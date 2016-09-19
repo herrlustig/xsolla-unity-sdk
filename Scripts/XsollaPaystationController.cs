@@ -403,8 +403,8 @@ namespace Xsolla
 				texts[0].text = "";
 				texts[1].text = utils.GetTranslations().Get(XsollaTranslations.VIRTUALITEM_PAGE_TITLE);
 				menuItemGoods.GetComponent<Button>().onClick.AddListener(delegate {
+					_radioController.SelectItem(menuItemGoods.GetComponent<RadioButton>());
 					LoadGoodsGroups();
-					_radioController.SelectItem(0);
 				});
 				menuItemGoods.transform.SetParent(menuTransform);
 				_radioController.AddButton(menuItemGoods.GetComponent<RadioButton>());
@@ -418,12 +418,27 @@ namespace Xsolla
 				texts[0].text = "";
 				texts[1].text = utils.GetTranslations().Get(XsollaTranslations.PRICEPOINT_PAGE_TITLE);
 				menuItemPricepoints.GetComponent<Button>().onClick.AddListener(delegate {
+					_radioController.SelectItem(menuItemPricepoints.GetComponent<RadioButton>());
 					LoadShopPricepoints();
-					_radioController.SelectItem(1);
 				});
 				menuItemPricepoints.transform.SetParent(menuTransform);	
 				_radioController.AddButton(menuItemPricepoints.GetComponent<RadioButton>());
 			} 
+
+			if (components.ContainsKey("subscriptions") && components["subscriptions"].IsEnabled)
+			{
+				GameObject menuItemSubs = Instantiate(menuItemPrefab) as GameObject;
+				Text[] texts = menuItemSubs.GetComponentsInChildren<Text>();
+				texts[0].text = "";
+				texts[1].text = utils.GetTranslations().Get(XsollaTranslations.SUBSCRIPTION_MOBILE_PAGE_TITLE);
+				menuItemSubs.GetComponent<Button>().onClick.AddListener(delegate {
+					//_shopViewController.OpenSubscriptions();
+					_radioController.SelectItem(menuItemSubs.GetComponent<RadioButton>());
+				});
+				menuItemSubs.transform.SetParent(menuTransform);	
+				_radioController.AddButton(menuItemSubs.GetComponent<RadioButton>());
+
+			}
 
 			if (components.ContainsKey("coupons") && components["coupons"].IsEnabled)
 			{
@@ -432,8 +447,8 @@ namespace Xsolla
 				texts[0].text = "";
 				texts[1].text = utils.GetTranslations().Get(XsollaTranslations.COUPON_PAGE_TITLE);
 				menuItemCoupons.GetComponent<Button>().onClick.AddListener(delegate {
+					_radioController.SelectItem(menuItemCoupons.GetComponent<RadioButton>());
 					ShowRedeemCoupon();
-					_radioController.SelectItem(2);
 				});
 				menuItemCoupons.transform.SetParent(menuTransform);	
 				_radioController.AddButton(menuItemCoupons.GetComponent<RadioButton>());
@@ -447,8 +462,8 @@ namespace Xsolla
 			menuItemFavorite.GetComponentInChildren<Text> ().text = "";
 			menuItemFavorite.GetComponent<Button>().onClick.AddListener(delegate {
 				_shopViewController.SetTitle(utils.GetTranslations().Get(XsollaTranslations.VIRTUALITEMS_TITLE_FAVORITE));
+				_radioController.SelectItem(menuItemFavorite.GetComponent<RadioButton>());
 				LoadFavorites();
-				_radioController.SelectItem(3);
 			});
 			menuItemFavorite.transform.SetParent (menuTransform);
 			_radioController.AddButton(menuItemFavorite.GetComponent<RadioButton>());

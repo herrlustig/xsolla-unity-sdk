@@ -35,6 +35,15 @@ namespace Xsolla {
 			isUpdated = false;
 		}
 
+		public void SelectItem(RadioButton pBtn)
+		{
+			foreach(RadioButton btn in radioButtons)
+			{
+				btn.Deselect();
+			}
+			pBtn.Select();
+		}
+
 		void Update() {
 			if (!isUpdated) {
 				foreach (var rb in radioButtons) {
