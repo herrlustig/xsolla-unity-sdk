@@ -53,6 +53,7 @@ namespace  Xsolla
 		protected abstract void ShowPaymentsList (XsollaPaymentMethods paymentMethods);
 		protected abstract void ShowSavedPaymentsList(XsollaSavedPaymentMethods savedPaymentsMethods);
 		protected abstract void ShowCountries (XsollaCountries paymentMethods);
+		protected abstract void ShowSubs (XsollaSubscriptions pSubs);
 
 		protected abstract void ShowPaymentForm (XsollaUtils utils, XsollaForm form);
 
@@ -122,6 +123,7 @@ namespace  Xsolla
 			Payment.PricepointsRecieved += (pricepoints) => ShowPricepoints(Utils, pricepoints);
 			Payment.GoodsGroupsRecieved += (goods) => ShowGoodsGroups(goods);
 			Payment.GoodsRecieved += (goods) => UpdateGoods(goods);
+			Payment.SubsReceived += (pSubs) => ShowSubs(pSubs);
 
 			Payment.VirtualPaymentSummaryRecieved += (summary) => ShowVPSummary(Utils, summary);
 			Payment.VirtualPaymentProceedError += (error) => ShowVPError(Utils, error);
@@ -174,6 +176,12 @@ namespace  Xsolla
 		{
 			Logger.Log ("Load Goods request");
 			Payment.GetItems (groupId, currentPurchase.GetMergedMap());
+		}
+
+		public void LoadSubscriptions()
+		{
+			Logger.Log("Load subscriptions");
+			Payment.GetSubscriptions();
 		}
 
 		public void LoadFavorites()

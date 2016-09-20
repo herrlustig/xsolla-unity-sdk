@@ -14,6 +14,7 @@ namespace Xsolla
 		private const string PREFAB_SCREEN_CHECKOUT 	 = "Prefabs/SimpleView/_ScreenCheckout/ScreenCheckout";
 		private const string PREFAB_SCREEN_VP_SUMMARY 	 = "Prefabs/SimpleView/_ScreenVirtualPaymentSummary/ScreenVirtualPaymentSummary";
 		private const string PREFAB_SCREEN_REDEEM_COUPON = "Prefabs/SimpleView/_ScreenShop/RedeemCouponView";
+		private const string PREFAB_SCREEN_SUBSCRIPTIONS = "Prefabs/SimpleView/_ScreenShop/SubscriptionsView";
 
 		private const string PREFAB_VIEW_MENU_ITEM		 = "Prefabs/SimpleView/MenuItem";
 		private const string PREFAB_VIEW_MENU_ITEM_ICON	 = "Prefabs/SimpleView/MenuItemIcon";
@@ -33,6 +34,7 @@ namespace Xsolla
 		private PaymentListScreenController _paymentListScreenController;
 		private ShopViewController 			_shopViewController;
 		private RedeemCouponViewController  _couponController;
+		private SubscriptionsViewController _subsController;
 		private RadioGroupController 		_radioController;
 
 		private static ActiveScreen 		currentActive = ActiveScreen.UNKNOWN;
@@ -41,7 +43,7 @@ namespace Xsolla
 
 		enum ActiveScreen
 		{
-			SHOP, P_LIST, VP_PAYMENT, PAYMENT, STATUS, ERROR, UNKNOWN, FAV_ITEMS_LIST, REDEEM_COUPONS
+			SHOP, P_LIST, VP_PAYMENT, PAYMENT, STATUS, ERROR, UNKNOWN, FAV_ITEMS_LIST, REDEEM_COUPONS, SUBSCRIPTIONS
 		}
 
 		protected override void RecieveUtils (XsollaUtils utils)
@@ -122,6 +124,14 @@ namespace Xsolla
 			Logger.Log ("Show Payment Error " + error);
 			SetLoading (false);
 			DrawError (error);
+		}
+
+		protected override void ShowSubs (XsollaSubscriptions pSubs)
+		{
+			Logger.Log ("Show subscriptions");
+			SetLoading (true);
+			DrawSubscriptions(pSubs);
+			SetLoading (false);
 		}
 
 		// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
@@ -260,6 +270,20 @@ namespace Xsolla
 			StatusViewController controller = statusScreen.GetComponent<StatusViewController> ();
 			controller.StatusHandler += OnUserStatusExit;
 			controller.InitScreen(translations, status);
+		}
+
+		private void DrawSubscriptions(XsollaSubscriptions pSubs)
+		{
+			currentActive = ActiveScreen.SUBSCRIPTIONS;
+			GameObject screenSubs = Instantiate(Resources.Load(PREFAB_SCREEN_SUBSCRIPTIONS)) as GameObject;
+			Resizer.DestroyChilds(mainScreenContainer.transform);
+			screenSubs.transform.SetParent (mainScreenContainer.transform);
+			screenSubs.transform.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, 0);
+			Resizer.ResizeToParrent(screenSubs);
+			mainScreenContainer.GetComponentInParent<ScrollRect> ().content = screenSubs.GetComponent<RectTransform> ();
+			_subsController = screenSubs.GetComponent<SubscriptionsViewController>();
+			_subsController.InitScreen(pSubs);
+
 		}
 
 		public void ShowRedeemCoupon()
@@ -432,8 +456,8 @@ namespace Xsolla
 				texts[0].text = "";
 				texts[1].text = utils.GetTranslations().Get(XsollaTranslations.SUBSCRIPTION_MOBILE_PAGE_TITLE);
 				menuItemSubs.GetComponent<Button>().onClick.AddListener(delegate {
-					//_shopViewController.OpenSubscriptions();
 					_radioController.SelectItem(menuItemSubs.GetComponent<RadioButton>());
+					LoadSubscriptions();
 				});
 				menuItemSubs.transform.SetParent(menuTransform);	
 				_radioController.AddButton(menuItemSubs.GetComponent<RadioButton>());

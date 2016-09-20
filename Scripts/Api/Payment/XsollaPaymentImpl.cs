@@ -28,6 +28,7 @@ namespace Xsolla
 		private const int VIRTUAL_PROCEED 			= 10;
 		private const int VIRTUAL_STATUS 			= 11;
 		private const int COUPON_PROCEED			= 12;
+		private const int ACTIVE_SUBS				= 13;
 
 
 		public Action<XsollaUtils> 					UtilsRecieved;
@@ -36,6 +37,7 @@ namespace Xsolla
 		public Action<XsollaPricepointsManager> 	PricepointsRecieved;
 		public Action<XsollaGroupsManager> 			GoodsGroupsRecieved;
 		public Action<XsollaGoodsManager> 			GoodsRecieved;
+		public Action<XsollaSubscriptions>			SubsReceived;
 
 		public Action<XsollaPaymentMethods> 		PaymentMethodsRecieved;
 		public Action<XsollaSavedPaymentMethods>    SavedPaymentMethodsRecieved;
@@ -145,6 +147,12 @@ namespace Xsolla
 		{
 			if(GoodsGroupsRecieved != null)
 				GoodsGroupsRecieved(groups);
+		}
+
+		private void OnSubscriptionsReceived(XsollaSubscriptions pSubs)
+		{
+			if(SubsReceived != null)
+				SubsReceived(pSubs);
 		}
 
 		// ---------------------------------------------------------------------------
@@ -293,6 +301,13 @@ namespace Xsolla
 //			Dictionary<string, object> requestParams = new Dictionary<string, object>();
 			requestParams.Add ("group_id", groupId );//group_id <- NEW | OLD -> requestParams.Add ("id_group",groupId );
 			POST (GOODS_ITEMS, GetItemsUrl(), requestParams);
+		}
+
+		public void GetSubscriptions()
+		{
+			Dictionary<string,object> param = new Dictionary<string, object>();
+			param.Add(XsollaApiConst.ACCESS_TOKEN, baseParams[XsollaApiConst.ACCESS_TOKEN]);
+			POST(ACTIVE_SUBS, GetSubsUrl(), baseParams);
 		}
 
 		public void GetFavorites(Dictionary<string, object> requestParams)
@@ -576,6 +591,13 @@ namespace Xsolla
 							}
 						}
 						break;
+					case ACTIVE_SUBS:
+						{
+							XsollaSubscriptions subs = new XsollaSubscriptions();
+							subs.Parse(rootNode);
+							OnSubscriptionsReceived(subs);
+						}
+						break;
 					default:
 						break;
 					}
@@ -850,6 +872,11 @@ namespace Xsolla
 
 		private string GetCountriesListUrl(){
 			return DOMAIN + "/paystation2/api/country";
+		}
+
+		private string GetSubsUrl()
+		{
+			return DOMAIN + "/paystation2/api/recurring/active";
 		}
 		
 		/*		BUY WITH VIRTUAL CURERENCY	 */
