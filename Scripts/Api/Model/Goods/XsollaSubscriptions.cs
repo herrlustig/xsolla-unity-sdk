@@ -38,6 +38,7 @@ namespace Xsolla
 		public int periodTrial { get; private set;}//					"period_trial":1,
 		public string periodUnit { get; private set;}//					"period_unit":"month",
 		public string name { get; private set;}//						"name":"Platinum VIP",
+		public string offerLabel { get; private set;}// 				"offer_label: """,
 		public string description { get; private set;}//				"description":"10x more experience!",
 		public int bonusVirtualCurrency { get; private set;}//			"bonus_virtual_currency":0,
 		public List<XsollaBonusItem> bonusVirtualItems { get; private set;}//	"bonus_virtual_items":[]
@@ -110,6 +111,7 @@ namespace Xsolla
 			periodTrial = subscriptionNode ["perios_trial"].AsInt;
 			periodUnit = subscriptionNode ["period_unit"];
 			name = subscriptionNode ["name"];
+			offerLabel = subscriptionNode ["offer_label"];
 			description = subscriptionNode ["description"];
 			bonusVirtualCurrency = subscriptionNode ["bonus_virtual_currency"].AsInt;
 			bonusVirtualItems = XsollaBonusItem.ParseMany (subscriptionNode ["bonus_virtual_items"]);

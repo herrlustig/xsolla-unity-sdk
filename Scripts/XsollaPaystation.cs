@@ -212,7 +212,7 @@ namespace  Xsolla
 				currentPurchase.Remove (ActivePurchase.Part.PID);
 				currentPurchase.Remove (ActivePurchase.Part.XPS);
 			}
-			//FIX First we must check savemethod, and if we not have those, we draw all methods
+		
 			LoadSavedPaymentMethods();
 			LoadPaymentMethods ();
 			LoadCountries ();

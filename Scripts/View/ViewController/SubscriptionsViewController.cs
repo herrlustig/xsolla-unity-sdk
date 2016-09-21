@@ -27,6 +27,7 @@ namespace Xsolla
 			subObj.transform.SetParent(_listSubsView.transform);
 			SubscriptionBtnController controller = subObj.GetComponent<SubscriptionBtnController>();
 			controller.InitBtn(pSub);
+
 		}
 
 		public SubscriptionsViewController ()
