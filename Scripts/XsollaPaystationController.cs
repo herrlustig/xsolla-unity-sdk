@@ -282,7 +282,7 @@ namespace Xsolla
 			Resizer.ResizeToParrent(screenSubs);
 			mainScreenContainer.GetComponentInParent<ScrollRect> ().content = screenSubs.GetComponent<RectTransform> ();
 			_subsController = screenSubs.GetComponent<SubscriptionsViewController>();
-			_subsController.InitScreen(pSubs);
+			_subsController.InitScreen(Utils.GetTranslations(),pSubs);
 
 		}
 

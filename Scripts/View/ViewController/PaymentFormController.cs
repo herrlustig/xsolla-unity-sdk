@@ -216,8 +216,6 @@ namespace Xsolla
 			{
 				GameObject.Find(toggle.transform.parent.name).SetActive(false);
 			}
-
-
 			return cardViewObj;
 		}
 

@@ -1,6 +1,7 @@
 ﻿using SimpleJSON;
 using System.Collections.Generic;
 using System.Text;
+using System;
 
 namespace Xsolla 
 {
@@ -8,7 +9,7 @@ namespace Xsolla
 
 //		private List<XsollaSubscription> subscriptionList;//"packages":[],
 		private XsollaApi api;//							"api":{
-
+		private XsollaActivePackage activeUserPackage;
 		public IParseble Parse (JSONNode subscriptionsNode)
 		{
 			var packagesNode = subscriptionsNode ["packages"];
@@ -17,9 +18,36 @@ namespace Xsolla
 			{
 				AddItem(new XsollaSubscription().Parse(enumerator.Current) as XsollaSubscription);
 			}
+
+			if (subscriptionsNode["active_user_package"].AsObject != null)
+				activeUserPackage = new XsollaActivePackage().Parse(subscriptionsNode["active_user_package"]) as XsollaActivePackage;
+			
 			api = new XsollaApi().Parse(subscriptionsNode["api"]) as XsollaApi;
 			return this;
 		}
+
+		public XsollaActivePackage GetActivePackage()
+		{
+			return activeUserPackage;
+		}
+	}
+
+	public class XsollaActivePackage : IParseble
+	{
+		public DateTime _dateNextCharge;
+		public DateTime _datePlanChange;
+		public string _id;
+		public bool   _isPossibleRenew;
+
+		public IParseble Parse (JSONNode pNode)
+		{
+			DateTime.TryParse( pNode["date_next_charge"],out _dateNextCharge);
+			DateTime.TryParse(pNode["date_plan_change"],out _datePlanChange);
+			_id = pNode["id"];
+			_isPossibleRenew = pNode["is_possible_renew"].AsBool;
+			return this;
+		}
+
 	}
 
 	public class XsollaSubscription : IXsollaObject, IParseble

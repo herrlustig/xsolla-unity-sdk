@@ -32,6 +32,7 @@ GameObject:
   - 114: {fileID: 11452268}
   - 114: {fileID: 11460592}
   - 114: {fileID: 11458474}
+  - 114: {fileID: 11455442}
   m_Layer: 5
   m_Name: ShopItemSubscriptionSpecial
   m_TagString: Untagged
@@ -49,6 +50,7 @@ GameObject:
   - 224: {fileID: 22440874}
   - 222: {fileID: 22294576}
   - 114: {fileID: 11416712}
+  - 114: {fileID: 11499850}
   m_Layer: 5
   m_Name: NameText
   m_TagString: Untagged
@@ -66,6 +68,7 @@ GameObject:
   - 224: {fileID: 22487406}
   - 222: {fileID: 22222146}
   - 114: {fileID: 11461256}
+  - 114: {fileID: 11433334}
   m_Layer: 5
   m_Name: PricePanel
   m_TagString: Untagged
@@ -136,6 +139,7 @@ GameObject:
   - 224: {fileID: 22457754}
   - 222: {fileID: 22270476}
   - 114: {fileID: 11497916}
+  - 114: {fileID: 11497720}
   m_Layer: 5
   m_Name: BonusText
   m_TagString: Untagged
@@ -155,7 +159,7 @@ GameObject:
   - 114: {fileID: 11421242}
   - 114: {fileID: 11429138}
   m_Layer: 5
-  m_Name: Text
+  m_Name: offerText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -195,10 +199,10 @@ MonoBehaviour:
     m_Right: 0
     m_Top: 0
     m_Bottom: 0
-  m_ChildAlignment: 0
+  m_ChildAlignment: 5
   m_Spacing: 0
   m_ChildForceExpandWidth: 0
-  m_ChildForceExpandHeight: 1
+  m_ChildForceExpandHeight: 0
 --- !u!114 &11416252
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -231,7 +235,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0, b: 0, a: 0.47058824}
+  m_Color: {r: 0.5764706, g: 0.5764706, b: 0.5764706, a: 1}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -240,10 +244,10 @@ MonoBehaviour:
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_FontData:
     m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 14
+    m_FontSize: 20
     m_FontStyle: 0
-    m_BestFit: 1
-    m_MinSize: 10
+    m_BestFit: 0
+    m_MinSize: 1
     m_MaxSize: 30
     m_Alignment: 3
     m_AlignByGeometry: 0
@@ -251,7 +255,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Platinum VIP
+  m_Text: 
 --- !u!114 &11421242
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -279,12 +283,12 @@ MonoBehaviour:
     m_MinSize: 10
     m_MaxSize: 14
     m_Alignment: 4
-    m_AlignByGeometry: 0
-    m_RichText: 1
+    m_AlignByGeometry: 1
+    m_RichText: 0
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: OFFER
+  m_Text: 'Offer '
 --- !u!114 &11427330
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -302,7 +306,7 @@ MonoBehaviour:
   m_PreferredWidth: -1
   m_PreferredHeight: -1
   m_FlexibleWidth: 1
-  m_FlexibleHeight: -1
+  m_FlexibleHeight: 1
 --- !u!114 &11429138
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -315,12 +319,30 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
-  m_MinWidth: 1.7
+  m_MinWidth: 31
+  m_MinHeight: -1
+  m_PreferredWidth: 41.9
+  m_PreferredHeight: 38.8
+  m_FlexibleWidth: 0
+  m_FlexibleHeight: 0
+--- !u!114 &11433334
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 121730}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1679637790, guid: f5f67c52d1564df4a8936ccd202a3bd8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_IgnoreLayout: 0
+  m_MinWidth: 100
   m_MinHeight: -1
   m_PreferredWidth: -1
   m_PreferredHeight: -1
   m_FlexibleWidth: 0
-  m_FlexibleHeight: -1
+  m_FlexibleHeight: 0
 --- !u!114 &11448194
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -333,7 +355,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0, b: 0, a: 0.47058824}
+  m_Color: {r: 0.5764706, g: 0.5764706, b: 0.5764706, a: 1}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -344,16 +366,16 @@ MonoBehaviour:
     m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
     m_FontSize: 14
     m_FontStyle: 0
-    m_BestFit: 1
-    m_MinSize: 8
+    m_BestFit: 0
+    m_MinSize: 1
     m_MaxSize: 14
-    m_Alignment: 1
+    m_Alignment: 3
     m_AlignByGeometry: 0
     m_RichText: 1
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: per 1 month
+  m_Text: 
 --- !u!114 &11452268
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -415,6 +437,20 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
+--- !u!114 &11455442
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 112526}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fc117f59f61de4868b1f1d085ec2e3e1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemsToColor:
+  - color: 7
+    whatToColor: {fileID: 11478688}
 --- !u!114 &11458474
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -510,14 +546,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Padding:
-    m_Left: 10
+    m_Left: 30
     m_Right: 10
     m_Top: 10
     m_Bottom: 10
-  m_ChildAlignment: 0
+  m_ChildAlignment: 3
   m_Spacing: 0
-  m_ChildForceExpandWidth: 1
-  m_ChildForceExpandHeight: 1
+  m_ChildForceExpandWidth: 0
+  m_ChildForceExpandHeight: 0
 --- !u!114 &11474174
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -530,12 +566,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
-  m_MinWidth: 270
+  m_MinWidth: 20
   m_MinHeight: -1
   m_PreferredWidth: -1
   m_PreferredHeight: -1
   m_FlexibleWidth: 1
-  m_FlexibleHeight: -1
+  m_FlexibleHeight: 0
 --- !u!114 &11478688
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -563,6 +599,24 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
+--- !u!114 &11497720
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 168780}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1679637790, guid: f5f67c52d1564df4a8936ccd202a3bd8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_IgnoreLayout: 0
+  m_MinWidth: -1
+  m_MinHeight: -1
+  m_PreferredWidth: 215.00002
+  m_PreferredHeight: 32.69
+  m_FlexibleWidth: 0
+  m_FlexibleHeight: 0
 --- !u!114 &11497916
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -586,16 +640,16 @@ MonoBehaviour:
     m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
     m_FontSize: 14
     m_FontStyle: 0
-    m_BestFit: 1
-    m_MinSize: 10
+    m_BestFit: 0
+    m_MinSize: 1
     m_MaxSize: 14
     m_Alignment: 3
-    m_AlignByGeometry: 0
+    m_AlignByGeometry: 1
     m_RichText: 1
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 10x more experience!
+  m_Text: 
 --- !u!114 &11498258
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -626,7 +680,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0, b: 0, a: 0.47058824}
+  m_Color: {r: 0.5764706, g: 0.5764706, b: 0.5764706, a: 1}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -635,18 +689,36 @@ MonoBehaviour:
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_FontData:
     m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 14
+    m_FontSize: 20
     m_FontStyle: 0
-    m_BestFit: 1
-    m_MinSize: 10
+    m_BestFit: 0
+    m_MinSize: 1
     m_MaxSize: 30
-    m_Alignment: 7
+    m_Alignment: 3
     m_AlignByGeometry: 0
     m_RichText: 1
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: $19.99
+  m_Text: 
+--- !u!114 &11499850
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 113726}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1679637790, guid: f5f67c52d1564df4a8936ccd202a3bd8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_IgnoreLayout: 0
+  m_MinWidth: -1
+  m_MinHeight: -1
+  m_PreferredWidth: -1
+  m_PreferredHeight: -1
+  m_FlexibleWidth: 0
+  m_FlexibleHeight: 0
 --- !u!222 &22222146
 CanvasRenderer:
   m_ObjectHideFlags: 1
@@ -781,8 +853,8 @@ RectTransform:
   m_RootOrder: 0
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0.000061035156, y: 0.000030517578}
-  m_SizeDelta: {x: 400, y: 80}
+  m_AnchoredPosition: {x: 0, y: -9.3}
+  m_SizeDelta: {x: 355, y: 78.8}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &22423890
 RectTransform:
@@ -817,8 +889,8 @@ RectTransform:
   m_RootOrder: 0
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 20.74074, y: -40}
-  m_SizeDelta: {x: 41.48148, y: 80}
+  m_AnchoredPosition: {x: 20.95, y: -30.05}
+  m_SizeDelta: {x: 41.899994, y: 38.8}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &22440874
 RectTransform:
