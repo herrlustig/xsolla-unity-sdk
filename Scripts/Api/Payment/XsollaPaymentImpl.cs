@@ -30,6 +30,7 @@ namespace Xsolla
 		private const int APPLY_PROMO_COUPONE		= 12;
 		private const int COUPON_PROCEED			= 13;
 		private const int HISTORY					= 22;
+		private const int PAYMENT_MANAGER_LIST		= 14;
 
 	
 		public Action<XsollaUtils> 					UtilsRecieved;
@@ -366,6 +367,11 @@ namespace Xsolla
 		public void GetSavedPayments(Dictionary<string, object> requestParams)
 		{
 			POST(SAVED_PAYMENT_LIST, GetSavedPaymentListUrl(), requestParams);
+		}
+
+		public void GetSavedPaymentsForManager(Dictionary<string, object> pParams)
+		{
+			POST(PAYMENT_MANAGER_LIST, GetSavedPaymentListUrl(), pParams);
 		}
 
 		public void GetCountries(Dictionary<string, object> requestParams)

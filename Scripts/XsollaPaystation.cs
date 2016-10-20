@@ -244,6 +244,11 @@ namespace  Xsolla
 			Payment.GetHistory(pParams);
 		}
 
+		public void LoadPaymentManager(Dictionary<string, object> pParams)
+		{
+			Payment.GetSavedPaymentsForManager(pParams);
+		}
+
 		public void UpdateCountries(string countryIso)
 		{
 			Logger.Log ("Update Countries request");
