@@ -67,6 +67,7 @@ namespace  Xsolla
 		protected abstract void ShowVPError (XsollaUtils utils, string error);
 		protected abstract void ShowVPStatus (XsollaUtils utils, XVPStatus status);
 		protected abstract void GetCouponErrorProceed(XsollaCouponProceedResult presult);
+		protected abstract void PaymentManagerRecieved(XsollaSavedPaymentMethods pResult);
 
 		//{"user":{ "id":{ "value":"1234567","hidden":true},"email":{"value":"support@xsolla.com"},"name":{"value":"Tardis"},"country":{"value":"US"} },"settings":{"project_id":15764,"language":"en","currency":"USD"}}
 		//jafS6nqbzRpZzA38
@@ -134,7 +135,8 @@ namespace  Xsolla
 			Payment.VirtualPaymentProceedError += (error) => ShowVPError(Utils, error);
 			Payment.VirtualPaymentStatusRecieved += (status) => ShowVPStatus(Utils, status);
 
-			Payment.CouponProceedErrorRecived += (proceed) => GetCouponErrorProceed(proceed); 
+			Payment.CouponProceedErrorRecived += (proceed) => GetCouponErrorProceed(proceed);
+			Payment.PaymentManagerMethods += (savedMethods) => PaymentManagerRecieved(savedMethods);
 			
 			Payment.ErrorReceived += ShowPaymentError;
 			Payment.SetModeSandbox (isSandbox);

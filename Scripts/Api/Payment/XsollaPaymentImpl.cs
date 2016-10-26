@@ -59,6 +59,8 @@ namespace Xsolla
 		public Action<string> 						VirtualPaymentProceedError;
 		public Action<XVPStatus> 					VirtualPaymentStatusRecieved;
 
+		public Action<XsollaSavedPaymentMethods>	PaymentManagerMethods;
+
 		//TODO CHANGE PARAMS
 		protected string _accessToken;
 		protected Dictionary<string, object> baseParams;
@@ -259,6 +261,12 @@ namespace Xsolla
 		{
 			if (CustomAmountCalcRecieved != null)
 				CustomAmountCalcRecieved(pRes);
+		}
+
+		protected virtual void OnPaymentManagerMethod(XsollaSavedPaymentMethods pRes)
+		{
+			if (PaymentManagerMethods != null)
+				PaymentManagerMethods(pRes);
 		}
 		
 		// ---------------------------------------------------------------------------
@@ -651,9 +659,14 @@ namespace Xsolla
 						break;
 					case CALCULATE_CUSTOM_AMOUNT:
 						{
-							//TODO: fill method
 							CustomVirtCurrAmountController.CustomAmountCalcRes res = new CustomVirtCurrAmountController.CustomAmountCalcRes().Parse(rootNode["calculation"]) as CustomVirtCurrAmountController.CustomAmountCalcRes;
 							OnCustomAmountResRecieved(res);
+						}
+						break;
+					case PAYMENT_MANAGER_LIST:
+						{
+							XsollaSavedPaymentMethods res = new XsollaSavedPaymentMethods().Parse(rootNode) as XsollaSavedPaymentMethods;
+							OnPaymentManagerMethod(res);
 						}
 						break;
 					default:

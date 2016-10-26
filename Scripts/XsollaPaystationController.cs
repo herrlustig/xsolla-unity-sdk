@@ -258,6 +258,11 @@ namespace Xsolla
 				Logger.Log("Custom amount controller not found");	
 		}
 
+		protected override void PaymentManagerRecieved (XsollaSavedPaymentMethods pResult)
+		{
+			
+		}
+
 		// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 		// <<<<<<<<<<<<<<<<<<<<<<<<<<<< PAYMENT METHODS <<<<<<<<<<<<<<<<<<<<<<<<<<<< 
 		// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
