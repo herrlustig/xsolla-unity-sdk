@@ -56,6 +56,7 @@ namespace  Xsolla
 		protected abstract void ShowCountries (XsollaCountries paymentMethods);
 		protected abstract void ApplyPromoCouponeCode(XsollaForm pForm);
 		protected abstract void ShowHistory(XsollaHistoryList pList);
+		protected abstract void UpdateCustomAmount(CustomVirtCurrAmountController.CustomAmountCalcRes pRes);
 
 		protected abstract void ShowPaymentForm (XsollaUtils utils, XsollaForm form);
 
@@ -127,6 +128,7 @@ namespace  Xsolla
 			Payment.PricepointsRecieved += (pricepoints) => ShowPricepoints(Utils, pricepoints);
 			Payment.GoodsGroupsRecieved += (goods) => ShowGoodsGroups(goods);
 			Payment.GoodsRecieved += (goods) => UpdateGoods(goods);
+			Payment.CustomAmountCalcRecieved += (calcRes) => UpdateCustomAmount(calcRes);
 
 			Payment.VirtualPaymentSummaryRecieved += (summary) => ShowVPSummary(Utils, summary);
 			Payment.VirtualPaymentProceedError += (error) => ShowVPError(Utils, error);
@@ -323,6 +325,12 @@ namespace  Xsolla
 			Logger.Log ("Get Status");
 			FillPurchase (ActivePurchase.Part.INVOICE, items);
 			Payment.NextStep (currentPurchase.GetMergedMap());
+		}
+
+		public void CalcCustomAmount(Dictionary<string, object> pParam)
+		{
+			Logger.Log("Calc custom amount");
+			Payment.CalculateCustomAmount(pParam);
 		}
 
 		protected void Restart (){

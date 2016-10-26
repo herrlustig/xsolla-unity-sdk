@@ -76,6 +76,8 @@ using System.Collections;namespace Xsolla {
 		public static string PERIOD_MONTHS = "period_months";//"months"
 		public static string PRICEPOINT_OPTION_BUTTON = "pricepoint_option_button";//"Buy Package"
 		public static string PRICEPOINT_PAGE_TITLE = "pricepoint_page_title";//"Virtual Currency"
+		public static string PRICEPOINT_PAGE_CUSTOM_AMOUNT_HIDE_TITLE = "custom_amount_hide_button";// custom_amount_hide_button:"Show Price Packages"
+		public static string PRICEPOINT_PAGE_CUSTOM_AMOUNT_SHOW_TITLE = "custom_amount_show_button";// custom_amount_show_button:"Custom Virtual Currency Amount"
 		public static string SAVED_METHODS_TITLE = "saved_methods_title";//"Your Saved Payment Methods"
 		public static string SAVEDMETHOD_OTHER_ACCOUNT_LABEL = "savedmethod_other_account_label";//"Pay with another account"
 		public static string SAVEDMETHOD_OTHER_LABEL = "savedmethod_other_label";//"Choose another payment method"

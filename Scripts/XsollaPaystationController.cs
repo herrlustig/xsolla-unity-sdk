@@ -179,8 +179,7 @@ namespace Xsolla
 			SetLoading (false);
 			DrawVPStatus (utils, status);
 		}
-
-
+			
 		protected override void ApplyPromoCouponeCode (XsollaForm pForm)
 		{
 			Logger.Log("Apply promo recieved");
@@ -248,6 +247,17 @@ namespace Xsolla
 				Resizer.ResizeToParrent (screenHistoryView);
 			}
 		}
+
+		protected override void UpdateCustomAmount (CustomVirtCurrAmountController.CustomAmountCalcRes pRes)
+		{
+			// find custom amount controller 
+			CustomVirtCurrAmountController controller = FindObjectOfType<CustomVirtCurrAmountController>();
+			if (controller != null)
+				controller.setValues(pRes);
+			else
+				Logger.Log("Custom amount controller not found");	
+		}
+
 		// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 		// <<<<<<<<<<<<<<<<<<<<<<<<<<<< PAYMENT METHODS <<<<<<<<<<<<<<<<<<<<<<<<<<<< 
 		// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -272,7 +282,11 @@ namespace Xsolla
 			string title = utils.GetTranslations ().Get (XsollaTranslations.PRICEPOINT_PAGE_TITLE);
 			string vcName = utils.GetProject ().virtualCurrencyName;
 			string buyText = utils.GetTranslations ().Get (XsollaTranslations.VIRTUAL_ITEM_OPTION_BUTTON);
-			_shopViewController.OpenPricepoints(title, pricepoints, vcName, buyText);
+
+			if (utils.GetSettings().components.virtualCurreny.customAmount)
+				_shopViewController.OpenPricepoints(title, pricepoints, vcName, buyText, true, utils);
+			else
+				_shopViewController.OpenPricepoints(title, pricepoints, vcName, buyText);
 		}
 		
 		public void OpenGoods(XsollaGroupsManager groups)

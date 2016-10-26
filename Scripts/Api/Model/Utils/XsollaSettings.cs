@@ -8,6 +8,7 @@ namespace Xsolla
 
 		public string version;//"version":"mobile"
 		public XsollaPaystation2 paystation2;//"paystation2":{}
+		public Components components;
 		public string theme;
 
 		public string GetTheme(){
@@ -26,11 +27,35 @@ namespace Xsolla
 			var paystation2Node = rootNode["paystation2"];
 			paystation2 = new XsollaPaystation2 ().Parse (paystation2Node) as XsollaPaystation2;
 			theme = rootNode["theme"];
+			components = new Components().Parse(rootNode["components"]) as Components;
 			return this;
 		}
 		public override string ToString ()
 		{
 			return string.Format ("[XsollaSettings]");
+		}
+	}
+
+	public class Components: IParseble
+	{
+		public VirtualCurrency virtualCurreny;
+
+		public IParseble Parse(JSONNode pRootNode)
+		{
+			virtualCurreny = new VirtualCurrency().Parse(pRootNode["virtual_currency"]) as VirtualCurrency;
+			return this;
+		}
+
+	}
+
+	public class VirtualCurrency: IParseble
+	{
+		public bool customAmount;
+
+		public IParseble Parse(JSONNode pRootNode)
+		{
+			customAmount = pRootNode["custom_amount"].AsBool;
+			return this;
 		}
 	}
 

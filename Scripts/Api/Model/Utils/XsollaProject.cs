@@ -16,6 +16,7 @@ namespace Xsolla
 		public string 	name				{get; private set;}// "name":"TestCreateProject",
 		public string 	nameEn				{get; private set;}// "nameEn":"TestCreateProject",
 		public string 	virtualCurrencyName	{get; private set;}// "virtualCurrencyName":"virt. currency",
+		public string 	virtualCurrencyIconUrl	{get; private set;}// virtualCurrencyImage:"//cdn3.xsolla.com/img/misc/images/91d3aecf770347428c8c6abdc8a260b8.png"
 		public string 	projectUrl			{get; private set;}// "projectUrl":"xsolla.com",
 		public string 	returnUrl			{get; private set;}// "returnUrl":"https:\/\/secure.xsolla.com?v1=user_1&v2=John+Smith",
 		public string 	eula				{get; private set;}// "eula":"http:\/\/xsolla.com\/termsandconditions\/?lang=en&ca=2340",
@@ -36,6 +37,7 @@ namespace Xsolla
 			name = projectNode ["name"];
 			nameEn = projectNode ["nameEn"];
 			virtualCurrencyName = projectNode ["virtualCurrencyName"];
+			virtualCurrencyIconUrl = projectNode ["virtualCurrencyImage"];
 			merchantId = projectNode ["merchantId"].AsInt;
 			isDiscrete = projectNode ["isDiscrete"].AsBool;
 			projectUrl = projectNode ["projectUrl"];

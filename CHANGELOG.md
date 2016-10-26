@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.3.3 - 2016-10-21
+
+- [update] add functional «Profile History»
+- [update] add functional «Custom Virtual Currency Amount»
+- [fix] minor text fixes
+
 ## 1.3.2 - 2016-09-30
 
 - [update] add functional «Redeems coupon»
