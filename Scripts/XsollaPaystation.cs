@@ -229,6 +229,13 @@ namespace  Xsolla
 			Payment.GetPayments (_countryCurr, currentPurchase.GetMergedMap());
 		}
 
+		public void LoadPaymentMethods(Dictionary<string, object> pReqParams)
+		{
+			Logger.Log("Load Payment Methods request with parameters");
+			SetLoading(true);
+			Payment.GetPayments(_countryCurr, pReqParams);
+		}
+
 		public void LoadSavedPaymentMethods()
 		{
 			Logger.Log ("Load saved payments methods");
