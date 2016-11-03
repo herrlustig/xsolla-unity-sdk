@@ -361,7 +361,8 @@ namespace Xsolla
 			Logger.Log("Click addAccount");
 			Dictionary<string, object> reqParams = new Dictionary<string, object>();
 			reqParams.Add("save_payment_account_only",1);
-			LoadPaymentMethods(reqParams);
+			FillPurchase(ActivePurchase.Part.PAYMENT_MANAGER, reqParams);
+			LoadPaymentMethods();
 		}
 			
 		private void DrawError(XsollaError error)

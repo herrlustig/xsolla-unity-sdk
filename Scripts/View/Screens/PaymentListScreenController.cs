@@ -63,7 +63,7 @@ namespace Xsolla
 
 		public void OpenPayments()
 		{
-			if (_savedPaymetnsMethods.Count != 0)
+			if ((_savedPaymetnsMethods != null) && (_savedPaymetnsMethods.Count != 0))
 				OpenSavedMethod();
 			else
 				OpenQuickPayments();

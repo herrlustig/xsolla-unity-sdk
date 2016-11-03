@@ -214,12 +214,10 @@ namespace  Xsolla
 				currentPurchase.Remove (ActivePurchase.Part.XPS);
 			}
 
-			//TODO On new version API
 			LoadSavedPaymentMethods();
 			LoadPaymentMethods ();
 			LoadCountries ();
 			SetLoading (true);
-			//Payment.GetQuickPayments (null, currentPurchase.GetMergedMap());
 		}
 
 		public void LoadPaymentMethods()
@@ -227,13 +225,6 @@ namespace  Xsolla
 			Logger.Log ("Load Payment Methods request");
 			SetLoading (true);
 			Payment.GetPayments (_countryCurr, currentPurchase.GetMergedMap());
-		}
-
-		public void LoadPaymentMethods(Dictionary<string, object> pReqParams)
-		{
-			Logger.Log("Load Payment Methods request with parameters");
-			SetLoading(true);
-			Payment.GetPayments(_countryCurr, pReqParams);
 		}
 
 		public void LoadSavedPaymentMethods()
@@ -354,7 +345,7 @@ namespace  Xsolla
 			TryPay();
 		}
 		
-		private void FillPurchase(ActivePurchase.Part part, Dictionary<string, object> items)
+		public void FillPurchase(ActivePurchase.Part part, Dictionary<string, object> items)
 		{
 			if (currentPurchase == null) {
 				currentPurchase = new ActivePurchase();
