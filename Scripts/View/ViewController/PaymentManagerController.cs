@@ -31,7 +31,12 @@ namespace Xsolla
 			mTitle.text = pUtils.GetTranslations().Get("payment_account_page_title");
 			mInformationTitle.text = pUtils.GetTranslations().Get("payment_account_add_title");
 			mInformation.text = pUtils.GetTranslations().Get("payment_account_add_info");
-			mContinueLink.text = pUtils.GetTranslations().Get("payment_account_back_button");
+			mContinueLink.text = pUtils.GetTranslations().Get("payment_account_back_button") + " >";
+			mContinueLink.GetComponent<Button>().onClick.AddListener(delegate 
+				{
+					Logger.Log("Destroy history");
+					Destroy(this.gameObject);	
+				});
 			Text textBtn = mBtnAddPaymentObj.GetComponentInChildren<Text>();
 			textBtn.text = pUtils.GetTranslations().Get("payment_account_add_button");
 			if (pMethods.GetCount() == 0)
@@ -45,7 +50,9 @@ namespace Xsolla
 				mContainer.SetActive(true);
 				foreach (XsollaSavedPaymentMethod item in pMethods.GetItemList())
 				{
-					
+					// Create prefab on btn saved method, set parent and set controller on them
+
+
 				}
 			}
 				

@@ -226,6 +226,7 @@ namespace  Xsolla
 			SetLoading (true);
 			Payment.GetPayments (_countryCurr, currentPurchase.GetMergedMap());
 		}
+			
 
 		public void LoadSavedPaymentMethods()
 		{

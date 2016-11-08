@@ -182,7 +182,12 @@ namespace Xsolla
 			if (textElementsMap.ContainsKey (key))
 				return textElementsMap [key];
 			else
-				return null;
+			{
+				// TODO: by def return null, but on code above we get object and immediate execute GetValue and have NullReferenceException
+				//return null;
+				Logger.Log("We get null StatusTextElement by key - " + key);
+				return new StatusTextElement("","","","","");
+			}
 		}
 
 		public string GetPurchsaeValue(){
