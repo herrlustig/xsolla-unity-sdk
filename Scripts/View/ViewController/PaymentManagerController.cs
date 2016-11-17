@@ -15,7 +15,9 @@ namespace Xsolla
 		public Text mInformationTitle;
 		public Text mInformation;
 		public GameObject mContainer;
+		public GameObject mBtnGrid;
 		public GameObject mBtnAddPaymentObj;
+		public ImageLoader mImgLoader; 
 
 		public PaymentManagerController ()
 		{
@@ -51,11 +53,33 @@ namespace Xsolla
 				foreach (XsollaSavedPaymentMethod item in pMethods.GetItemList())
 				{
 					// Create prefab on btn saved method, set parent and set controller on them
+					GameObject methodBtn = Instantiate(Resources.Load("Prefabs/SimpleView/_PaymentFormElements/SavedMethodBtn")) as GameObject;
+					methodBtn.transform.SetParent(mBtnGrid.transform);
+					SavedMethodBtnController controller = methodBtn.GetComponent<SavedMethodBtnController>();
 
+					// Activated btn delete
+					controller.setDeleteBtn(true);
+					controller.setDeleteBtnName(pUtils.GetTranslations().Get("delete_payment_account_button"));
 
+					// Set btn property
+					// Set method
+					controller.setMethod(item);
+					// Set name 
+					controller.setNameMethod(item.GetName());
+					// Set Type
+					controller.setNameType(item.GetPsName());
+					// Set icon
+					mImgLoader.LoadImage(controller._iconMethod, item.GetImageUrl());		
+					// Set BtnDelAction
+					controller.getBtnDelete().onClick.AddListener(() => deletePaymentMethod(controller.getMethod()));
 				}
 			}
 				
+		}
+
+		private void deletePaymentMethod(XsollaSavedPaymentMethod pMethod)
+		{
+			Logger.Log("Click Btn to Delete saved method");
 		}
 	}
 }

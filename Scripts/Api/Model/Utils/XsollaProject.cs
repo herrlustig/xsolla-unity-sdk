@@ -48,6 +48,10 @@ namespace Xsolla
 			canRepeatPayment = projectNode ["canRepeatPayment"].AsBool;
 			
 			JSONClass jsonObj = projectNode["components"].AsObject;
+
+			if (jsonObj == null)
+				return this;
+
 			IEnumerator elements = jsonObj.GetEnumerator();
 			while (elements.MoveNext()) {
 				KeyValuePair<string, JSONNode> elem = (KeyValuePair<string, JSONNode>)elements.Current;

@@ -884,7 +884,9 @@ MonoBehaviour:
   mInformationTitle: {fileID: 11445710}
   mInformation: {fileID: 11497996}
   mContainer: {fileID: 146502}
+  mBtnGrid: {fileID: 172420}
   mBtnAddPaymentObj: {fileID: 131246}
+  mImgLoader: {fileID: 11421564}
 --- !u!114 &11483024
 MonoBehaviour:
   m_ObjectHideFlags: 1

@@ -11,6 +11,7 @@ namespace Xsolla
 		public Text _nameMethod;
 		public Text _nameType;
 		public Button _btnMethod;
+		public GameObject _btnDelete;
 		public GameObject _self;
 
 		private XsollaSavedPaymentMethod _method;
@@ -33,6 +34,22 @@ namespace Xsolla
 		public void setNameType(String pNametype)
 		{
 			_nameType.text = pNametype;
+		}
+
+		public void setDeleteBtn(bool pState)
+		{
+			_btnDelete.SetActive(pState);
+		}
+
+		public void setDeleteBtnName(String pName)
+		{
+			Text name = _btnDelete.GetComponent<Text>();
+			name.text = pName;
+		}
+
+		public Button getBtnDelete()
+		{
+			return _btnDelete.GetComponent<Button>();
 		}
 	}
 }

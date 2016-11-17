@@ -57,7 +57,7 @@ namespace Xsolla {
 				}));
 			// Show payment form
 			//SetToken(formController, token);
-			//StartCoroutine(XsollaJsonGenerator.FreshToken ((token) => SetToken(formController, token)));
+			StartCoroutine(XsollaJsonGenerator.FreshToken ((token) => SetToken(formController, token)));
 		}
 
 		private void SetToken(XsollaPaystationController controller, string token){
