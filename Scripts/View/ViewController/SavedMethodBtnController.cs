@@ -39,6 +39,7 @@ namespace Xsolla
 		public void setDeleteBtn(bool pState)
 		{
 			_btnDelete.SetActive(pState);
+			_btnMethod.enabled = !pState;
 		}
 
 		public void setDeleteBtnName(String pName)

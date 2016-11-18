@@ -73,6 +73,9 @@ namespace Xsolla
 					// Set BtnDelAction
 					controller.getBtnDelete().onClick.AddListener(() => deletePaymentMethod(controller.getMethod()));
 				}
+
+				// Add button "Add payment metnod"
+				Instantiate<GameObject>(mBtnAddPaymentObj).transform.SetParent(mBtnGrid.transform);
 			}
 				
 		}
