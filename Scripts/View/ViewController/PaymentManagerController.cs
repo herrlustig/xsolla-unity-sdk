@@ -19,6 +19,16 @@ namespace Xsolla
 		public GameObject mBtnAddPaymentObj;
 		public ImageLoader mImgLoader; 
 
+		// for edit
+		public GameObject mDelPanelMethod;
+		public GameObject mPanelForDelMethod;
+		public Text 	  mQuestionLabel;
+		public GameObject mLinkCancel;
+		public GameObject mLinkDelete;
+		public GameObject mBtnReplace;
+
+		private XsollaUtils mUtilsLink;
+
 		public PaymentManagerController ()
 		{
 		}
@@ -30,6 +40,7 @@ namespace Xsolla
 
 		public void initScreen(XsollaUtils pUtils, XsollaSavedPaymentMethods pMethods)
 		{
+			mUtilsLink = pUtils;
 			mTitle.text = pUtils.GetTranslations().Get("payment_account_page_title");
 			mInformationTitle.text = pUtils.GetTranslations().Get("payment_account_add_title");
 			mInformation.text = pUtils.GetTranslations().Get("payment_account_add_info");
@@ -71,7 +82,7 @@ namespace Xsolla
 					// Set icon
 					mImgLoader.LoadImage(controller._iconMethod, item.GetImageUrl());		
 					// Set BtnDelAction
-					controller.getBtnDelete().onClick.AddListener(() => deletePaymentMethod(controller.getMethod()));
+					controller.getBtnDelete().onClick.AddListener(() => deletePaymentMethod(methodBtn));
 				}
 
 				// Add button "Add payment metnod"
@@ -80,9 +91,29 @@ namespace Xsolla
 				
 		}
 
-		private void deletePaymentMethod(XsollaSavedPaymentMethod pMethod)
+		private void initDeleteMethodPanel(GameObject pMethodObj)
+		{
+			// show edit panel
+			mContainer.SetActive(false);
+			mDelPanelMethod.SetActive(true);
+
+			// clone object to panel edit
+			GameObject methodPanel = Instantiate(pMethodObj);
+			methodPanel.transform.SetParent(mPanelForDelMethod.transform);
+
+			// set text 
+			mTitle.text = mUtilsLink.GetTranslations().Get("delete_payment_account_page_title");
+			mQuestionLabel.text = mUtilsLink.GetTranslations().Get("payment_account_delete_confirmation_question");
+			mLinkCancel.GetComponent<Text>().text = mUtilsLink.GetTranslations().Get("cancel");
+			mLinkDelete.GetComponent<Text>().text = mUtilsLink.GetTranslations().Get("delete_payment_account_button");
+			mBtnReplace.GetComponentInChildren<Text>().text = mUtilsLink.GetTranslations().Get("replace_payment_account_button");
+
+		}
+
+		private void deletePaymentMethod(GameObject pMethodObj)
 		{
 			Logger.Log("Click Btn to Delete saved method");
+			initDeleteMethodPanel(pMethodObj);
 		}
 	}
 }
