@@ -37,6 +37,11 @@ namespace Xsolla
 			_nameType.text = pNametype;
 		}
 
+		public void setMethodBtn(bool pState)
+		{
+			_btnMethod.enabled = pState;
+		}
+
 		public void setDeleteBtn(bool pState)
 		{
 			_btnDelete.SetActive(pState);

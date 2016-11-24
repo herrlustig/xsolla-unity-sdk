@@ -47,7 +47,6 @@ namespace Xsolla
 			mContinueLink.text = pUtils.GetTranslations().Get("payment_account_back_button") + " >";
 			mContinueLink.GetComponent<Button>().onClick.AddListener(delegate 
 				{
-					Logger.Log("Destroy history");
 					Destroy(this.gameObject);	
 				});
 			Text textBtn = mBtnAddPaymentObj.GetComponentInChildren<Text>();
@@ -70,6 +69,7 @@ namespace Xsolla
 
 					// Activated btn delete
 					controller.setDeleteBtn(true);
+					controller.setMethodBtn(false);
 					controller.setDeleteBtnName(pUtils.GetTranslations().Get("delete_payment_account_button"));
 
 					// Set btn property
@@ -82,7 +82,7 @@ namespace Xsolla
 					// Set icon
 					mImgLoader.LoadImage(controller._iconMethod, item.GetImageUrl());		
 					// Set BtnDelAction
-					controller.getBtnDelete().onClick.AddListener(() => deletePaymentMethod(methodBtn));
+					controller.getBtnDelete().onClick.AddListener(() => onClickDeletePaymentMethod(methodBtn));
 				}
 
 				// Add button "Add payment metnod"
@@ -99,18 +99,75 @@ namespace Xsolla
 
 			// clone object to panel edit
 			GameObject methodPanel = Instantiate(pMethodObj);
+			SavedMethodBtnController controller = methodPanel.GetComponent<SavedMethodBtnController>();
+			controller.setDeleteBtn(false);
+			controller.setMethodBtn(false);
+
+			RectTransform methodPanelrecttransform = methodPanel.GetComponent<RectTransform>();
+			// clear currency state
+			if (mPanelForDelMethod.transform.hasChanged)
+			{
+				for(int i = 0; i < mPanelForDelMethod.transform.childCount; i++)
+				{
+					Logger.Log("Destroy child on panel for edit saved payment method with ind - " + i);
+					Destroy(mPanelForDelMethod.transform.GetChild(i).gameObject);
+				}
+			}
+
 			methodPanel.transform.SetParent(mPanelForDelMethod.transform);
+			methodPanelrecttransform.anchorMin = new Vector2(0, 0);
+			methodPanelrecttransform.anchorMax = new Vector2(1, 1);
+			methodPanelrecttransform.pivot = new Vector2(0.5f, 0.5f);
+			methodPanelrecttransform.offsetMin = new Vector2(0,0);
+			methodPanelrecttransform.offsetMax = new Vector2(0,0);
+
 
 			// set text 
 			mTitle.text = mUtilsLink.GetTranslations().Get("delete_payment_account_page_title");
 			mQuestionLabel.text = mUtilsLink.GetTranslations().Get("payment_account_delete_confirmation_question");
 			mLinkCancel.GetComponent<Text>().text = mUtilsLink.GetTranslations().Get("cancel");
+			mLinkCancel.GetComponent<Button>().onClick.AddListener(() => onClickCancelEditMethod());
+
 			mLinkDelete.GetComponent<Text>().text = mUtilsLink.GetTranslations().Get("delete_payment_account_button");
+			mLinkDelete.GetComponent<Button>().onClick.AddListener(() => onClickConfirmDeletePaymentMethod(controller.getMethod()));
+
 			mBtnReplace.GetComponentInChildren<Text>().text = mUtilsLink.GetTranslations().Get("replace_payment_account_button");
+			mBtnReplace.GetComponent<Button>().onClick.AddListener(() => onCliceReplacePeymentMethod(controller.getMethod()));
 
 		}
 
-		private void deletePaymentMethod(GameObject pMethodObj)
+		private void onCliceReplacePeymentMethod(XsollaSavedPaymentMethod pMethod)
+		{
+			Logger.Log("Click replace method");
+		}
+
+		private void onClickConfirmDeletePaymentMethod(XsollaSavedPaymentMethod pMethod)
+		{
+			Logger.Log("Delete payment method");
+			Dictionary<String, object> reqParams = new Dictionary<string, object>();
+
+			reqParams.Add("id", pMethod.GetKey());
+			reqParams.Add("type", pMethod.GetType());
+
+
+
+			// https://secure.xsolla.com/paystation2/api/savedmethods/delete
+//			access_token:W8SaoL896NvrC3NfhN42gS7tgklgC2lN
+//			id:1957827
+//			type:paypal
+
+		}
+
+		private void onClickCancelEditMethod()
+		{
+			Logger.Log("Cancel edit method");
+
+			mInfoPanel.SetActive(false);
+			mDelPanelMethod.SetActive(false);
+			mContainer.SetActive(true);
+		}
+
+		private void onClickDeletePaymentMethod(GameObject pMethodObj)
 		{
 			Logger.Log("Click Btn to Delete saved method");
 			initDeleteMethodPanel(pMethodObj);
