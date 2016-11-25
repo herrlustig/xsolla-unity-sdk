@@ -32,6 +32,7 @@ namespace Xsolla
 		private const int HISTORY					= 22;
 		private const int PAYMENT_MANAGER_LIST		= 15;
 		private const int CALCULATE_CUSTOM_AMOUNT   = 14;
+		private const int DELETE_SAVED_METHOD 		= 16;
 
 		public Action<XsollaUtils> 					UtilsRecieved;
 		public Action<XsollaTranslations> 			TranslationRecieved;
@@ -60,6 +61,7 @@ namespace Xsolla
 		public Action<XVPStatus> 					VirtualPaymentStatusRecieved;
 
 		public Action<XsollaSavedPaymentMethods>	PaymentManagerMethods;
+		public Action								DeleteSavedPaymentMethodRespond;
 
 		//TODO CHANGE PARAMS
 		protected string _accessToken;
@@ -71,7 +73,6 @@ namespace Xsolla
 
 		public XsollaPaymentImpl(string accessToken){
 			this._accessToken = accessToken;
-
 		}
 
 		public void InitPaystation(XsollaWallet xsollaWallet)
@@ -268,6 +269,12 @@ namespace Xsolla
 			if (PaymentManagerMethods != null)
 				PaymentManagerMethods(pRes);
 		}
+
+		protected virtual void OnDeleteSavedPaymentMethod()
+		{
+			if (DeleteSavedPaymentMethodRespond != null)
+				DeleteSavedPaymentMethodRespond();
+		}
 		
 		// ---------------------------------------------------------------------------
 
@@ -412,6 +419,13 @@ namespace Xsolla
 			if (!pParams.ContainsKey(XsollaApiConst.ACCESS_TOKEN))
 				pParams.Add(XsollaApiConst.ACCESS_TOKEN, baseParams[XsollaApiConst.ACCESS_TOKEN]);
 			POST(CALCULATE_CUSTOM_AMOUNT, GetCalculateCustomAmountUrl(), pParams);
+		}
+
+		public void DeleteSavedMethod(Dictionary<string, object> pParam)
+		{
+			if (!pParam.ContainsKey(XsollaApiConst.ACCESS_TOKEN))
+				pParam.Add(XsollaApiConst.ACCESS_TOKEN, baseParams[XsollaApiConst.ACCESS_TOKEN]);
+			POST(DELETE_SAVED_METHOD, GetDeleteSavedPaymentMethodUrl(), pParam);
 		}
 
 		public WWW POST(int type, string url, Dictionary<string, object> post)
@@ -912,6 +926,19 @@ namespace Xsolla
 							OnPaymentManagerMethod(res);
 						}
 						break;
+						case DELETE_SAVED_METHOD:
+						{
+							if (rootNode["error"] != null)
+							{
+								// has error
+								Logger.Log("Respond on delete savedPaymentMethod has error");
+							}
+							else
+								OnDeleteSavedPaymentMethod();
+
+							//XsollaDeleteSavedMethodRespond res = new XsollaDeleteSavedMethodRespond().Parse(rootNode) as XsollaDeleteSavedMethodRespond;
+						}
+						break;
 						default:
 						break;
 					}
@@ -1026,6 +1053,11 @@ namespace Xsolla
 		private string GetCalculateCustomAmountUrl() 
 		{
 			return DOMAIN + "/paystation2/api/pricepoints/calculate";
+		}
+
+		private string GetDeleteSavedPaymentMethodUrl()
+		{
+			return DOMAIN + "paystation2/api/savedmethods/delete";
 		}
 
 		//*** GA SECTION START ***

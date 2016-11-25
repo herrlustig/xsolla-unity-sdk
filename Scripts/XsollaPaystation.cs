@@ -68,6 +68,7 @@ namespace  Xsolla
 		protected abstract void ShowVPStatus (XsollaUtils utils, XVPStatus status);
 		protected abstract void GetCouponErrorProceed(XsollaCouponProceedResult presult);
 		protected abstract void PaymentManagerRecieved(XsollaSavedPaymentMethods pResult);
+		protected abstract void DeleteSavedPaymentMethodRecieved();
 
 		//{"user":{ "id":{ "value":"1234567","hidden":true},"email":{"value":"support@xsolla.com"},"name":{"value":"Tardis"},"country":{"value":"US"} },"settings":{"project_id":15764,"language":"en","currency":"USD"}}
 		//jafS6nqbzRpZzA38
@@ -137,6 +138,7 @@ namespace  Xsolla
 
 			Payment.CouponProceedErrorRecived += (proceed) => GetCouponErrorProceed(proceed);
 			Payment.PaymentManagerMethods += (savedMethods) => PaymentManagerRecieved(savedMethods);
+			Payment.DeleteSavedPaymentMethodRespond += () => DeleteSavedPaymentMethodRecieved();
 			
 			Payment.ErrorReceived += ShowPaymentError;
 			Payment.SetModeSandbox (isSandbox);
@@ -311,6 +313,12 @@ namespace  Xsolla
 			FillPurchase(ActivePurchase.Part.XPS, items);
 			TryApplyCoupone();
 			
+		}
+
+		public void DeleteSavedPaymentMethod(Dictionary<string, object> pParam)
+		{
+			Logger.Log("Delete method");
+			Payment.DeleteSavedMethod(pParam);
 		}
 
 		public void DoPayment(Dictionary<string, object> items)

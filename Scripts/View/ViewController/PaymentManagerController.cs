@@ -149,9 +149,10 @@ namespace Xsolla
 			reqParams.Add("id", pMethod.GetKey());
 			reqParams.Add("type", pMethod.GetType());
 
+			XsollaPaystationController controller = gameObject.GetComponentInParent<XsollaPaystationController>();
+			controller.DeleteSavedPaymentMethod(reqParams);
 
-
-			// https://secure.xsolla.com/paystation2/api/savedmethods/delete
+// 			https://secure.xsolla.com/paystation2/api/savedmethods/delete
 //			access_token:W8SaoL896NvrC3NfhN42gS7tgklgC2lN
 //			id:1957827
 //			type:paypal
