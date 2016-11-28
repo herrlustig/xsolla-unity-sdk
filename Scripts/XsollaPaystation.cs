@@ -249,9 +249,12 @@ namespace  Xsolla
 			Payment.GetHistory(pParams);
 		}
 
-		public void LoadPaymentManager(Dictionary<string, object> pParams)
+		public void LoadPaymentManager()
 		{
-			Payment.GetSavedPaymentsForManager(pParams);
+			Logger.Log("Show Payment manager");
+			Dictionary<string, object> lParams = new Dictionary<string, object>();
+			lParams.Add("userInitialCurrency", "");
+			Payment.GetSavedPaymentsForManager(lParams);
 		}
 
 		public void UpdateCountries(string countryIso)

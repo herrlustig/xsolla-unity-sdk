@@ -68,6 +68,11 @@ namespace Xsolla
 			return id.ToString();
 		}
 
+		public string GetMethodType()
+		{
+			return type;
+		}
+
 		public long GetPid()
 		{
 			return pid;

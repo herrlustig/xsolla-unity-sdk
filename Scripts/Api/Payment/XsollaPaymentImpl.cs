@@ -1057,7 +1057,7 @@ namespace Xsolla
 
 		private string GetDeleteSavedPaymentMethodUrl()
 		{
-			return DOMAIN + "paystation2/api/savedmethods/delete";
+			return DOMAIN + "/paystation2/api/savedmethods/delete";
 		}
 
 		//*** GA SECTION START ***

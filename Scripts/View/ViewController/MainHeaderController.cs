@@ -40,10 +40,7 @@ namespace Xsolla
 
 		private void ShowPaymentManager()
 		{
-			Logger.Log("Show Payment manager");
-			Dictionary<string, object> lParams = new Dictionary<string, object>();
-			lParams.Add("userInitialCurrency", "");
-			GetComponentInParent<XsollaPaystation> ().LoadPaymentManager(lParams);
+			GetComponentInParent<XsollaPaystation> ().LoadPaymentManager();
 		}
 
 		public void ShowHistory()

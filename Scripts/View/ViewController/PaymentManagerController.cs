@@ -26,6 +26,7 @@ namespace Xsolla
 		public GameObject mLinkCancel;
 		public GameObject mLinkDelete;
 		public GameObject mBtnReplace;
+		public GameObject mDelStatusPanel;
 
 		private XsollaUtils mUtilsLink;
 
@@ -82,7 +83,7 @@ namespace Xsolla
 					// Set icon
 					mImgLoader.LoadImage(controller._iconMethod, item.GetImageUrl());		
 					// Set BtnDelAction
-					controller.getBtnDelete().onClick.AddListener(() => onClickDeletePaymentMethod(methodBtn));
+					controller.getBtnDelete().onClick.AddListener(() => onClickDeletePaymentMethod(controller));
 				}
 
 				// Add button "Add payment metnod"
@@ -91,19 +92,33 @@ namespace Xsolla
 				
 		}
 
-		private void initDeleteMethodPanel(GameObject pMethodObj)
+		public void SetStatusDeleteOk()
+		{
+			string statusText = mUtilsLink.GetTranslations().Get("payment_account_message_delete_account_successfully");
+			StartCoroutine(ShowStatusBar(statusText,3));
+		}
+
+		private IEnumerator ShowStatusBar(string pStatus,float time)
+		{
+			mDelStatusPanel.GetComponentInChildren<Text>().text = pStatus;
+			mDelStatusPanel.SetActive(true);
+			yield return new WaitForSeconds(time);
+			mDelStatusPanel.SetActive(false);
+		}
+
+		private void initDeleteMethodPanel(SavedMethodBtnController pMethodObj)
 		{
 			// show edit panel
 			mContainer.SetActive(false);
 			mDelPanelMethod.SetActive(true);
 
 			// clone object to panel edit
-			GameObject methodPanel = Instantiate(pMethodObj);
-			SavedMethodBtnController controller = methodPanel.GetComponent<SavedMethodBtnController>();
+			SavedMethodBtnController controller = Instantiate(pMethodObj);
+			controller.setMethod(pMethodObj.getMethod());
 			controller.setDeleteBtn(false);
 			controller.setMethodBtn(false);
 
-			RectTransform methodPanelrecttransform = methodPanel.GetComponent<RectTransform>();
+			RectTransform methodPanelrecttransform = controller.GetComponent<RectTransform>();
 			// clear currency state
 			if (mPanelForDelMethod.transform.hasChanged)
 			{
@@ -114,13 +129,12 @@ namespace Xsolla
 				}
 			}
 
-			methodPanel.transform.SetParent(mPanelForDelMethod.transform);
+			controller.transform.SetParent(mPanelForDelMethod.transform);
 			methodPanelrecttransform.anchorMin = new Vector2(0, 0);
 			methodPanelrecttransform.anchorMax = new Vector2(1, 1);
 			methodPanelrecttransform.pivot = new Vector2(0.5f, 0.5f);
 			methodPanelrecttransform.offsetMin = new Vector2(0,0);
 			methodPanelrecttransform.offsetMax = new Vector2(0,0);
-
 
 			// set text 
 			mTitle.text = mUtilsLink.GetTranslations().Get("delete_payment_account_page_title");
@@ -147,7 +161,7 @@ namespace Xsolla
 			Dictionary<String, object> reqParams = new Dictionary<string, object>();
 
 			reqParams.Add("id", pMethod.GetKey());
-			reqParams.Add("type", pMethod.GetType());
+			reqParams.Add("type", pMethod.GetMethodType());
 
 			XsollaPaystationController controller = gameObject.GetComponentInParent<XsollaPaystationController>();
 			controller.DeleteSavedPaymentMethod(reqParams);
@@ -168,7 +182,7 @@ namespace Xsolla
 			mContainer.SetActive(true);
 		}
 
-		private void onClickDeletePaymentMethod(GameObject pMethodObj)
+		private void onClickDeletePaymentMethod(SavedMethodBtnController pMethodObj)
 		{
 			Logger.Log("Click Btn to Delete saved method");
 			initDeleteMethodPanel(pMethodObj);

@@ -36,6 +36,7 @@ namespace Xsolla
 		private ShopViewController 			_shopViewController;
 		private RedeemCouponViewController  _couponController;
 		private RadioGroupController 		_radioController;
+		private PaymentManagerController 	_SavedPaymentController;
 
 		private static ActiveScreen 		currentActive = ActiveScreen.UNKNOWN;
 		private Transform 					menuTransform;
@@ -263,9 +264,9 @@ namespace Xsolla
 		{
 			currentActive = ActiveScreen.PAYMENT_MANAGER;
 			GameObject paymentManager = Instantiate(Resources.Load(PREFAB_SCREEN_PAYMENT_MANAGER)) as GameObject;
-			PaymentManagerController controller = paymentManager.GetComponent<PaymentManagerController>();
-			controller.initScreen(Utils, pResult);
-			controller.GetAddAccountBtn().onClick.AddListener(delegate 
+			_SavedPaymentController = paymentManager.GetComponent<PaymentManagerController>();
+			_SavedPaymentController.initScreen(Utils, pResult);
+			_SavedPaymentController.GetAddAccountBtn().onClick.AddListener(delegate 
 				{
 					AddPaymentAccount();
 				});
@@ -277,7 +278,13 @@ namespace Xsolla
 
 		protected override void DeleteSavedPaymentMethodRecieved()
 		{
-			throw new NotImplementedException ();
+			// Send message on delete to form
+			if ((currentActive == ActiveScreen.PAYMENT_MANAGER) && (_SavedPaymentController != null))
+			{
+				_SavedPaymentController.SetStatusDeleteOk();
+				// Reload savedMethods
+				LoadPaymentManager();
+			}
 		}
 
 		// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
