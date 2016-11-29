@@ -262,18 +262,17 @@ namespace Xsolla
 
 		protected override void PaymentManagerRecieved (XsollaSavedPaymentMethods pResult)
 		{
-			currentActive = ActiveScreen.PAYMENT_MANAGER;
-			GameObject paymentManager = Instantiate(Resources.Load(PREFAB_SCREEN_PAYMENT_MANAGER)) as GameObject;
-			_SavedPaymentController = paymentManager.GetComponent<PaymentManagerController>();
+			if (currentActive != ActiveScreen.PAYMENT_MANAGER)
+			{
+				currentActive = ActiveScreen.PAYMENT_MANAGER;
+				GameObject paymentManager = Instantiate(Resources.Load(PREFAB_SCREEN_PAYMENT_MANAGER)) as GameObject;
+				_SavedPaymentController = paymentManager.GetComponent<PaymentManagerController>();
+				paymentManager.transform.SetParent (mainScreenContainer.transform);
+				paymentManager.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, 0);
+				Resizer.ResizeToParrent (paymentManager);
+			}
 			_SavedPaymentController.initScreen(Utils, pResult);
-			_SavedPaymentController.GetAddAccountBtn().onClick.AddListener(delegate 
-				{
-					AddPaymentAccount();
-				});
-			paymentManager.transform.SetParent (mainScreenContainer.transform);
-			paymentManager.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, 0);
-			Resizer.ResizeToParrent (paymentManager);
-
+			_SavedPaymentController.SetAddMethodAction(AddPaymentAccount);
 		}
 
 		protected override void DeleteSavedPaymentMethodRecieved()

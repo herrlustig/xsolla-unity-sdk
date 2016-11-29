@@ -39,6 +39,13 @@ namespace Xsolla
 			return mBtnAddPaymentObj.GetComponent<Button>();
 		}
 
+		public void SetAddMethodAction(Action pAction)
+		{
+			Button btnAddMethod = mBtnAddPaymentObj.GetComponent<Button>();
+			btnAddMethod.onClick.RemoveAllListeners();
+			btnAddMethod.onClick.AddListener(() => pAction());
+		}
+
 		public void initScreen(XsollaUtils pUtils, XsollaSavedPaymentMethods pMethods)
 		{
 			mUtilsLink = pUtils;
@@ -46,20 +53,32 @@ namespace Xsolla
 			mInformationTitle.text = pUtils.GetTranslations().Get("payment_account_add_title");
 			mInformation.text = pUtils.GetTranslations().Get("payment_account_add_info");
 			mContinueLink.text = pUtils.GetTranslations().Get("payment_account_back_button") + " >";
-			mContinueLink.GetComponent<Button>().onClick.AddListener(delegate 
+
+			Button continueBtn = mContinueLink.GetComponent<Button>();
+			continueBtn.onClick.RemoveAllListeners();
+			continueBtn.onClick.AddListener(delegate 
 				{
 					Destroy(this.gameObject);	
 				});
 			Text textBtn = mBtnAddPaymentObj.GetComponentInChildren<Text>();
 			textBtn.text = pUtils.GetTranslations().Get("payment_account_add_button");
+
+			// clear btn Grid
+			for(int i = 0; i < mBtnGrid.transform.childCount; i++ )
+			{
+				Destroy(mBtnGrid.transform.GetChild(i).gameObject);
+			}
+
 			if (pMethods.GetCount() == 0)
 			{
 				mContainer.SetActive(false);
+				mDelPanelMethod.SetActive(false);
 				mInfoPanel.SetActive(true);
 			}
 			else
 			{
 				mInfoPanel.SetActive(false);
+				mDelPanelMethod.SetActive(false);
 				mContainer.SetActive(true);
 				foreach (XsollaSavedPaymentMethod item in pMethods.GetItemList())
 				{
