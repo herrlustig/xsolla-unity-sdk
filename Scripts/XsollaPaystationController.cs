@@ -271,8 +271,8 @@ namespace Xsolla
 				paymentManager.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, 0);
 				Resizer.ResizeToParrent (paymentManager);
 			}
-			_SavedPaymentController.initScreen(Utils, pResult);
-			_SavedPaymentController.SetAddMethodAction(AddPaymentAccount);
+			_SavedPaymentController.initScreen(Utils, pResult, AddPaymentAccount);
+			//_SavedPaymentController.SetAddMethodAction(AddPaymentAccount);
 		}
 
 		protected override void DeleteSavedPaymentMethodRecieved()

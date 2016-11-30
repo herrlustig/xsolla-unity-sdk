@@ -46,7 +46,7 @@ namespace Xsolla
 			btnAddMethod.onClick.AddListener(() => pAction());
 		}
 
-		public void initScreen(XsollaUtils pUtils, XsollaSavedPaymentMethods pMethods)
+		public void initScreen(XsollaUtils pUtils, XsollaSavedPaymentMethods pMethods, Action pAddPaymentMethod)
 		{
 			mUtilsLink = pUtils;
 			mTitle.text = pUtils.GetTranslations().Get("payment_account_page_title");
@@ -74,6 +74,10 @@ namespace Xsolla
 				mContainer.SetActive(false);
 				mDelPanelMethod.SetActive(false);
 				mInfoPanel.SetActive(true);
+
+				Button btnAddPayment = mBtnAddPaymentObj.GetComponent<Button>();
+				btnAddPayment.onClick.RemoveAllListeners();
+				btnAddPayment.onClick.AddListener(() => pAddPaymentMethod());
 			}
 			else
 			{
@@ -106,7 +110,13 @@ namespace Xsolla
 				}
 
 				// Add button "Add payment metnod"
-				Instantiate<GameObject>(mBtnAddPaymentObj).transform.SetParent(mBtnGrid.transform);
+				GameObject objAddMethodClone = Instantiate<GameObject>(mBtnAddPaymentObj);
+				objAddMethodClone.transform.SetParent(mBtnGrid.transform);
+				//set onclickListener
+				Button btnAddMethod = objAddMethodClone.GetComponent<Button>();
+				btnAddMethod.onClick.RemoveAllListeners();
+				btnAddMethod.onClick.AddListener(() => pAddPaymentMethod());
+
 			}
 				
 		}
@@ -158,13 +168,17 @@ namespace Xsolla
 			// set text 
 			mTitle.text = mUtilsLink.GetTranslations().Get("delete_payment_account_page_title");
 			mQuestionLabel.text = mUtilsLink.GetTranslations().Get("payment_account_delete_confirmation_question");
-			mLinkCancel.GetComponent<Text>().text = mUtilsLink.GetTranslations().Get("cancel");
-			mLinkCancel.GetComponent<Button>().onClick.AddListener(() => onClickCancelEditMethod());
 
+			mLinkCancel.GetComponent<Text>().text = mUtilsLink.GetTranslations().Get("cancel");
+			mLinkCancel.GetComponent<Button>().onClick.RemoveAllListeners();
+			mLinkCancel.GetComponent<Button>().onClick.AddListener(() => onClickCancelEditMethod());
+	
 			mLinkDelete.GetComponent<Text>().text = mUtilsLink.GetTranslations().Get("delete_payment_account_button");
+			mLinkDelete.GetComponent<Button>().onClick.RemoveAllListeners();
 			mLinkDelete.GetComponent<Button>().onClick.AddListener(() => onClickConfirmDeletePaymentMethod(controller.getMethod()));
 
 			mBtnReplace.GetComponentInChildren<Text>().text = mUtilsLink.GetTranslations().Get("replace_payment_account_button");
+			mBtnReplace.GetComponent<Button>().onClick.RemoveAllListeners();
 			mBtnReplace.GetComponent<Button>().onClick.AddListener(() => onCliceReplacePeymentMethod(controller.getMethod()));
 
 		}
