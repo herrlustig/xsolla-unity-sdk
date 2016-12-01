@@ -34,18 +34,6 @@ namespace Xsolla
 		{
 		}
 
-		public Button GetAddAccountBtn()
-		{
-			return mBtnAddPaymentObj.GetComponent<Button>();
-		}
-
-		public void SetAddMethodAction(Action pAction)
-		{
-			Button btnAddMethod = mBtnAddPaymentObj.GetComponent<Button>();
-			btnAddMethod.onClick.RemoveAllListeners();
-			btnAddMethod.onClick.AddListener(() => pAction());
-		}
-
 		public void initScreen(XsollaUtils pUtils, XsollaSavedPaymentMethods pMethods, Action pAddPaymentMethod)
 		{
 			mUtilsLink = pUtils;
