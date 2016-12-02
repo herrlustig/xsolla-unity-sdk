@@ -57,8 +57,8 @@ namespace Xsolla
 		}
 
 
-		public void ContainsKey(Part part){
-			purchase.ContainsKey (part);
+		public bool ContainsKey(Part part){
+			return purchase.ContainsKey (part);
 		}
 
 		public Dictionary<string, object> GetPart(Part part){

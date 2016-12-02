@@ -225,7 +225,7 @@ namespace  Xsolla
 		public void LoadPaymentMethods()
 		{
 			Logger.Log ("Load Payment Methods request");
-			SetLoading (true);
+			SetLoading (true);	
 			Payment.GetPayments (_countryCurr, currentPurchase.GetMergedMap());
 		}
 			
@@ -366,6 +366,17 @@ namespace  Xsolla
 				currentPurchase.Remove(part);
 				currentPurchase.Add(part, new Dictionary<string, object>(items));
 			}
+		}
+
+		public void RemovePurchasePart(ActivePurchase.Part pPart)
+		{
+			Logger.Log("Remove purchase part: " + pPart.ToString());
+			if ((currentPurchase != null) && (currentPurchase.ContainsKey(pPart)))
+			{
+				currentPurchase.Remove(pPart);		
+			}
+			else
+				Logger.Log("purchase is null or don't contain key");
 		}
 
 		private void TryApplyCoupone()

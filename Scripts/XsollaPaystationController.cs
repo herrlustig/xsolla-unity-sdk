@@ -271,8 +271,11 @@ namespace Xsolla
 				paymentManager.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, 0);
 				Resizer.ResizeToParrent (paymentManager);
 			}
+		
+			// Remove purchase part 
+			Restart();
 			_SavedPaymentController.initScreen(Utils, pResult, AddPaymentAccount);
-			//_SavedPaymentController.SetAddMethodAction(AddPaymentAccount);
+			
 		}
 
 		protected override void DeleteSavedPaymentMethodRecieved()
@@ -373,6 +376,7 @@ namespace Xsolla
 			Dictionary<string, object> reqParams = new Dictionary<string, object>();
 			reqParams.Add("save_payment_account_only",1);
 			FillPurchase(ActivePurchase.Part.PAYMENT_MANAGER, reqParams);
+			// reload payment methods
 			LoadPaymentMethods();
 		}
 			
