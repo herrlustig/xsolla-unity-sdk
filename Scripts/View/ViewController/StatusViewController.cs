@@ -26,12 +26,21 @@ namespace Xsolla {
 			string input = translations.Get (XsollaTranslations.STATUS_PURCHASED_DESCRIPTION);
 			XsollaStatusText statusText = xsollaStatus.GetStatusText ();
 			XsollaStatus.Group currentStatus = xsollaStatus.GetGroup ();
-			if (input != null) {
+			if (input != null) 
+			{
 				string pattern = "{{.*?}}";
 				Regex regex = new Regex (pattern);
-				input = regex.Replace (input, statusText.GetPurchsaeValue(), 1);
-				input = regex.Replace (input, statusText.Get ("sum").GetValue (), 1);
-			} else {
+
+				if ((statusText.GetPurchsaeValue() != "") && (statusText.Get ("sum").GetValue () != ""))
+				{
+					input = regex.Replace (input, statusText.GetPurchsaeValue(), 1);
+					input = regex.Replace (input, statusText.Get ("sum").GetValue (), 1);	
+				}
+				else
+					input = "";
+			}
+			else 
+			{
 				input = "";
 			}
 			PrepareStatus (currentStatus, xsollaStatus.GetStatusText().GetState (), input, xsollaStatus.GetInvoice());
@@ -39,7 +48,8 @@ namespace Xsolla {
 			if(currentStatus == XsollaStatus.Group.DONE)
 				AddStatus (translations.Get (XsollaTranslations.VIRTUALSTATUS_DONE_DESCRIPTIONS));
 
-			AddElement (statusText.GetPurchsaeValue(), statusText.Get ("sum").GetValue ());
+			if (statusText.GetPurchsaeValue() != "")
+				AddElement (statusText.GetPurchsaeValue(), statusText.Get ("sum").GetValue ());
 			
 			XsollaStatusText.StatusTextElement element = statusText.Get ("out");
 			if(element != null)
@@ -67,8 +77,10 @@ namespace Xsolla {
 				statusViewExitButton.gameObject.GetComponent<Text> ().text = statusText.backUrlCaption;
 			else
 				statusViewExitButton.gameObject.GetComponent<Text> ().text = translations.Get(XsollaTranslations.BACK_TO_STORE);
-			statusViewExitButton.onClick.AddListener (delegate {OnClickExit(currentStatus, xsollaStatus.GetStatusData().GetInvoice(), xsollaStatus.GetStatusData().GetStatus(), null);});
-
+			statusViewExitButton.onClick.AddListener (delegate 
+				{
+					OnClickExit(currentStatus, xsollaStatus.GetStatusData().GetInvoice(), xsollaStatus.GetStatusData().GetStatus(), null);
+				});
 		}
 
 		public void DrawVpStatus(XsollaUtils utils, XVPStatus status){
@@ -153,6 +165,10 @@ namespace Xsolla {
 		}
 
 		private void AddElement(string s, string s1){
+			// if key and value is empty
+			if ((s == "") && (s1 == ""))
+				return;
+			
 			GameObject elementInstance = Instantiate (rowInfoElementPrefab) as GameObject;
 			elementInstance.transform.SetParent (checkListTransform);
 			Text[] texts = elementInstance.GetComponentsInChildren<Text> ();
