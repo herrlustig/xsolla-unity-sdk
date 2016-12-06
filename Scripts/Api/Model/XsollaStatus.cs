@@ -111,6 +111,16 @@ namespace Xsolla
 			return statusData;
 		}
 
+		public bool GetNeedCheck()
+		{
+			return needToCheck;
+		}
+
+		public bool IsCancelUser()
+		{
+			return isCancelUser;
+		}
+
 //        public override string ToString()
 //		{
 //			return string.Format ("[XsollaStatus]"

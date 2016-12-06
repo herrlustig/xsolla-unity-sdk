@@ -43,7 +43,7 @@ namespace Xsolla {
 			{
 				input = "";
 			}
-			PrepareStatus (currentStatus, xsollaStatus.GetStatusText().GetState (), input, xsollaStatus.GetInvoice());
+			PrepareStatus (currentStatus, xsollaStatus.GetStatusText().GetState (), input, xsollaStatus.GetInvoice(), xsollaStatus);
 			AddTitle (statusText.GetProjectString());
 			if(currentStatus == XsollaStatus.Group.DONE)
 				AddStatus (translations.Get (XsollaTranslations.VIRTUALSTATUS_DONE_DESCRIPTIONS));
@@ -79,7 +79,8 @@ namespace Xsolla {
 				statusViewExitButton.gameObject.GetComponent<Text> ().text = translations.Get(XsollaTranslations.BACK_TO_STORE);
 			statusViewExitButton.onClick.AddListener (delegate 
 				{
-					OnClickExit(currentStatus, xsollaStatus.GetStatusData().GetInvoice(), xsollaStatus.GetStatusData().GetStatus(), null);
+					//OnClickExit(currentStatus, xsollaStatus.GetStatusData().GetInvoice(), xsollaStatus.GetStatusData().GetStatus(), null);
+					OnClickBack(currentStatus, xsollaStatus.GetStatusData().GetInvoice(), xsollaStatus.GetStatusData().GetStatus(), null);
 				});
 		}
 
@@ -111,7 +112,7 @@ namespace Xsolla {
 			statusViewExitButton.onClick.AddListener (delegate {OnClickBack(currentStatus, status.OperationId, Xsolla.XsollaStatusData.Status.DONE, status.GetPurchaseList());});
 		}
 
-		public void PrepareStatus(XsollaStatus.Group group, string state, string purchase, string invoice){
+		public void PrepareStatus(XsollaStatus.Group group, string state, string purchase, string invoice, XsollaStatus pStatus = null){
 			Component[] texts = status.GetComponentsInChildren(typeof(Text),true);// [0] Icon [1] Title [2] purchse
 //  			Image bg = status.GetComponent<Image> ();
 			ColorController colorController = GetComponent<ColorController> ();
@@ -123,6 +124,23 @@ namespace Xsolla {
 			}
 			else
 				texts[2].gameObject.SetActive(false);
+
+
+			if (pStatus != null)
+			{
+				if (pStatus.GetNeedCheck())
+				{
+					((Text)texts[0]).text = "";
+					((Text)texts[0]).gameObject.AddComponent<MyRotation>();
+					colorController.ChangeColor(1, StyleManager.BaseColor.selected);
+					StartCoroutine(UpdateStatus(invoice));
+					return;
+				}
+				if (pStatus.IsCancelUser())
+				{
+					Logger.Log("User canceled operation");
+				}
+			}
 
 			switch (group){
 				case XsollaStatus.Group.DONE:
