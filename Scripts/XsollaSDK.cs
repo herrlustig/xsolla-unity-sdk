@@ -42,19 +42,19 @@ namespace Xsolla {
 			// Prepare args
 			Dictionary<string, object> dataArgs = new Dictionary<string, object>();
 			dataArgs.Add("data", request);
-			XsollaPaystation.AddHttpRequestObj();
+//			XsollaPaystation.AddHttpRequestObj();
 			// Get object to request 
-			HttpTlsRequest httpreq = GameObject.Find(HttpTlsRequest.loaderGameObjName).GetComponent<HttpTlsRequest>();
-			StartCoroutine(httpreq.Request("https://livedemo.xsolla.com/sdk/token/", dataArgs, (value) => {
-				if (!value.HasError)
-				{
-				JSONNode rootNode = JSON.Parse(value.TextRequest);
-				Logger.Log("Token - " + rootNode["token"].Value);
-				SetToken(formController, rootNode["token"].Value);
-				}
-				else 
-					Logger.Log(value.ErrorText);	
-				}));
+//			HttpTlsRequest httpreq = GameObject.Find(HttpTlsRequest.loaderGameObjName).GetComponent<HttpTlsRequest>();
+//			StartCoroutine(httpreq.Request("https://livedemo.xsolla.com/sdk/token/", dataArgs, (value) => {
+//				if (!value.HasError)
+//				{
+//				JSONNode rootNode = JSON.Parse(value.TextRequest);
+//				Logger.Log("Token - " + rootNode["token"].Value);
+//				SetToken(formController, rootNode["token"].Value);
+//				}
+//				else 
+//					Logger.Log(value.ErrorText);	
+//				}));
 			// Show payment form
 			//SetToken(formController, token);
 			StartCoroutine(XsollaJsonGenerator.FreshToken ((token) => SetToken(formController, token)));

@@ -12,6 +12,8 @@ namespace Xsolla
 		public Text _nameType;
 		public Button _btnMethod;
 		public GameObject _btnDelete;
+		public GameObject _toggleObj;
+		public Toggle _toggle;
 		public Text _btnDeleteName;
 		public GameObject _self;
 
@@ -45,7 +47,27 @@ namespace Xsolla
 		public void setDeleteBtn(bool pState)
 		{
 			_btnDelete.SetActive(pState);
-			_btnMethod.enabled = !pState;
+		}
+
+		public void setToggleObj(bool pState, Action<string, bool> pActionChange)
+		{
+			_toggleObj.SetActive(pState);
+			_toggle.onValueChanged.RemoveAllListeners();
+			_toggle.onValueChanged.AddListener((value) => 
+				{
+					if (value)
+						pActionChange(_method.GetKey(), value);
+				});
+		}
+
+		public bool getToggleState()
+		{
+			return _toggle.isOn;
+		}
+
+		public void setToggleState(bool pState)
+		{
+			_toggle.isOn = pState;
 		}
 
 		public void setDeleteBtnName(String pName)

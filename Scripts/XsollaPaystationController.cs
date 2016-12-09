@@ -42,7 +42,7 @@ namespace Xsolla
 		private Transform 					menuTransform;
 		private GameObject 					mainScreenContainer;
 
-		enum ActiveScreen
+		public enum ActiveScreen
 		{
 			SHOP, P_LIST, VP_PAYMENT, PAYMENT, STATUS, ERROR, UNKNOWN, FAV_ITEMS_LIST, REDEEM_COUPONS, HISTORY_LIST, PAYMENT_MANAGER
 		}
@@ -264,12 +264,14 @@ namespace Xsolla
 		{
 			if (currentActive != ActiveScreen.PAYMENT_MANAGER)
 			{
-				currentActive = ActiveScreen.PAYMENT_MANAGER;
 				GameObject paymentManager = Instantiate(Resources.Load(PREFAB_SCREEN_PAYMENT_MANAGER)) as GameObject;
 				_SavedPaymentController = paymentManager.GetComponent<PaymentManagerController>();
+				_SavedPaymentController.setPrevScreen(currentActive);
+				_SavedPaymentController.setOnCloseMethod(setCurrentScreenValue);
 				paymentManager.transform.SetParent (mainScreenContainer.transform);
 				paymentManager.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, 0);
 				Resizer.ResizeToParrent (paymentManager);
+				currentActive = ActiveScreen.PAYMENT_MANAGER;
 			}
 		
 			// Remove purchase part 
@@ -378,6 +380,11 @@ namespace Xsolla
 			FillPurchase(ActivePurchase.Part.PAYMENT_MANAGER, reqParams);
 			// reload payment methods
 			LoadPaymentMethods();
+		}
+
+		private void setCurrentScreenValue(ActiveScreen pValue)
+		{
+			currentActive = pValue;
 		}
 			
 		private void DrawError(XsollaError error)

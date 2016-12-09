@@ -76,7 +76,7 @@ namespace  Xsolla
 		//KVvI4jVlPaTbre4IAD2chJWTBRqQPkCD
 		public void OpenPaystation (string accessToken, bool isSandbox)
 		{
-			AddHttpRequestObj();
+//			AddHttpRequestObj();
 			SetLoading (isSandbox);
 			Logger.isLogRequired = true;//isSandbox;
 			Logger.Log ("Paystation initiated current mode sandbox");
@@ -318,10 +318,17 @@ namespace  Xsolla
 			
 		}
 
-		public void DeleteSavedPaymentMethod(Dictionary<string, object> pParam)
+		public void DeleteSavedPaymentMethod(Dictionary<string, object> pParams)
 		{
 			Logger.Log("Delete method");
-			Payment.DeleteSavedMethod(pParam);
+			Payment.DeleteSavedMethod(pParams);
+		}
+
+		public void ReplacedOnSavedMethod(Dictionary<string, object> pParams)
+		{
+			Logger.Log("Replaced saved method on saved method");
+			FillPurchase(ActivePurchase.Part.XPS, pParams);
+			TryPay();
 		}
 
 		public void DoPayment(Dictionary<string, object> items)

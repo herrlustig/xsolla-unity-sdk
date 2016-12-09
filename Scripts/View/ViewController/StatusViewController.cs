@@ -126,21 +126,21 @@ namespace Xsolla {
 				texts[2].gameObject.SetActive(false);
 
 
-			if (pStatus != null)
-			{
-				if (pStatus.GetNeedCheck())
-				{
-					((Text)texts[0]).text = "";
-					((Text)texts[0]).gameObject.AddComponent<MyRotation>();
-					colorController.ChangeColor(1, StyleManager.BaseColor.selected);
-					StartCoroutine(UpdateStatus(invoice));
-					return;
-				}
-				if (pStatus.IsCancelUser())
-				{
-					Logger.Log("User canceled operation");
-				}
-			}
+//			if (pStatus != null)
+//			{
+//				if (pStatus.GetNeedCheck())
+//				{
+//					((Text)texts[0]).text = "";
+//					((Text)texts[0]).gameObject.AddComponent<MyRotation>();
+//					colorController.ChangeColor(1, StyleManager.BaseColor.selected);
+//					StartCoroutine(UpdateStatus(invoice));
+//					return;
+//				}
+//				if (pStatus.IsCancelUser())
+//				{
+//					Logger.Log("User canceled operation");
+//				}
+//			}
 
 			switch (group){
 				case XsollaStatus.Group.DONE:
