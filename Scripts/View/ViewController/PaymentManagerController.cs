@@ -265,7 +265,7 @@ namespace Xsolla
 			mBtnContinue.GetComponentInChildren<Text>().text = mUtilsLink.GetTranslations().Get("form_continue");
 			Button btnContinue = mBtnContinue.GetComponent<Button>();
 			btnContinue.onClick.RemoveAllListeners();
-			btnContinue.onClick.AddListener(() => onClickConfirmReplaced(pMethod.GetKey()));
+			btnContinue.onClick.AddListener(() => onClickConfirmReplaced(pMethod));
 
 		}
 
@@ -283,16 +283,27 @@ namespace Xsolla
 			}
 		}
 
-		private void onClickConfirmReplaced(string pMethodKey)
+		private void onClickConfirmReplaced(XsollaSavedPaymentMethod pMethod)
 		{
 			Logger.Log("Raplaced existing method");
 			Dictionary<string, object> reqParams = new Dictionary<string, object>();
-			reqParams.Add("id_payment_account", pMethodKey);
-			reqParams.Add("saved_method_id", mSelectedMethod);
-			reqParams.Add("paymentWithSavedMethod", "1");
+			reqParams.Add("id_payment_account", pMethod.GetKey());
 
-			XsollaPaystationController controller = gameObject.GetComponentInParent<XsollaPaystationController>();
-			controller.ReplacedOnSavedMethod(reqParams);
+			reqParams.Add("saved_method_id", mSelectedMethod);
+			reqParams.Add("pid", pMethod.GetPid());
+			reqParams.Add("paymentWithSavedMethod", 1);
+			reqParams.Add("paymentSid", pMethod.GetFormSid());
+			reqParams.Add("type_payment_account", pMethod.GetMethodType());
+
+			Dictionary<string, object> replacedParam = new Dictionary<string, object>();
+			replacedParam.Add("replace_payment_account", 1);
+
+			XsollaPaystationController payController = GetComponentInParent<XsollaPaystationController> ();
+			payController.FillPurchase(ActivePurchase.Part.PAYMENT_MANAGER_REPLACED, replacedParam);
+			payController.ChoosePaymentMethod (reqParams);
+
+//			XsollaPaystationController controller = gameObject.GetComponentInParent<XsollaPaystationController>();
+//			controller.ReplacedOnSavedMethod(reqParams);
 		}
 
 		private void onClickConfirmReplacedAnotherMethod(string pMethodKey)

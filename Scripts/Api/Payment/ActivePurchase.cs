@@ -13,7 +13,7 @@ namespace Xsolla
 
 		public enum Part
 		{
-			TOKEN, INFO, ITEM, PID, XPS, INVOICE, PROCEED, NULL, PAYMENT_MANAGER
+			TOKEN, INFO, ITEM, PID, XPS, INVOICE, PROCEED, NULL, PAYMENT_MANAGER, PAYMENT_MANAGER_REPLACED
 		}
 
 		public ActivePurchase(){

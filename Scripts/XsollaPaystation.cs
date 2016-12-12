@@ -327,7 +327,7 @@ namespace  Xsolla
 		public void ReplacedOnSavedMethod(Dictionary<string, object> pParams)
 		{
 			Logger.Log("Replaced saved method on saved method");
-			FillPurchase(ActivePurchase.Part.XPS, pParams);
+			FillPurchase(ActivePurchase.Part.PAYMENT_MANAGER_REPLACED, pParams);
 			TryPay();
 		}
 
