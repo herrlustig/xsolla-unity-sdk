@@ -151,6 +151,7 @@ namespace Xsolla
 			_paymentListScreenController.InitScreen(base.Utils);
 			_paymentListScreenController.SetPaymentsMethods (paymentMethods);
 			_paymentListScreenController.OpenPayments();
+
 			SetLoading (false);
 			return;
 		}

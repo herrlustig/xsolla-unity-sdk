@@ -51,7 +51,8 @@ namespace Xsolla
 		public void SetCountries(string pStartCountry, XsollaCountries countries)
 		{
 			_countries = countries;
-			if (utilsLink.GetUser ().IsAllowChangeCountry ()) 
+//			if (utilsLink.GetUser ().IsAllowChangeCountry ())
+			if (false)
 				allController.SetCountries (pStartCountry!=""?pStartCountry:startCountryIso, _countries);
 		}
 

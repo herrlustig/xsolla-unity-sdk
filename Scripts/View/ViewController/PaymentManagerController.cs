@@ -255,7 +255,7 @@ namespace Xsolla
 			mLinkGetAnotherMethods.GetComponent<Text>().text = mUtilsLink.GetTranslations().Get("savedmethod_other_change_account_label");
 			Button linkAnotherMethod = mLinkGetAnotherMethods.GetComponent<Button>();
 			linkAnotherMethod.onClick.RemoveAllListeners();
-			linkAnotherMethod.onClick.AddListener(() => onClickConfirmReplacedAnotherMethod(pMethod.GetKey()));
+			linkAnotherMethod.onClick.AddListener(() => onClickConfirmReplacedAnotherMethod(pMethod));
 
 			mLinkBack.GetComponent<Text>().text = mUtilsLink.GetTranslations().Get("back_to_paymentaccount");
 			Button linkBack = mLinkBack.GetComponent<Button>();
@@ -301,18 +301,23 @@ namespace Xsolla
 			XsollaPaystationController payController = GetComponentInParent<XsollaPaystationController> ();
 			payController.FillPurchase(ActivePurchase.Part.PAYMENT_MANAGER_REPLACED, replacedParam);
 			payController.ChoosePaymentMethod (reqParams);
-
-//			XsollaPaystationController controller = gameObject.GetComponentInParent<XsollaPaystationController>();
-//			controller.ReplacedOnSavedMethod(reqParams);
 		}
 
-		private void onClickConfirmReplacedAnotherMethod(string pMethodKey)
+		private void onClickConfirmReplacedAnotherMethod(XsollaSavedPaymentMethod pMethod)
 		{
 			Logger.Log("Raplaced existing method");
 			Dictionary<string, object> reqParams = new Dictionary<string, object>();
-			reqParams.Add("id_payment_account", pMethodKey);
+			reqParams.Add("id_payment_account", pMethod.GetKey());
+			reqParams.Add("replace_payment_account", 1);
+			//reqParams.Add("pid", pMethod.GetPid());
+			reqParams.Add("type_payment_account", pMethod.GetMethodType());
 
-			// load all methods 
+			//Dictionary<string, object> replacedParam = new Dictionary<string, object>();
+			//replacedParam.Add("replace_payment_account", 1);
+
+			XsollaPaystationController payController = GetComponentInParent<XsollaPaystationController> ();
+			//payController.FillPurchase(ActivePurchase.Part.PAYMENT_MANAGER_REPLACED, reqParams);
+			payController.ChooseItem(reqParams);
 
 		}
 
