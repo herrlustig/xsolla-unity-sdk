@@ -30,7 +30,6 @@ namespace Xsolla
 		{
 			if (pMethods != null)
 			{
-				self.gameObject.SetActive(false);
 				if (listBtns == null)
 					listBtns = new List<SavedMethodBtnController>();
 				else
