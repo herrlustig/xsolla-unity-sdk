@@ -451,6 +451,10 @@ MonoBehaviour:
   itemsToColor:
   - color: 7
     whatToColor: {fileID: 11478688}
+  - color: 21
+    whatToColor: {fileID: 11416712}
+  - color: 21
+    whatToColor: {fileID: 11499454}
 --- !u!114 &11458474
 MonoBehaviour:
   m_ObjectHideFlags: 1

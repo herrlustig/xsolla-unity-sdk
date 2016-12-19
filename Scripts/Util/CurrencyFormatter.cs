@@ -19,7 +19,7 @@ namespace Xsolla
 					amount = "R$" + amount;
 					break;
 				case "RUB":
-					amount = amount + "RUB";
+					amount = amount + "";
 					break;//&#8399;
 				default:
 					amount = amount + " " + currency;

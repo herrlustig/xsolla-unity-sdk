@@ -14,6 +14,7 @@ namespace Xsolla
 		private const string PREFAB_SCREEN_CHECKOUT 	 = "Prefabs/SimpleView/_ScreenCheckout/ScreenCheckout";
 		private const string PREFAB_SCREEN_VP_SUMMARY 	 = "Prefabs/SimpleView/_ScreenVirtualPaymentSummary/ScreenVirtualPaymentSummary";
 		private const string PREFAB_SCREEN_REDEEM_COUPON = "Prefabs/SimpleView/_ScreenShop/RedeemCouponView";
+		private const string PREFAB_SCREEN_HISTORY_USER  = "Prefabs/SimpleView/_ScreenShop/HistoryView";
 		private const string PREFAB_SCREEN_SUBSCRIPTIONS = "Prefabs/SimpleView/_ScreenShop/SubscriptionsView";
 
 		private const string PREFAB_VIEW_MENU_ITEM		 = "Prefabs/SimpleView/MenuItem";
@@ -28,7 +29,7 @@ namespace Xsolla
 		private bool 						isMainScreenShowed = false;
 
 		public GameObject 					shopScreenPrefab;
-		public GameObject 					paymentListScreebPrefab;
+		public GameObject 					paymentListScreenPrefab;
 		public GameObject 					container;
 
 		private PaymentListScreenController _paymentListScreenController;
@@ -43,17 +44,17 @@ namespace Xsolla
 
 		enum ActiveScreen
 		{
-			SHOP, P_LIST, VP_PAYMENT, PAYMENT, STATUS, ERROR, UNKNOWN, FAV_ITEMS_LIST, REDEEM_COUPONS, SUBSCRIPTIONS
+			SHOP, P_LIST, VP_PAYMENT, PAYMENT, STATUS, ERROR, UNKNOWN, FAV_ITEMS_LIST, REDEEM_COUPONS, HISTORY_LIST, SUBSCRIPTIONS
 		}
 
 		protected override void RecieveUtils (XsollaUtils utils)
 		{
-			StyleManager.Instance.ChangeTheme (utils.GetSettings().GetTheme());
+			StyleManager.Instance.ChangeTheme(utils.GetSettings().GetTheme());
 			mainScreen = Instantiate (mainScreen);
 			mainScreen.transform.SetParent (container.transform);
 			mainScreen.SetActive (true);
 			mainScreenContainer = mainScreen.GetComponentsInChildren<ScrollRect> ()[0].gameObject;
-			menuTransform = mainScreen.GetComponentsInChildren<RectTransform> ()[5].transform;
+			menuTransform = mainScreen.GetComponentsInChildren<RectTransform> ()[8].transform;
 			Resizer.ResizeToParrent (mainScreen);
 			base.RecieveUtils(utils);
 			InitHeader(utils);
@@ -140,7 +141,7 @@ namespace Xsolla
 		private void DrawPaymentListScreen(){
 			currentActive = ActiveScreen.P_LIST;
 			if (_paymentListScreenController == null) {
-				GameObject paymentListScreen = Instantiate (paymentListScreebPrefab);
+				GameObject paymentListScreen = Instantiate (paymentListScreenPrefab);
 				_paymentListScreenController = paymentListScreen.GetComponent<PaymentListScreenController> ();
 				_paymentListScreenController.transform.SetParent (mainScreenContainer.transform);
 				_paymentListScreenController.GetComponent<RectTransform> ().anchoredPosition = new Vector2 (0, 0);
@@ -150,50 +151,28 @@ namespace Xsolla
 
 		protected override void ShowQuickPaymentsList (XsollaUtils utils, XsollaQuickPayments quickPayments)
 		{
-			DrawPaymentListScreen ();
-			if (!_paymentListScreenController.IsQuiqckPayments()) {
-				_paymentListScreenController.InitScreen (utils);
-				_paymentListScreenController.SetQuickPayments (quickPayments);
-//				LoadPaymentMethods ();
-			} else {
-				_paymentListScreenController.UpdateQuick(quickPayments);
-			}
-			if(_paymentListScreenController.IsAllLoaded())
-				SetLoading (false);
 		}
 
 		protected override void ShowPaymentsList (XsollaPaymentMethods paymentMethods)
 		{
 			DrawPaymentListScreen ();
-			if (!_paymentListScreenController.IsAllPayments ()) {
-				_paymentListScreenController.SetPaymentsMethods (paymentMethods);
-//				LoadCountries ();
-			} else {
-				//_paymentListScreenController.SetPaymentsMethods(paymentMethods);
-				_paymentListScreenController.UpdateRecomended(paymentMethods);
-			}
-			if(_paymentListScreenController.IsAllLoaded())
-				SetLoading (false);
+			_paymentListScreenController.InitScreen(base.Utils);
+			_paymentListScreenController.SetPaymentsMethods (paymentMethods);
+			_paymentListScreenController.OpenPayments();
+			SetLoading (false);
+			return;
 		}
 
 		protected override void ShowSavedPaymentsList (XsollaSavedPaymentMethods savedPaymentsMethods)
 		{
 			DrawPaymentListScreen ();
-			if (!_paymentListScreenController.IsSavedPayments())
-				_paymentListScreenController.SetSavedPaymentsMethods(savedPaymentsMethods);
-			else
-				_paymentListScreenController.UpdateSavedMethods(savedPaymentsMethods);
-			if(_paymentListScreenController.IsAllLoaded())
-				SetLoading (false);
+			_paymentListScreenController.SetSavedPaymentsMethods(savedPaymentsMethods);
 		}
 
 		protected override void ShowCountries (XsollaCountries countries)
 		{
 			DrawPaymentListScreen ();
-			_paymentListScreenController.SetCountries (countries);
-			if(_paymentListScreenController.IsAllLoaded())
-				SetLoading (false);
-//			throw new System.NotImplementedException ();
+			_paymentListScreenController.SetCountries (_countryCurr, countries, Utils);
 		}
 
 		protected override void ShowVPSummary(XsollaUtils utils, XVirtualPaymentSummary summary) {
@@ -210,6 +189,35 @@ namespace Xsolla
 			SetLoading (false);
 			DrawVPStatus (utils, status);
 		}
+			
+		protected override void ApplyPromoCouponeCode (XsollaForm pForm)
+		{
+			Logger.Log("Apply promo recieved");
+			PromoCodeController promoController = mainScreenContainer.GetComponentInChildren<PromoCodeController>();
+			if (pForm.GetError() != null)
+			{
+				if (pForm.GetError().elementName == XsollaApiConst.COUPON_CODE)
+				{
+					promoController.SetError(pForm.GetError());
+					return;
+				}
+				return;
+			}
+
+			RightTowerController controller = mainScreenContainer.GetComponentInChildren<RightTowerController>();
+			// update rigth tower info, if we get rigth tower controller
+			if (controller != null)
+				controller.UpdateDiscont(Utils.GetTranslations(),pForm.GetSummary());
+
+			// update total amount on payment form total
+			PaymentFormController paymentController = mainScreenContainer.GetComponentInChildren<PaymentFormController>();
+			if (paymentController != null)
+			{
+				Text[] footerTexts = paymentController.layout.objects[paymentController.layout.objects.Count - 1].gameObject.GetComponentsInChildren<Text> ();
+				footerTexts[1].text = Utils.GetTranslations().Get(XsollaTranslations.TOTAL) + " " + pForm.GetSumTotal ();
+			}
+			promoController.ApplySuccessful();
+		}
 
 		protected override void GetCouponErrorProceed (XsollaCouponProceedResult pResult)
 		{
@@ -220,6 +228,46 @@ namespace Xsolla
 				return;
 			}
 		}
+
+		protected override void ShowHistory (XsollaHistoryList pList)
+		{
+			GameObject screenHistoryView;
+			HistoryController controller;
+			controller = GameObject.FindObjectOfType<HistoryController>();
+			// if we have controller
+			if (controller != null)
+			{
+				controller = GameObject.FindObjectOfType<HistoryController>();
+				if (!controller.IsRefresh())
+					controller.AddListRows(Utils.GetTranslations(), pList);
+				else
+					controller.InitScreen(Utils.GetTranslations(), pList, Utils.GetProject().virtualCurrencyName);
+			}
+			else
+			{
+				currentActive = ActiveScreen.HISTORY_LIST;
+				screenHistoryView = Instantiate(Resources.Load(PREFAB_SCREEN_HISTORY_USER)) as GameObject;
+				controller = screenHistoryView.GetComponent<HistoryController>();	
+				if (controller != null)
+					controller.InitScreen(Utils.GetTranslations(), pList, Utils.GetProject().virtualCurrencyName);
+				// clear container
+				//Resizer.DestroyChilds(mainScreenContainer.transform);
+				screenHistoryView.transform.SetParent (mainScreenContainer.transform);
+				screenHistoryView.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, 0);
+				Resizer.ResizeToParrent (screenHistoryView);
+			}
+		}
+
+		protected override void UpdateCustomAmount (CustomVirtCurrAmountController.CustomAmountCalcRes pRes)
+		{
+			// find custom amount controller 
+			CustomVirtCurrAmountController controller = FindObjectOfType<CustomVirtCurrAmountController>();
+			if (controller != null)
+				controller.setValues(pRes);
+			else
+				Logger.Log("Custom amount controller not found");	
+		}
+
 		// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 		// <<<<<<<<<<<<<<<<<<<<<<<<<<<< PAYMENT METHODS <<<<<<<<<<<<<<<<<<<<<<<<<<<< 
 		// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -244,7 +292,11 @@ namespace Xsolla
 			string title = utils.GetTranslations ().Get (XsollaTranslations.PRICEPOINT_PAGE_TITLE);
 			string vcName = utils.GetProject ().virtualCurrencyName;
 			string buyText = utils.GetTranslations ().Get (XsollaTranslations.VIRTUAL_ITEM_OPTION_BUTTON);
-			_shopViewController.OpenPricepoints(title, pricepoints, vcName, buyText);
+
+			if (utils.GetSettings().components.virtualCurreny.customAmount)
+				_shopViewController.OpenPricepoints(title, pricepoints, vcName, buyText, true, utils);
+			else
+				_shopViewController.OpenPricepoints(title, pricepoints, vcName, buyText);
 		}
 		
 		public void OpenGoods(XsollaGroupsManager groups)
@@ -254,7 +306,7 @@ namespace Xsolla
 			_shopViewController.OpenGoods(groups);
 			_radioController.SelectItem(0);
 		}
-
+			
 		// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 		// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< SHOP <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 		// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -405,8 +457,11 @@ namespace Xsolla
 
 		private void InitHeader(XsollaUtils utils)
 		{
-			Text[] texts = mainScreen.GetComponentsInChildren<Text> ();
-			texts [0].text = utils.GetProject ().name;
+			MainHeaderController controller = mainScreen.GetComponentInChildren<MainHeaderController>();
+			controller.InitScreen(utils);
+
+			//Text[] texts = mainScreen.GetComponentsInChildren<Text> ();
+			//texts [0].text = utils.GetProject ().name;
 		}
 
 		//TODO minimize
@@ -499,10 +554,11 @@ namespace Xsolla
 			if (utils != null) {
 				Text[] texts = mainScreen.GetComponentsInChildren<Text> ();
 				XsollaTranslations translatrions = utils.GetTranslations ();
-				texts [2].text = translatrions.Get (XsollaTranslations.SUPPORT_CUSTOMER_SUPPORT);
-				texts [3].text = translatrions.Get (XsollaTranslations.SUPPORT_CONTACT_US);
-				texts [5].text = translatrions.Get (XsollaTranslations.FOOTER_SECURED_CONNECTION);
-				texts [6].text = translatrions.Get (XsollaTranslations.FOOTER_AGREEMENT);
+				texts [4].text = translatrions.Get (XsollaTranslations.SUPPORT_CUSTOMER_SUPPORT);
+				texts [5].text = translatrions.Get (XsollaTranslations.SUPPORT_CONTACT_US);
+				texts [6].text = translatrions.Get (XsollaTranslations.XSOLLA_COPYRIGHT);
+				texts [7].text = translatrions.Get (XsollaTranslations.FOOTER_SECURED_CONNECTION);
+				texts [8].text = translatrions.Get (XsollaTranslations.FOOTER_AGREEMENT);
 			}
 		}
 
@@ -573,9 +629,12 @@ namespace Xsolla
 						controller.statusViewExitButton.onClick.Invoke();
 					break;
 				default:
+				{
 					Logger.Log ("Handle chancel");
-					ErrorHandler (XsollaError.GetCancelError());
+					if (ErrorHandler != null) 
+						ErrorHandler (XsollaError.GetCancelError());
 					break;
+				}
 			}
 		}
 	}

@@ -9,7 +9,6 @@ namespace Xsolla
 {
 	public class PaymentFormController : ScreenBaseConroller<object> 
 	{
-
 		public delegate void BackButtonHandler();
 		public BackButtonHandler OnClickBack;
 
@@ -23,7 +22,7 @@ namespace Xsolla
 			throw new System.NotImplementedException ();
 		}
 
-		public void InitView(XsollaTranslations translations, XsollaForm form)
+		public void InitView(XsollaTranslations pTranslations, XsollaForm form)
 		{
 			_form = form;
 			// if have skipCheckout and this checkout form
@@ -41,12 +40,12 @@ namespace Xsolla
 
 			string pattern = "{{.*?}}";
 			Regex regex = new Regex (pattern);
-			string title = regex.Replace (translations.Get(XsollaTranslations.PAYMENT_PAGE_TITLE_VIA), form.GetTitle (), 1);
+			string title = regex.Replace (pTranslations.Get(XsollaTranslations.PAYMENT_PAGE_TITLE_VIA), form.GetTitle (), 1);
 			layout.AddObject (GetTitle (title));
 			layout.AddObject (GetError (form.GetError ()));
 			layout.AddObject (GetInfo (form.GetMessage ()));
 			if (form.GetVisible ().Count > 0) {
-				GameObject formView = GetFormView (form, translations);
+				GameObject formView = GetFormView (form, pTranslations);
 				layout.AddObject (formView);
 			}
 			if (form.GetAccountXsolla () != null && !"".Equals (form.GetAccountXsolla ()) && !"null".Equals (form.GetAccountXsolla ()))
@@ -54,7 +53,7 @@ namespace Xsolla
 			if (form.GetAccount () != null && !"".Equals (form.GetAccount ()) && !"null".Equals (form.GetAccount ()))
 				layout.AddObject (GetTwoTextPlate ("2pay number", form.GetAccount ()));
 			if (form.IsValidPaymentSystem ())
-				layout.AddObject (GetTextPlate (translations.Get (XsollaTranslations.FORM_CC_EULA)));
+				layout.AddObject (GetTextPlate (pTranslations.Get (XsollaTranslations.FORM_CC_EULA)));
 			GameObject footerInstance = Instantiate (footer);
 			Text[] footerTexts = footerInstance.GetComponentsInChildren<Text> ();
 //			footerTexts [0].text = "back";//back
@@ -77,7 +76,7 @@ namespace Xsolla
 				vecMin.x = vecMin.x - (buttonRect.anchorMax.x - vecMin.x)/2;
 				buttonRect.anchorMin = vecMin;
 			} else {
-				footerTexts [1].text = translations.Get (XsollaTranslations.TOTAL) + " " + form.GetSumTotal ();//total
+				footerTexts [1].text = pTranslations.Get (XsollaTranslations.TOTAL) + " " + form.GetSumTotal ();//total
 			}
 
 			layout.AddObject (footerInstance);
@@ -119,7 +118,7 @@ namespace Xsolla
 				return GetCardViewWeb(xsollaForm, translations);
 			} else {
 				FormElementAdapter adapter = GetComponent<FormElementAdapter>();
-				adapter.SetForm (xsollaForm);
+				adapter.SetForm (xsollaForm, translations);
 				GameObject list = GetList (adapter);
 				list.GetComponent<ListView>().DrawList(GetComponent<RectTransform> ());
 				return list;
@@ -215,6 +214,39 @@ namespace Xsolla
 			else
 			{
 				GameObject.Find(toggle.transform.parent.name).SetActive(false);
+			}
+				
+			if (xsollaForm.Contains("couponCode") && xsollaForm.GetItem("couponCode").IsVisible())
+			{
+				GameObject promoController = Instantiate(Resources.Load("Prefabs/SimpleView/_PaymentFormElements/ContainerPromoCode")) as GameObject;
+				PromoCodeController controller = promoController.GetComponent<PromoCodeController>();
+				controller.InitScreen(translations, xsollaForm.GetItem("couponCode"));
+				controller._inputField.onValueChanged.AddListener((s) => {
+					OnValueChange("couponCode", s.Trim());
+				});
+				controller._promoCodeApply.onClick.AddListener(() => 
+					{
+						bool isLinkRequired = false;
+						if ((_form.GetCurrentCommand() == XsollaForm.CurrentCommand.CHECKOUT) && _form.GetSkipChekout()){
+							string checkoutToken = _form.GetCheckoutToken();
+							isLinkRequired = checkoutToken != null 
+								&& !"".Equals(checkoutToken) 
+								&& !"null".Equals(checkoutToken)
+								&& !"false".Equals(checkoutToken);
+						}
+						if(isLinkRequired){
+							string link = "https://secure.xsolla.com/pages/checkout/?token=" + _form.GetCheckoutToken();
+							if (Application.platform == RuntimePlatform.WebGLPlayer 
+								|| Application.platform == RuntimePlatform.OSXWebPlayer 
+								|| Application.platform == RuntimePlatform.WindowsWebPlayer) {
+								Application.ExternalEval("window.open('" + link + "','Window title')");
+							} else {
+								Application.OpenURL(link);
+							}
+						}
+						gameObject.GetComponentInParent<XsollaPaystationController> ().ApplyPromoCoupone (_form.GetXpsMap ());
+					});
+				promoController.transform.SetParent(cardViewObj.transform);
 			}
 			return cardViewObj;
 		}

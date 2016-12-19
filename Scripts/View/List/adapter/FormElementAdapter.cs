@@ -8,10 +8,11 @@ namespace Xsolla {
 
 	public class FormElementAdapter : IBaseAdapter {
 		
-		private GameObject labelPrefab, inputPrefab, checkBoxPrefab, selectPrtefab, selectElementPrefab;
+		private GameObject labelPrefab, tablePrefab, inputPrefab, checkBoxPrefab, selectPrtefab, selectElementPrefab;
 
 		private XsollaForm form;
 		private List<XsollaFormElement> elements;
+		private XsollaTranslations _translation;
 
 		public object getSelectElemPrefab()
 		{
@@ -21,6 +22,7 @@ namespace Xsolla {
 		public void Awake()
 		{
 			labelPrefab = Resources.Load("Prefabs/SimpleView/_PaymentFormElements/ElementLabel") as GameObject;
+			tablePrefab = Resources.Load("Prefabs/SimpleView/_PaymentFormElements/ElementTable") as GameObject;
 			inputPrefab = Resources.Load("Prefabs/SimpleView/_PaymentFormElements/ElementText") as GameObject;
 			checkBoxPrefab = Resources.Load("Prefabs/SimpleView/_PaymentFormElements/ElementCheckBox") as GameObject;
 			selectPrtefab = Resources.Load("Prefabs/SimpleView/_PaymentFormElements/ElementDropDown") as GameObject;
@@ -51,13 +53,26 @@ namespace Xsolla {
 					return DrawCheckBox(element);
 				case XsollaFormElement.TYPE_SELECT:
 					return DrawSelect(element);
+				case XsollaFormElement.TYPE_TABLE:
+					return DrawTable(element);
 				default:
 					return DrawLabel(element);
 			}
 		}
 
+		GameObject DrawTable(XsollaFormElement element)
+		{
+			GameObject newItem = Instantiate(tablePrefab) as GameObject;
+			ElementTableController controller = newItem.GetComponent<ElementTableController>();
+            controller.InitScreen(element);
+			return newItem;
+		}
+
 		GameObject DrawLabel(XsollaFormElement element)
         {
+			if (element.GetTitle() == "")
+				return null;
+
 			GameObject newItem = Instantiate(labelPrefab) as GameObject;
 			newItem.GetComponentInChildren<Text> ().text = element.GetTitle ();
 			return newItem;
@@ -65,14 +80,56 @@ namespace Xsolla {
 
 		GameObject DrawInput(XsollaFormElement element)
         {
-			GameObject newItem = Instantiate(inputPrefab) as GameObject;
-			newItem.GetComponentInChildren<Text> ().text = element.GetTitle ();
-            InputField inputField = newItem.GetComponentInChildren<InputField> ();
-			inputField.GetComponentInChildren<Text>().text = element.GetExample ();
-			SetupValidation (element.GetName (), inputField);
-			//inputField.onValidateInput += ValidateInput;
-			inputField.onEndEdit.AddListener(delegate{OnEndEdit(element, inputField);});
-			return newItem;
+            // if this promo coupone code then draw another prefab
+            if (element.GetName() == "couponCode")
+            {
+				GameObject newItem = Instantiate(Resources.Load("Prefabs/SimpleView/_PaymentFormElements/ContainerPromoCode")) as GameObject;
+                PromoCodeController controller = newItem.GetComponent<PromoCodeController>();
+				controller.InitScreen(_translation, element);
+				controller._inputField.onEndEdit.AddListener(delegate 
+					{
+						OnEndEdit(element, controller._inputField);
+					});
+
+				controller._promoCodeApply.onClick.AddListener(delegate 
+					{
+						bool isLinkRequired = false;
+						if ((form.GetCurrentCommand() == XsollaForm.CurrentCommand.CHECKOUT) && form.GetSkipChekout()){
+							string checkoutToken = form.GetCheckoutToken();
+							isLinkRequired = checkoutToken != null 
+								&& !"".Equals(checkoutToken) 
+								&& !"null".Equals(checkoutToken)
+								&& !"false".Equals(checkoutToken);
+						}
+						if(isLinkRequired){
+							string link = "https://secure.xsolla.com/pages/checkout/?token=" + form.GetCheckoutToken();
+							if (Application.platform == RuntimePlatform.WebGLPlayer 
+								|| Application.platform == RuntimePlatform.OSXWebPlayer 
+								|| Application.platform == RuntimePlatform.WindowsWebPlayer) {
+								Application.ExternalEval("window.open('" + link + "','Window title')");
+							} else {
+								Application.OpenURL(link);
+							}
+						}
+						gameObject.GetComponentInParent<XsollaPaystationController> ().ApplyPromoCoupone (form.GetXpsMap ());
+					});
+
+                return newItem;
+            }
+            else
+			{
+				GameObject newItem = Instantiate(inputPrefab) as GameObject;
+				newItem.GetComponentInChildren<Text>().text = element.GetTitle();
+				InputField inputField = newItem.GetComponentInChildren<InputField>();
+				inputField.GetComponentInChildren<Text>().text = element.GetExample();
+				SetupValidation(element.GetName(), inputField);
+				//inputField.onValidateInput += ValidateInput;
+				inputField.onEndEdit.AddListener(delegate
+				{
+					OnEndEdit(element, inputField);
+				});
+				return newItem;
+			}
 		}
 
 		void SetupValidation(string fieldName, InputField _inputField){
@@ -160,10 +217,11 @@ namespace Xsolla {
 		}
 
 
-		public void SetForm(XsollaForm form)
+		public void SetForm(XsollaForm form, XsollaTranslations pTranslation = null)
 		{
 			this.form = form;
 			this.elements = form.GetVisible ();
+			this._translation = pTranslation;
 		}
 
 		public override GameObject GetNext ()

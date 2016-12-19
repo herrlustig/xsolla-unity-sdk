@@ -59,9 +59,9 @@ namespace Xsolla
 
 	public class XsollaPricepoint : AXsollaShopItem, IParseble
 	{
-		public int outAmount { get; private set;}// 					"out":100,
-		public int outWithoutDiscount { get; private set;}// 			"outWithoutDiscount":100,
-		public int bonusOut { get; private set;}// 						"bonusOut":0,
+		public float outAmount { get; private set;}// 					"out":100,
+		public float outWithoutDiscount { get; private set;}// 			"outWithoutDiscount":100,
+		public float bonusOut { get; private set;}// 						"bonusOut":0,
 		public float sum { get; private set;}// 						"sum":0.99,
 		public float sumWithoutDiscount { get; private set;}// 			"sumWithoutDiscount":0.99,
 		public string currency { get; private set;}// 					"currency":"USD",
@@ -120,9 +120,9 @@ namespace Xsolla
 
 		public IParseble Parse (JSONNode pricepointNode)
 		{
-			outAmount = pricepointNode["out"].AsInt;
-			outWithoutDiscount = pricepointNode["outWithoutDiscount"].AsInt;
-			bonusOut = pricepointNode["bonusOut"].AsInt;
+			outAmount = pricepointNode["out"].AsFloat;
+			outWithoutDiscount = pricepointNode["outWithoutDiscount"].AsFloat;
+			bonusOut = pricepointNode["bonusOut"].AsFloat;
 			sum = pricepointNode["sum"].AsFloat;
 			sumWithoutDiscount = pricepointNode["sumWithoutDiscount"].AsFloat;
 			currency = pricepointNode["currency"].Value;

@@ -8,6 +8,7 @@ namespace Xsolla
 	{
 
 		private XsollaSummary _summary;
+		private XsollaTranslations _translations;
 		public GameObject orderSummaryPrefab;
 		public GameObject summaryItemPrefab;
 		public GameObject financeItemPrefab;
@@ -18,7 +19,15 @@ namespace Xsolla
 
 		public void InitView(XsollaTranslations translations, XsollaSummary summary)
 		{
+			_translations = translations;
 			_summary = summary;
+
+			if (this.gameObject.GetComponent<VerticalLayoutGroup>() == null)
+			{
+				this.gameObject.AddComponent<VerticalLayoutGroup>();
+				VerticalLayoutGroup obj = this.GetComponent<VerticalLayoutGroup>();
+				obj.childForceExpandHeight = false;
+			}
 			GameObject header = Instantiate (orderSummaryPrefab);
 			header.GetComponentsInChildren<Text> () [0].text = translations.Get (XsollaTranslations.PAYMENT_SUMMARY_HEADER);
 			linearLayout.AddObject(header);
@@ -46,6 +55,15 @@ namespace Xsolla
 					linearLayout.AddObject(GetItem(financeItemPrefab, "VAT", PriceFormatter.Format(finance.vat.amount, finance.vat.currency)));
 			}
 			linearLayout.Invalidate ();
+		}
+
+		public void UpdateDiscont(XsollaTranslations pTranslation, XsollaSummary pSummary)
+		{
+			// clear all gameobject
+			linearLayout.objects.ForEach((obj) => Destroy(obj));
+			// redraw
+			InitView(pTranslation, pSummary);
+
 		}
 
 		private GameObject GetSummaryItem(IXsollaSummaryItem purchase)

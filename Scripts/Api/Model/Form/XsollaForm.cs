@@ -54,7 +54,7 @@ namespace Xsolla
 	    * * * * * * * * * * * * * * * * * * * * * * * * * * */
 		public void AddElement(XsollaFormElement xsollaFormElement) {
 			elements.Add(xsollaFormElement);
-			if (xsollaFormElement.IsVisible() && !"couponCode".Equals(xsollaFormElement.GetName()))
+			if (xsollaFormElement.IsVisible() /*&& !"couponCode".Equals(xsollaFormElement.GetName())*/)
 				elementsVisible.Add(xsollaFormElement);
 			map.Add(xsollaFormElement.GetName(), xsollaFormElement);
 			if (xsollaFormElement.GetName () != null) 
@@ -97,7 +97,23 @@ namespace Xsolla
 
 		public List<XsollaFormElement> GetVisible()
 		{
-			return elementsVisible;
+			List<XsollaFormElement> resList = new List<XsollaFormElement>();
+			XsollaFormElement couponCode = null;
+			elementsVisible.ForEach((item) => 
+				{
+					if (item.GetName().Equals("couponCode"))
+					{
+						couponCode = item;
+					}
+					else 
+					{
+						resList.Add(item);
+					}
+				});
+			if (couponCode != null)
+				resList.Add(couponCode);
+
+			return resList;
 		}
 
 		public Dictionary<string, object> GetXpsMap()
@@ -171,7 +187,10 @@ namespace Xsolla
 
 		public string GetTitle()
 		{
-			return title;
+			if (title == null)
+				return "";
+			else
+				return title;
 		}
 
 		public string GetSumTotal()

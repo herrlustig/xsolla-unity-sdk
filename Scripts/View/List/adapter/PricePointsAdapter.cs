@@ -10,7 +10,7 @@ namespace Xsolla
 	{
 		private GameObject shopItemPrefab;
 
-		public Action<int> OnBuyPricepoints;
+		public Action<float> OnBuyPricepoints;
 
 		private XsollaPricepointsManager manager;
 		private string _virtualCurrencyName = "Coins";
@@ -60,7 +60,7 @@ namespace Xsolla
 			return shopItemInstance;
 		}
 
-		private void OnClickBuy (int i){
+		private void OnClickBuy (float i){
 			if (OnBuyPricepoints != null) 
 			{
 				OnBuyPricepoints(i);

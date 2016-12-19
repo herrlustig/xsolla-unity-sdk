@@ -16,7 +16,8 @@ namespace Xsolla {
 
 		public IParseble Parse(JSONNode quickPaymentsNode)
 		{
-			var paymentListEnumerator =  quickPaymentsNode["instances"].Childs.GetEnumerator();
+			//var paymentListEnumerator =  quickPaymentsNode["instances"].Childs.GetEnumerator();
+			var paymentListEnumerator =  quickPaymentsNode["quick_instances"].Childs.GetEnumerator();
 			while(paymentListEnumerator.MoveNext())
 			{
 				var method = new XsollaPaymentMethod().Parse(paymentListEnumerator.Current) as XsollaPaymentMethod;

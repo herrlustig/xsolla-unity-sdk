@@ -13,7 +13,7 @@ SceneSettings:
 --- !u!104 &2
 RenderSettings:
   m_ObjectHideFlags: 0
-  serializedVersion: 6
+  serializedVersion: 7
   m_Fog: 0
   m_FogColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
   m_FogMode: 3
@@ -37,12 +37,12 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
+  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
 --- !u!157 &4
 LightmapSettings:
   m_ObjectHideFlags: 0
-  serializedVersion: 6
+  serializedVersion: 7
   m_GIWorkflowMode: 0
-  m_LightmapsMode: 1
   m_GISettings:
     serializedVersion: 2
     m_BounceScale: 1
@@ -53,17 +53,22 @@ LightmapSettings:
     m_EnableBakedLightmaps: 0
     m_EnableRealtimeLightmaps: 0
   m_LightmapEditorSettings:
-    serializedVersion: 3
+    serializedVersion: 4
     m_Resolution: 2
     m_BakeResolution: 40
     m_TextureWidth: 1024
     m_TextureHeight: 1024
+    m_AO: 0
     m_AOMaxDistance: 1
-    m_Padding: 2
     m_CompAOExponent: 0
+    m_CompAOExponentDirect: 0
+    m_Padding: 2
     m_LightmapParameters: {fileID: 0}
+    m_LightmapsBakeMode: 1
     m_TextureCompression: 1
+    m_DirectLightInLightProbes: 1
     m_FinalGather: 0
+    m_FinalGatherFiltering: 1
     m_FinalGatherRayCount: 1024
     m_ReflectionCompression: 2
   m_LightingDataAsset: {fileID: 0}
@@ -208,8 +213,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d2f371921c59433abf700ea842959c1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  input: {fileID: 1135759379}
-  token: ksa4dgZSOJo7ynagO6ZxPfvNStSBC0q5
+  input: {fileID: 0}
+  token: 
 --- !u!114 &221813087
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -709,8 +714,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d2f371921c59433abf700ea842959c1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  input: {fileID: 1135759379}
-  token: Ujvb8Ra81EMLaxs0sDMSG4J2qWGGcpKU
+  input: {fileID: 0}
+  token: 
 --- !u!114 &779210633
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1131,8 +1136,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b11a3240e41434061839eae4ee0e8214, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isSandbox: 1
-  payment: {fileID: 11412752, guid: 7098472acf7784f5eb856d86514147f8, type: 2}
+  isSandbox: 0
+  payment: {fileID: 0}
 --- !u!1 &1141150334
 GameObject:
   m_ObjectHideFlags: 0
@@ -1180,7 +1185,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 94166ecf66f904d079f98b8c88a64e7b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  text: {fileID: 1141150337}
+  text: {fileID: 0}
 --- !u!114 &1141150337
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1269,8 +1274,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d2f371921c59433abf700ea842959c1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  input: {fileID: 1135759379}
-  token: hLqTLgOZlKaRuN2madJ9J7BrhzvZnoz8
+  input: {fileID: 0}
+  token: 
 --- !u!114 &1167631243
 MonoBehaviour:
   m_ObjectHideFlags: 0

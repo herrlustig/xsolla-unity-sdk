@@ -11,6 +11,7 @@ namespace Xsolla
 		public Text _nameMethod;
 		public Text _nameType;
 		public Button _btnMethod;
+		public GameObject _self;
 
 		private XsollaSavedPaymentMethod _method;
 
@@ -22,6 +23,16 @@ namespace Xsolla
 		public XsollaSavedPaymentMethod getMethod()
 		{
 			return _method;
+		}
+
+		public void setNameMethod(String pNameMethod)
+		{
+			_nameMethod.text = pNameMethod;
+		}
+
+		public void setNameType(String pNametype)
+		{
+			_nameType.text = pNametype;
 		}
 	}
 }

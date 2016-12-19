@@ -5,6 +5,12 @@ namespace Xsolla {
 		public const string ERROR_MSG = "error";
 		public const string REQUEST_PARAMS = "request_params";
 
+		public const string COMMAND_CALCULATE = "calculate";
+		public const string COMMAND_CHECK = "check";
+
+		//XPS params 
+		public const string XPS_FIX_COMMAND = "xps_fix_command";
+		public const string XPS_CHANGE_ELEM = "xps_change_element";
 
         //form fields
 		public const string ACCESS_TOKEN = "access_token";
@@ -24,6 +30,7 @@ namespace Xsolla {
         public const string CARD_ZIP = "zip";
         public const string CARD_HOLDER = "cardholdername";
         public const string ALLOW_SUBSCRIPTION = "allowSubscription";
+		public const string COUPON_CODE = "couponCode";
 
         //PAYMENT SYSTEM ID
         public const string PID_Card = "26";

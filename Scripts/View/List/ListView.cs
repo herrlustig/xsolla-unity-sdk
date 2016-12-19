@@ -84,6 +84,7 @@ namespace Xsolla
 		public void DrawList(RectTransform parentRectTransform){
 			Clear ();
 			//			ResizeToParent ();
+			LayoutElement elem = GetComponent<LayoutElement>();
 			GameObject itemPrefab = adapter.GetPrefab ();
 			int itemCount = adapter.GetCount ();
 			if (itemCount > 0) {
@@ -113,6 +114,8 @@ namespace Xsolla
 				
 					GameObject newItem = adapter.GetView (i);
 					newItem.transform.SetParent (gameObject.transform);
+					// set height for all listView
+					elem.minHeight += newItem.GetComponent<RectTransform>().rect.height;
 				
 					//move and size the new item
 					RectTransform rectTransform = newItem.GetComponent<RectTransform> ();
