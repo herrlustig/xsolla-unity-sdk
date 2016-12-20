@@ -11,13 +11,14 @@ namespace Xsolla
 		public Text 		_subName;
 		public Text			_bonusText;
 		public GameObject	_desc;
-		public Text			_price;
+		public Text			_oldPrice;
+		public Text 		_newPrice;
 		public Text			_period;
 		public Button		_btnSub;
 
 		public GameObject 	_offerText;
 
-		public void InitBtn(XsollaSubscription pSub)
+		public void InitBtn(XsollaSubscription pSub, XsollaTranslations pTranslation)
 		{
 			_sub = pSub;
 			_subName.text = _sub.GetName();
@@ -31,13 +32,21 @@ namespace Xsolla
 			{
 				_desc.SetActive(false);
 			}
-			_price.text = _sub.GetPriceString();
+			//_price.text = _sub.GetPriceString();
+
+			if(!_sub.IsSpecial())
+				_newPrice.text = CurrencyFormatter.FormatPrice(_sub.chargeCurrency, _sub.chargeAmount.ToString());
+			else
+			{
+				_oldPrice.text = CurrencyFormatter.FormatPrice(_sub.chargeCurrency, _sub.chargeAmountWithoutDiscount.ToString());
+				_newPrice.text = CurrencyFormatter.FormatPrice(_sub.chargeCurrency, _sub.chargeAmount.ToString());
+			}
 			_period.text = _sub.GetPeriodString("Every");
 
-			if (_sub.offerLabel == null)
-				SetOffer("");
+			if (_sub.isOffer())
+				SetOffer(pTranslation.Get("option_offer"));
 			else
-				SetOffer(_sub.offerLabel);
+				SetOffer("");
 
 			_btnSub.onClick.AddListener(() => {
 				Dictionary<string,object> purchase = new Dictionary<string, object>();

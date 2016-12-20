@@ -474,13 +474,12 @@ namespace Xsolla
 //			menuTransform = mainScreen.GetComponentInChildren<HorizontalLayoutGroup> ().gameObject.transform;
 			Dictionary<string, XComponent> components = utils.GetProject().components;
 			XsollaPaystation2 paystation2 			  = utils.GetSettings ().paystation2;
-			bool isGoodsRequred = components.ContainsKey("items") && components ["items"].IsEnabled;
-			if(isGoodsRequred)
+			if(components.ContainsKey("items") && components ["items"].IsEnabled)
 			{
 				GameObject menuItemGoods = Instantiate(menuItemPrefab) as GameObject;
 				Text[] texts = menuItemGoods.GetComponentsInChildren<Text>();
 				texts[0].text = "";
-				texts[1].text = utils.GetTranslations().Get(XsollaTranslations.VIRTUALITEM_PAGE_TITLE);
+				texts[1].text = components ["items"].Name; //utils.GetTranslations().Get(XsollaTranslations.VIRTUALITEM_PAGE_TITLE);
 				menuItemGoods.GetComponent<Button>().onClick.AddListener(delegate {
 					_radioController.SelectItem(menuItemGoods.GetComponent<RadioButton>());
 					LoadGoodsGroups();
@@ -489,13 +488,14 @@ namespace Xsolla
 				_radioController.AddButton(menuItemGoods.GetComponent<RadioButton>());
 			}
 			//HACK with Unity 5.3
-			//bool isPricepointsRequired = components.ContainsKey("virtual_currency") && components ["virtual_currency"].IsEnabled;
-			if (paystation2.pricepointsAtFirst != null && paystation2.pricepointsAtFirst.Equals("1"))
+			//bool isPricepointsRequired = components.ContainsKey("virtual_currency") && components ["virtual_currency"].IsEnabled
+			//if (paystation2.pricepointsAtFirst != null && paystation2.pricepointsAtFirst.Equals("1"))
+			if (components.ContainsKey("virtual_currency") && components ["virtual_currency"].IsEnabled)
 			{
 				GameObject menuItemPricepoints = Instantiate(menuItemPrefab) as GameObject;
 				Text[] texts = menuItemPricepoints.GetComponentsInChildren<Text>();
 				texts[0].text = "";
-				texts[1].text = utils.GetTranslations().Get(XsollaTranslations.PRICEPOINT_PAGE_TITLE);
+				texts[1].text = components ["virtual_currency"].Name; //utils.GetTranslations().Get(XsollaTranslations.PRICEPOINT_PAGE_TITLE);
 				menuItemPricepoints.GetComponent<Button>().onClick.AddListener(delegate {
 					_radioController.SelectItem(menuItemPricepoints.GetComponent<RadioButton>());
 					LoadShopPricepoints();
@@ -509,7 +509,7 @@ namespace Xsolla
 				GameObject menuItemSubs = Instantiate(menuItemPrefab) as GameObject;
 				Text[] texts = menuItemSubs.GetComponentsInChildren<Text>();
 				texts[0].text = "";
-				texts[1].text = utils.GetTranslations().Get(XsollaTranslations.SUBSCRIPTION_MOBILE_PAGE_TITLE);
+				texts[1].text = components["subscriptions"].Name;  // utils.GetTranslations().Get(XsollaTranslations.SUBSCRIPTION_MOBILE_PAGE_TITLE);
 				menuItemSubs.GetComponent<Button>().onClick.AddListener(delegate {
 					_radioController.SelectItem(menuItemSubs.GetComponent<RadioButton>());
 					LoadSubscriptions();
@@ -524,7 +524,7 @@ namespace Xsolla
 				GameObject menuItemCoupons = Instantiate(menuItemPrefab) as GameObject;
 				Text[] texts = menuItemCoupons.GetComponentsInChildren<Text>();
 				texts[0].text = "";
-				texts[1].text = utils.GetTranslations().Get(XsollaTranslations.COUPON_PAGE_TITLE);
+				texts[1].text = components["coupons"].Name; //utils.GetTranslations().Get(XsollaTranslations.COUPON_PAGE_TITLE);
 				menuItemCoupons.GetComponent<Button>().onClick.AddListener(delegate {
 					_radioController.SelectItem(menuItemCoupons.GetComponent<RadioButton>());
 					ShowRedeemCoupon();

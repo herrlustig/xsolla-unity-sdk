@@ -29,16 +29,16 @@ namespace Xsolla
 			_listSubs = pSubs;
 			foreach(XsollaSubscription sub in _listSubs.GetItemsList())
 			{
-				AddSubs(sub);
+				AddSubs(sub,pTranslation);
 			}
 		}
 
-		private void AddSubs(XsollaSubscription pSub)
+		private void AddSubs(XsollaSubscription pSub, XsollaTranslations pTranslation)
 		{
 			GameObject subObj = Instantiate(Resources.Load(PREFAB_SPEC_SUBS)) as GameObject;
 			subObj.transform.SetParent(_listSubsView.transform);
 			SubscriptionBtnController controller = subObj.GetComponent<SubscriptionBtnController>();
-			controller.InitBtn(pSub);
+			controller.InitBtn(pSub,pTranslation);
 
 		}
 

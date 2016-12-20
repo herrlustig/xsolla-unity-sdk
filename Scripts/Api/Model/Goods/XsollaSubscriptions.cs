@@ -89,6 +89,10 @@ namespace Xsolla
 				return "";
 			}
 		}
+		public bool isOffer()
+		{
+			return ((chargeAmountWithoutDiscount != chargeAmount) || (bonusVirtualCurrency != 0) || (bonusVirtualItems != null));
+		}
 
 		public string GetPeriodString(string per)
 		{
