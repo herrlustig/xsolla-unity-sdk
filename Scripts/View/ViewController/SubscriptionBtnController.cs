@@ -41,12 +41,9 @@ namespace Xsolla
 				_oldPrice.text = CurrencyFormatter.FormatPrice(_sub.chargeCurrency, _sub.chargeAmountWithoutDiscount.ToString());
 				_newPrice.text = CurrencyFormatter.FormatPrice(_sub.chargeCurrency, _sub.chargeAmount.ToString());
 			}
-			_period.text = _sub.GetPeriodString("Every");
+			_offerText.SetActive(_sub.IsSpecial()?true:false);
 
-			if (_sub.isOffer())
-				SetOffer(pTranslation.Get("option_offer"));
-			else
-				SetOffer("");
+			_period.text = _sub.GetPeriodString("Every");
 
 			_btnSub.onClick.AddListener(() => {
 				Dictionary<string,object> purchase = new Dictionary<string, object>();
@@ -54,15 +51,6 @@ namespace Xsolla
 
 				gameObject.GetComponentInParent<XsollaPaystationController> ().ChooseItem (purchase, false);
 			});
-		}
-
-		private void SetOffer(string pOffer)
-		{
-			if (_offerText != null)
-			{
-				_offerText.GetComponent<Text>().text = pOffer;
-				_offerText.SetActive(pOffer.Equals("")?false:true);
-			}
 		}
 
 		public SubscriptionBtnController ()
