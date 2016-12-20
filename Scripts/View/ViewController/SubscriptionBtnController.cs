@@ -17,6 +17,7 @@ namespace Xsolla
 		public Button		_btnSub;
 
 		public GameObject 	_offerText;
+		public Image 		_offerImagePanel;
 
 		public void InitBtn(XsollaSubscription pSub, XsollaTranslations pTranslation)
 		{
@@ -32,7 +33,6 @@ namespace Xsolla
 			{
 				_desc.SetActive(false);
 			}
-			//_price.text = _sub.GetPriceString();
 
 			if(!_sub.IsSpecial())
 				_newPrice.text = CurrencyFormatter.FormatPrice(_sub.chargeCurrency, _sub.chargeAmount.ToString());
@@ -40,8 +40,10 @@ namespace Xsolla
 			{
 				_oldPrice.text = CurrencyFormatter.FormatPrice(_sub.chargeCurrency, _sub.chargeAmountWithoutDiscount.ToString());
 				_newPrice.text = CurrencyFormatter.FormatPrice(_sub.chargeCurrency, _sub.chargeAmount.ToString());
+				_offerText.GetComponent<Text>().text = pTranslation.Get("option_offer");
 			}
 			_offerText.SetActive(_sub.IsSpecial()?true:false);
+			_offerImagePanel.enabled = _sub.IsSpecial()?true:false;
 
 			_period.text = _sub.GetPeriodString("Every");
 
