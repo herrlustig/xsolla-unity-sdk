@@ -44,6 +44,17 @@ namespace Xsolla {
 			pBtn.Select();
 		}
 
+		public void SelectItem(RadioButton.RadioType pType)
+		{
+			foreach(RadioButton btn in radioButtons)
+			{
+				if (btn.getType() != pType)
+					btn.Deselect();
+				else
+					btn.Select();
+			}
+		}
+
 		void Update() {
 			if (!isUpdated) {
 				foreach (var rb in radioButtons) {
