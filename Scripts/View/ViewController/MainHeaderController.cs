@@ -11,6 +11,7 @@ namespace Xsolla
 		public Text _titleProj;
 		public GameObject _btnDropDownObj;
 		public Text _userName;
+		public Button _pMenuBtnComponent;
 		private const string PREFAB_VIEW_MENU_ITEM_EMPTY = "Prefabs/SimpleView/ProfileBtn";
 
 		public void InitScreen(XsollaUtils pUtils)
@@ -27,7 +28,11 @@ namespace Xsolla
 				UserProfileBtnController controller = obj.GetComponentInChildren<UserProfileBtnController>();
 				controller.InitScreen("History", ShowHistory);
 				obj.transform.SetParent(_btnDropDownObj.transform);
+				_pMenuBtnComponent.enabled = true;
 			}
+			else
+				_pMenuBtnComponent.enabled = false;
+				
 		}
 
 		public void ShowHistory()

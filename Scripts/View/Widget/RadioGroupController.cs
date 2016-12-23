@@ -25,25 +25,6 @@ namespace Xsolla {
 			}
 		}
 
-		public void SelectItem(int position)
-		{
-			if (prevSelected >= 0) {
-				radioButtons [prevSelected].Deselect ();
-			}
-			radioButtons [position].Select ();
-			prevSelected = position;
-			isUpdated = false;
-		}
-
-		public void SelectItem(RadioButton pBtn)
-		{
-			foreach(RadioButton btn in radioButtons)
-			{
-				btn.Deselect();
-			}
-			pBtn.Select();
-		}
-
 		public void SelectItem(RadioButton.RadioType pType)
 		{
 			foreach(RadioButton btn in radioButtons)
@@ -64,14 +45,5 @@ namespace Xsolla {
 				isUpdated = true;
 			}
 		}
-
-//		public void SelectItem(RadioButton radioButton)
-//		{
-//			if(prevSelected != null)
-//				radioButton.Deselect ();
-//			radioButton.Select ();
-//			prevSelected = radioButton;
-//		}
-
 	}
 }
