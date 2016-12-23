@@ -168,7 +168,7 @@ namespace  Xsolla
 			Payment.NextStep (xpsMap);
 		}
 
-		private void SeleteRadioItem(RadioButton.RadioType pType)
+		private void SelectRadioItem(RadioButton.RadioType pType)
 		{
 			GetComponentInParent<XsollaPaystationController> ().SelectRadioItem(pType);
 		}
@@ -178,7 +178,7 @@ namespace  Xsolla
 			Logger.Log ("Load Pricepoints request");
 			SetLoading (true);
 			Payment.GetPricePoints (currentPurchase.GetMergedMap());
-			SeleteRadioItem(RadioButton.RadioType.SCREEN_PRICEPOINT);
+			SelectRadioItem(RadioButton.RadioType.SCREEN_PRICEPOINT);
 		}
 		
 		public void LoadGoodsGroups()
@@ -186,7 +186,7 @@ namespace  Xsolla
 			Logger.Log ("Load Goods Groups request");
 			SetLoading (true);
 			Payment.GetItemsGroups (currentPurchase.GetMergedMap());
-			SeleteRadioItem(RadioButton.RadioType.SCREEN_GOODS);
+			SelectRadioItem(RadioButton.RadioType.SCREEN_GOODS);
 		}
 
 		public void LoadGoods(long groupId)
@@ -199,14 +199,14 @@ namespace  Xsolla
 		{
 			Logger.Log("Load subscriptions");
 			Payment.GetSubscriptions();
-			SeleteRadioItem(RadioButton.RadioType.SCREEN_SUBSCRIPTION);
+			SelectRadioItem(RadioButton.RadioType.SCREEN_SUBSCRIPTION);
 		}
 
 		public void LoadFavorites()
 		{
 			Logger.Log ("Load Favorites request");
 			Payment.GetFavorites (currentPurchase.GetMergedMap());
-			SeleteRadioItem(RadioButton.RadioType.SCREEN_FAVOURITE);
+			SelectRadioItem(RadioButton.RadioType.SCREEN_FAVOURITE);
 		}
 
 		public void GetCouponProceed(string pCouponCode)

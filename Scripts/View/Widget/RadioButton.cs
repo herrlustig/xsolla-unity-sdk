@@ -38,10 +38,8 @@ namespace Xsolla {
 		public void Select()
 		{
 			if (!isSelected) {
-				//if(image != null && activeImage != null)
 				if(image != null)
 					image.color = StyleManager.Instance.GetColor (activeImage);
-				//if(text != null && activeText != null)
 				if(text != null)
 					text.color = StyleManager.Instance.GetColor (activeText);
 				if(isStarted)
@@ -54,10 +52,8 @@ namespace Xsolla {
 		public void Deselect()
 		{
 			if (isSelected) {
-				//if(image != null && normalImage != null)
 				if(image != null)	
 					image.color = StyleManager.Instance.GetColor (normalImage);
-				//if(text != null && normalText != null)
 				if(text != null)	
 					text.color = StyleManager.Instance.GetColor (normalText);
 				isSelected = false;
@@ -66,17 +62,13 @@ namespace Xsolla {
 
 		void Update() {
 			if (isSelected) {
-				//if(image != null && activeImage != null)
 				if(image != null)
 					image.color = StyleManager.Instance.GetColor (activeImage);
-				//if(text != null && activeText != null)
 				if(text != null)
 					text.color = StyleManager.Instance.GetColor (activeText);
 			} else {
-				//if(image != null && normalImage != null)
 				if(image != null)
 					image.color = StyleManager.Instance.GetColor (normalImage);
-				//if(text != null && normalText != null)
 				if(text != null)
 					text.color = StyleManager.Instance.GetColor (normalText);
 			}

@@ -118,7 +118,6 @@ namespace Xsolla {
 
 		public void PrepareStatus(XsollaStatus.Group group, string state, string purchase, string invoice){
 			Component[] texts = status.GetComponentsInChildren(typeof(Text),true);// [0] Icon [1] Title [2] purchse
-//  			Image bg = status.GetComponent<Image> ();
 			ColorController colorController = GetComponent<ColorController> ();
 			((Text)texts[1]).text = state;
 			if (purchase != null && purchase != "")
@@ -137,7 +136,6 @@ namespace Xsolla {
 				case XsollaStatus.Group.TROUBLED:
 					((Text)texts[0]).text = "";
 					colorController.ChangeColor(1, StyleManager.BaseColor.bg_error);
-//					bg.color = new Color (0.980392157f, 0.454901961f, 0.392156863f);
 					break;
 				case XsollaStatus.Group.INVOICE:
 				case XsollaStatus.Group.DELIVERING:
@@ -146,7 +144,6 @@ namespace Xsolla {
 					((Text)texts[0]).text = "";
 					((Text)texts[0]).gameObject.AddComponent<MyRotation>();
 					colorController.ChangeColor(1, StyleManager.BaseColor.selected);
-//					bg.color = new Color (0.639215686f, 0.552941176f, 0.847058824f);
 					StartCoroutine(UpdateStatus(invoice));
 					break;
 			}

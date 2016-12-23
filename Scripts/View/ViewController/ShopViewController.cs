@@ -106,8 +106,7 @@ namespace Xsolla
 			SetTitle (groups.GetItemByPosition(0).name);
 			menu.SetData ((groupId) => {
 				XsollaGoodsGroup group = groups.GetItemByKey(groupId);
-				//radioGroup.SelectItem (groups.GetItemsList().IndexOf(group));
-				radioGroup.SelectItem (RadioButton.RadioType.SCREEN_GOODS);
+				radioGroup.SelectItem (groups.GetItemsList().IndexOf(group));
 				ChooseItemsGroup(group.id, group.name);
 			}, groups.GetNamesDict ());
 			radioGroup.SetButtons(menu.GetItems ());

@@ -36,6 +36,16 @@ namespace Xsolla {
 			}
 		}
 
+		public void SelectItem(int pPosition)
+		{
+			if (prevSelected >= 0) {
+				radioButtons [prevSelected].Deselect ();
+			}
+			radioButtons [pPosition].Select ();
+			prevSelected = pPosition;
+			isUpdated = false;
+		}
+
 		void Update() {
 			if (!isUpdated) {
 				foreach (var rb in radioButtons) {
