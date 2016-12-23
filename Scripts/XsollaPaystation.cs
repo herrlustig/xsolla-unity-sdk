@@ -198,6 +198,7 @@ namespace  Xsolla
 		public void LoadSubscriptions()
 		{
 			Logger.Log("Load subscriptions");
+			SetLoading (true);
 			Payment.GetSubscriptions();
 			SelectRadioItem(RadioButton.RadioType.SCREEN_SUBSCRIPTION);
 		}

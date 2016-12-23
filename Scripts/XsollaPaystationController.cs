@@ -130,7 +130,6 @@ namespace Xsolla
 		protected override void ShowSubs (XsollaSubscriptions pSubs)
 		{
 			Logger.Log ("Show subscriptions");
-			SetLoading (true);
 			DrawSubscriptions(pSubs);
 			SetLoading (false);
 		}
@@ -469,9 +468,7 @@ namespace Xsolla
 			GameObject menuItemPrefab 		= Resources.Load (PREFAB_VIEW_MENU_ITEM) as GameObject;
 			GameObject menuItemIconPrefab 	= Resources.Load (PREFAB_VIEW_MENU_ITEM_ICON) as GameObject;
 			GameObject menuItemEmptyPrefab 	= Resources.Load (PREFAB_VIEW_MENU_ITEM_EMPTY) as GameObject;
-//			menuTransform = mainScreen.GetComponentInChildren<HorizontalLayoutGroup> ().gameObject.transform;
 			Dictionary<string, XComponent> components = utils.GetProject().components;
-			//XsollaPaystation2 paystation2 			  = utils.GetSettings ().paystation2;
 			if(components.ContainsKey("items") && components ["items"].IsEnabled)
 			{
 				GameObject menuItemGoods = Instantiate(menuItemPrefab) as GameObject;
@@ -515,7 +512,6 @@ namespace Xsolla
 				menuItemSubs.GetComponent<RadioButton>().setType(RadioButton.RadioType.SCREEN_SUBSCRIPTION);
 				menuItemSubs.GetComponent<Button>().onClick.AddListener(delegate 
 					{
-						//_radioController.SelectItem(menuItemSubs.GetComponent<RadioButton>());
 						_radioController.SelectItem(RadioButton.RadioType.SCREEN_SUBSCRIPTION);
 						LoadSubscriptions();
 					});
@@ -533,7 +529,6 @@ namespace Xsolla
 				menuItemCoupons.GetComponent<RadioButton>().setType(RadioButton.RadioType.SCREEN_REDEEMCOUPON);
 				menuItemCoupons.GetComponent<Button>().onClick.AddListener(delegate 
 					{
-						//_radioController.SelectItem(menuItemCoupons.GetComponent<RadioButton>());
 						_radioController.SelectItem(RadioButton.RadioType.SCREEN_REDEEMCOUPON);
 						ShowRedeemCoupon();
 					});
@@ -551,7 +546,6 @@ namespace Xsolla
 			menuItemFavorite.GetComponent<Button>().onClick.AddListener(delegate 
 				{
 					_shopViewController.SetTitle(utils.GetTranslations().Get(XsollaTranslations.VIRTUALITEMS_TITLE_FAVORITE));
-					//_radioController.SelectItem(menuItemFavorite.GetComponent<RadioButton>());
 					_radioController.SelectItem(RadioButton.RadioType.SCREEN_FAVOURITE);
 					LoadFavorites();
 				});
