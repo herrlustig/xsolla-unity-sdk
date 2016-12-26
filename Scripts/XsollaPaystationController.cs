@@ -460,8 +460,7 @@ namespace Xsolla
 			MainHeaderController controller = mainScreen.GetComponentInChildren<MainHeaderController>();
 			controller.InitScreen(utils);
 		}
-
-		//TODO minimize
+			
 		private void InitMenu(XsollaUtils utils)
 		{
 			_radioController = menuTransform.gameObject.AddComponent<RadioGroupController> ();
