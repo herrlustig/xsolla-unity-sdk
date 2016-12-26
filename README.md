@@ -18,6 +18,7 @@
 • Set Up Instant Payment Notification (IPN): http://developers.xsolla.com/api.html#notifications  
 • Create an Xsolla Access Token to conduct payments with maximum security. You can find documentation on creating a token here: http://developers.xsolla.com/api.html#payment-ui
 
+
 ##### Get Started
 
 If you would like to accept payments through Xsolla’s payment UI, follow these steps:  
@@ -60,6 +61,7 @@ public class XsollaError {
 ```
 
 #### TRY IT!
+
 
 You can look demo on https://livedemo.xsolla.com/sdk/unity/  
 We have two test scenes in "XsollaUnitySDK" -> "Resources" -> "_Scenes" folder:  
