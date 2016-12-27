@@ -97,7 +97,8 @@ namespace Xsolla{
 
 				for (int i = 0; i < countPopBtn; i++)
 				{
-					CreatePopularBtn(paymentMethods[i]);
+					if (i < paymentMethods.Count)
+						CreatePopularBtn(paymentMethods[i]);
 				}
 			}
 			SetUpNavButtons ();

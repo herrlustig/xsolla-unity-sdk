@@ -1,14 +1,15 @@
 ﻿using SimpleJSON;
 using System.Collections.Generic;
 using System.Text;
+using System;
 
 namespace Xsolla 
 {
 	public class XsollaSubscriptions : XsollaObjectsManager<XsollaSubscription>, IParseble {
 
 //		private List<XsollaSubscription> subscriptionList;//"packages":[],
-//		private XsollaApi api;//							"api":{
-
+		private XsollaApi api;//							"api":{
+		private XsollaActivePackage activeUserPackage;
 		public IParseble Parse (JSONNode subscriptionsNode)
 		{
 			var packagesNode = subscriptionsNode ["packages"];
@@ -17,31 +18,67 @@ namespace Xsolla
 			{
 				AddItem(new XsollaSubscription().Parse(enumerator.Current) as XsollaSubscription);
 			}
-//			api = new XsollaApi().Parse(subscriptionsNode["api"]) as XsollaApi;
+
+			if (subscriptionsNode["active_user_package"].AsObject != null)
+				activeUserPackage = new XsollaActivePackage().Parse(subscriptionsNode["active_user_package"]) as XsollaActivePackage;
+			
+			api = new XsollaApi().Parse(subscriptionsNode["api"]) as XsollaApi;
 			return this;
 		}
+
+		public XsollaActivePackage GetActivePackage()
+		{
+			return activeUserPackage;
+		}
+	}
+
+	public class XsollaActivePackage : IParseble
+	{
+		public DateTime _dateNextCharge;
+		public DateTime _datePlanChange;
+		public string _id;
+		public bool   _isPossibleRenew;
+
+		public IParseble Parse (JSONNode pNode)
+		{
+			DateTime.TryParse( pNode["date_next_charge"],out _dateNextCharge);
+			DateTime.TryParse(pNode["date_plan_change"],out _datePlanChange);
+			_id = pNode["id"];
+			_isPossibleRenew = pNode["is_possible_renew"].AsBool;
+			return this;
+		}
+
 	}
 
 	public class XsollaSubscription : IXsollaObject, IParseble
 	{
 		public string id { get; private set;}// 						"id":"5f23c3de",
-		public float chargeAmount { get; private set;}//				"chargeAmount":19.99,
-		public float chargeAmountWithoutDiscount{ get; private set;}//	"chargeAmountWithoutDiscount":19.99,
-		public string chargeCurrency { get; private set;}//				"chargeCurrency":"USD",
+		public float chargeAmount { get; private set;}//				"charge_amount":19.99,
+		public float chargeAmountLocal { get; private set;}//			"charge_amount_local":19.99,
+		public float chargeAmountWithoutDiscount{ get; private set;}//	"charge_amount_without_discount":19.99,
+		public float chargeAmountWithoutDiscountLocal{ get; private set;}//	"charge_amount_without_discount_local":19.99,
+		public string chargeCurrency { get; private set;}//				"charge_currency":"USD",
+		public string chargeCurrencyLocal { get; private set;}//		"charge_currency_local":"USD",
+		public bool isActive {get; private set;}//						"is_active:false",
+		public bool isPossibleRenew {get; private set;}//				"is_possible_renew:true",
+		public bool isTrial {get; private set;}//						"is_trial:false",
 		public int period { get; private set;}//						"period":1,
-		public string periodUnit { get; private set;}//					"periodUnit":"month",
+		public int periodTrial { get; private set;}//					"period_trial":1,
+		public string periodUnit { get; private set;}//					"period_unit":"month",
 		public string name { get; private set;}//						"name":"Platinum VIP",
+		public string offerLabel { get; private set;}// 				"offer_label: """,
 		public string description { get; private set;}//				"description":"10x more experience!",
-		public int bonusOut { get; private set;}//						"bonusOut":0,
-		public List<XsollaBonusItem> bonusItems { get; private set;}//	"bonusItems":[]
+		public int bonusVirtualCurrency { get; private set;}//			"bonus_virtual_currency":0,
+		public List<XsollaBonusItem> bonusVirtualItems { get; private set;}//	"bonus_virtual_items":[]
+		public int promotionChargesCount {get; private set;} // 		"promotion_charges_count: "
 
 		public string GetBounusString()
 		{
-			if (bonusItems.Count > 0) {
+			if (bonusVirtualItems.Count > 0) {
 				StringBuilder stringBuilder = new StringBuilder ();
 				stringBuilder.Append ("<color=#2DAE7B>");
 				stringBuilder.Append ("+ ");
-				foreach (XsollaBonusItem bonusItem in bonusItems) {
+				foreach (XsollaBonusItem bonusItem in bonusVirtualItems) {
 					stringBuilder.Append (bonusItem.name).Append (" ");
 				}
 				stringBuilder.Append ("</color>");
@@ -51,6 +88,10 @@ namespace Xsolla
 			{
 				return "";
 			}
+		}
+		public bool isOffer()
+		{
+			return ((chargeAmountWithoutDiscount != chargeAmount) || (bonusVirtualCurrency != 0) || (bonusVirtualItems != null));
 		}
 
 		public string GetPeriodString(string per)
@@ -89,15 +130,24 @@ namespace Xsolla
 		public IParseble Parse (JSONNode subscriptionNode)
 		{
 			id = subscriptionNode ["id"];
-			chargeAmount = subscriptionNode ["chargeAmount"].AsFloat;
-			chargeAmountWithoutDiscount = subscriptionNode ["chargeAmountWithoutDiscount"].AsFloat;
-			chargeCurrency = subscriptionNode ["chargeCurrency"];
+			chargeAmount = subscriptionNode ["charge_amount"].AsFloat;
+			chargeAmountLocal = subscriptionNode ["charge_amount_local"].AsFloat;
+			chargeAmountWithoutDiscount = subscriptionNode ["charge_amount_without_discount"].AsFloat;
+			chargeAmountWithoutDiscountLocal = subscriptionNode ["charge_amount_without_discount_local"].AsFloat;
+			chargeCurrency = subscriptionNode ["charge_currency"];
+			chargeCurrencyLocal = subscriptionNode ["charge_currency_local"];
+			isActive = subscriptionNode ["is_active"].AsBool;
+			isPossibleRenew = subscriptionNode ["is_possible_renew"].AsBool;
+			isTrial = subscriptionNode ["is_trial"].AsBool;
 			period = subscriptionNode ["period"].AsInt;
-			periodUnit = subscriptionNode ["periodUnit"];
+			periodTrial = subscriptionNode ["perios_trial"].AsInt;
+			periodUnit = subscriptionNode ["period_unit"];
 			name = subscriptionNode ["name"];
+			offerLabel = subscriptionNode ["offer_label"];
 			description = subscriptionNode ["description"];
-			bonusOut = subscriptionNode ["bonusOut"].AsInt;
-			bonusItems = XsollaBonusItem.ParseMany (subscriptionNode ["bonusItems"]);
+			bonusVirtualCurrency = subscriptionNode ["bonus_virtual_currency"].AsInt;
+			bonusVirtualItems = XsollaBonusItem.ParseMany (subscriptionNode ["bonus_virtual_items"]);
+			promotionChargesCount = subscriptionNode ["promotion_charges_count"].AsInt;
 			return this;
 		}
 	}

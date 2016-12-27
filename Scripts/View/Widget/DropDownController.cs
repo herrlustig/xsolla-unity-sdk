@@ -33,18 +33,6 @@ namespace Xsolla {
 					isParentChanged = true;
 				}
 			});
-//			List<string> list = new List<string>(5);
-//			list.Add ("ОДИН");
-//			list.Add ("ДВА");
-//			list.Add ("ТРИ");
-//			list.Add ("ЧЕТЫРЕ");
-//			list.Add ("ПЯТЬ");
-//			list.Add ("ШЕСТЬ");
-//			list.Add ("СЕМЬ");
-//			list.Add ("ВОСЕМЬ");
-//			list.Add ("ДЕВЯТЬ");
-//			list.Add ("ДЕСЯТЬ");
-//			SetData (list);
 		}
 
 		public void SetParentForScroll(Transform newParent){
