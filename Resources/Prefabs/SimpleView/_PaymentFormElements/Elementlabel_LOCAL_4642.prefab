@@ -29,7 +29,7 @@ GameObject:
   - 114: {fileID: 11497020}
   - 114: {fileID: 11405010}
   m_Layer: 5
-  m_Name: Elementlabel
+  m_Name: Elementlabel_LOCAL_4642
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
