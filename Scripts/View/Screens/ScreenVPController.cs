@@ -12,7 +12,7 @@ namespace Xsolla {
 		public GameObject ErrorContainer;
 		public Text Error;
 		public Text ItemName;
-		public Text BackTo;
+		public GameObject BackTo;
 		public Text Total;
 		public Text ProceedButtonText;
 		public Text ToggleText;
@@ -29,7 +29,12 @@ namespace Xsolla {
 			Confirmation.text = utils.GetTranslations ().Get ("cart_confirm_your_purchase");
 			ImageLoader.UploadImageToCurrentView (summary.Items [0].GetImage());
 			ItemName.text = summary.Items [0].Name;
-			BackTo.text = "< " + utils.GetTranslations ().Get ("back_to_virtualitem");
+
+			BackTo.GetComponent<Text>().text = "< " + utils.GetTranslations ().Get ("back_to_virtualitem");
+			BackTo.GetComponent<Button>().onClick.AddListener(delegate 
+				{
+					onClickBack();
+				});
 			ToggleText.text = utils.GetTranslations ().Get ("cart_dont_ask_again");
 			Total.text = utils.GetTranslations ().Get ("total") + " " + summary.Total + " " + utils.GetProject().virtualCurrencyName;
 			ProceedButtonText.text = utils.GetTranslations ().Get ("cart_submit");
@@ -50,6 +55,12 @@ namespace Xsolla {
 			Dictionary<string, object> purchase = new Dictionary<string, object> (1);
 			purchase.Add("dont_ask_again", isRemeber);
 			gameObject.GetComponentInParent<XsollaPaystationController> ().ProceedVirtualPayment (purchase);
+		}
+
+		private void onClickBack()
+		{
+			if (GetComponentInParent<XsollaPaystationController> () != null)
+				GetComponentInParent<XsollaPaystationController> ().LoadGoodsGroups();
 		}
 
 	}

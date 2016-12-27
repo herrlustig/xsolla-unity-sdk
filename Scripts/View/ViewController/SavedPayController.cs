@@ -96,7 +96,7 @@ namespace Xsolla
 				GetComponentInParent<PaymentListScreenController>().OpenQuickPayments();
 			});
 			back.GetComponent<Button>().onClick.AddListener (() => { 
-				GetComponentInParent<XsollaPaystationController>().LoadShopPricepoints();
+				GetComponentInParent<XsollaPaystationController>().LoadShop();
 			});
 		}
 

@@ -48,10 +48,10 @@ namespace Xsolla
 			allController.SetPaymentMethods(_paymentMethods.GetListOnType());;
 		}
 
-		public void SetCountries(string pStartCountry, XsollaCountries countries)
+		public void SetCountries(string pStartCountry, XsollaCountries countries, XsollaUtils pUtils)
 		{
 			_countries = countries;
-			if (utilsLink.GetUser ().IsAllowChangeCountry ()) 
+			if (pUtils.GetUser ().IsAllowChangeCountry ()) 
 				allController.SetCountries (pStartCountry!=""?pStartCountry:startCountryIso, _countries);
 		}
 

@@ -185,7 +185,7 @@ namespace Xsolla
 
 		public IParseble Parse(JSONNode purchaseNode)
 		{
-			amount = purchaseNode ["quantity"].AsFloat;
+			amount = purchaseNode ["amount"].AsFloat;
 			period = purchaseNode ["period"].AsInt;
 			currency = purchaseNode ["currency"];
 			description = purchaseNode ["description"];
