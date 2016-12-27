@@ -70,15 +70,11 @@ namespace  Xsolla
 		protected abstract void ShowVPStatus (XsollaUtils utils, XVPStatus status);
 		protected abstract void GetCouponErrorProceed(XsollaCouponProceedResult presult);
 
-		//{"user":{ "id":{ "value":"1234567","hidden":true},"email":{"value":"support@xsolla.com"},"name":{"value":"Tardis"},"country":{"value":"US"} },"settings":{"project_id":15764,"language":"en","currency":"USD"}}
-		//jafS6nqbzRpZzA38
-		// BGKkyK2VetScsLgOcnchTB3r1XdkQaW4 - sandbox
-		//KVvI4jVlPaTbre4IAD2chJWTBRqQPkCD
 		public void OpenPaystation (string accessToken, bool isSandbox)
 		{
 			AddHttpRequestObj();
 			SetLoading (isSandbox);
-			Logger.isLogRequired = true;//isSandbox;
+			Logger.isLogRequired = true;
 			Logger.Log ("Paystation initiated current mode sandbox");
 			currentPurchase = new ActivePurchase();
 			JSONNode rootNode = JSON.Parse(accessToken);
@@ -233,12 +229,9 @@ namespace  Xsolla
 				currentPurchase.Remove (ActivePurchase.Part.XPS);
 			}
 				
-			//TODO On new version API
 			LoadSavedPaymentMethods();
 			LoadPaymentMethods ();
 			LoadCountries ();
-
-			//Payment.GetQuickPayments (null, currentPurchase.GetMergedMap());
 		}
 
 		public void LoadPaymentMethods()
