@@ -71,12 +71,8 @@ namespace Xsolla {
 				AddElement (statusText.Get("userWallet").GetPref(), statusText.Get("userWallet").GetValue());
 			AddLine ();
 			AddBigElement (statusText.Get("sum").GetPref(), statusText.Get("sum").GetValue());
-//			Debug.Log ("statusText.backUrlCaption " + statusText.backUrlCaption);
 
-			if(statusText.backUrlCaption != null && !"".Equals(statusText.backUrlCaption))
-				statusViewExitButton.gameObject.GetComponent<Text> ().text = statusText.backUrlCaption;
-			else
-				statusViewExitButton.gameObject.GetComponent<Text> ().text = translations.Get(XsollaTranslations.BACK_TO_STORE);
+			statusViewExitButton.gameObject.GetComponent<Text> ().text = translations.Get(XsollaTranslations.BACK_TO_STORE);
 			statusViewExitButton.onClick.AddListener (delegate 
 				{
 					//OnClickExit(currentStatus, xsollaStatus.GetStatusData().GetInvoice(), xsollaStatus.GetStatusData().GetStatus(), null);
@@ -109,12 +105,14 @@ namespace Xsolla {
 				AddBigElement (translations.Get ("virtualstatus_check_vc_amount"), status.VcAmount + " " + utils.GetProject().virtualCurrencyName);
 			}
 			statusViewExitButton.gameObject.GetComponent<Text> ().text = translations.Get(XsollaTranslations.BACK_TO_STORE);
-			statusViewExitButton.onClick.AddListener (delegate {OnClickBack(currentStatus, status.OperationId, Xsolla.XsollaStatusData.Status.DONE, status.GetPurchaseList());});
+			statusViewExitButton.onClick.AddListener (delegate 
+				{
+					OnClickBack(currentStatus, status.OperationId, Xsolla.XsollaStatusData.Status.DONE, status.GetPurchaseList());
+				});
 		}
 
 		public void PrepareStatus(XsollaStatus.Group group, string state, string purchase, string invoice, XsollaStatus pStatus = null){
 			Component[] texts = status.GetComponentsInChildren(typeof(Text),true);// [0] Icon [1] Title [2] purchse
-//  			Image bg = status.GetComponent<Image> ();
 			ColorController colorController = GetComponent<ColorController> ();
 			((Text)texts[1]).text = state;
 			if (purchase != null && purchase != "")
@@ -150,7 +148,6 @@ namespace Xsolla {
 				case XsollaStatus.Group.TROUBLED:
 					((Text)texts[0]).text = "";
 					colorController.ChangeColor(1, StyleManager.BaseColor.bg_error);
-//					bg.color = new Color (0.980392157f, 0.454901961f, 0.392156863f);
 					break;
 				case XsollaStatus.Group.INVOICE:
 				case XsollaStatus.Group.DELIVERING:
@@ -159,7 +156,6 @@ namespace Xsolla {
 					((Text)texts[0]).text = "";
 					((Text)texts[0]).gameObject.AddComponent<MyRotation>();
 					colorController.ChangeColor(1, StyleManager.BaseColor.selected);
-//					bg.color = new Color (0.639215686f, 0.552941176f, 0.847058824f);
 					StartCoroutine(UpdateStatus(invoice));
 					break;
 			}
@@ -195,6 +191,10 @@ namespace Xsolla {
 		}
 
 		private void AddBigElement(string s, string s1){
+			// if key and value is empty
+			if ((s == "") && (s1 == ""))
+				return;
+
 			GameObject elementInstance = Instantiate (rowInfoElementBigPrefab) as GameObject;
 			elementInstance.transform.SetParent (checkListTransform);
 			Text[] texts = elementInstance.GetComponentsInChildren<Text> ();

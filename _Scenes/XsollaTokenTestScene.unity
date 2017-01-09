@@ -13,7 +13,7 @@ SceneSettings:
 --- !u!104 &2
 RenderSettings:
   m_ObjectHideFlags: 0
-  serializedVersion: 6
+  serializedVersion: 7
   m_Fog: 0
   m_FogColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
   m_FogMode: 3
@@ -37,12 +37,12 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
+  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
 --- !u!157 &4
 LightmapSettings:
   m_ObjectHideFlags: 0
-  serializedVersion: 6
+  serializedVersion: 7
   m_GIWorkflowMode: 0
-  m_LightmapsMode: 1
   m_GISettings:
     serializedVersion: 2
     m_BounceScale: 1
@@ -53,17 +53,22 @@ LightmapSettings:
     m_EnableBakedLightmaps: 0
     m_EnableRealtimeLightmaps: 0
   m_LightmapEditorSettings:
-    serializedVersion: 3
+    serializedVersion: 4
     m_Resolution: 2
     m_BakeResolution: 40
     m_TextureWidth: 1024
     m_TextureHeight: 1024
+    m_AO: 0
     m_AOMaxDistance: 1
-    m_Padding: 2
     m_CompAOExponent: 0
+    m_CompAOExponentDirect: 0
+    m_Padding: 2
     m_LightmapParameters: {fileID: 0}
+    m_LightmapsBakeMode: 1
     m_TextureCompression: 1
+    m_DirectLightInLightProbes: 1
     m_FinalGather: 0
+    m_FinalGatherFiltering: 1
     m_FinalGatherRayCount: 1024
     m_ReflectionCompression: 2
   m_LightingDataAsset: {fileID: 0}
@@ -95,7 +100,7 @@ GameObject:
   - 224: {fileID: 127852428}
   - 222: {fileID: 127852430}
   - 114: {fileID: 127852429}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -171,7 +176,7 @@ GameObject:
   - 114: {fileID: 221813088}
   - 114: {fileID: 221813087}
   - 114: {fileID: 221813086}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: ZipTokenBtn
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -208,8 +213,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d2f371921c59433abf700ea842959c1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  input: {fileID: 1135759379}
-  token: ksa4dgZSOJo7ynagO6ZxPfvNStSBC0q5
+  input: {fileID: 0}
+  token: 
 --- !u!114 &221813087
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -380,7 +385,7 @@ GameObject:
   - 224: {fileID: 335776031}
   - 222: {fileID: 335776033}
   - 114: {fileID: 335776032}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: Checkmark
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -448,7 +453,7 @@ GameObject:
   - 224: {fileID: 347241964}
   - 222: {fileID: 347241966}
   - 114: {fileID: 347241965}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -522,7 +527,7 @@ GameObject:
   - 224: {fileID: 533519920}
   - 222: {fileID: 533519922}
   - 114: {fileID: 533519921}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -596,7 +601,7 @@ GameObject:
   - 224: {fileID: 762871450}
   - 222: {fileID: 762871452}
   - 114: {fileID: 762871451}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: Label
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -672,7 +677,7 @@ GameObject:
   - 114: {fileID: 779210634}
   - 114: {fileID: 779210633}
   - 114: {fileID: 779210632}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: NormalTokenBtn
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -709,8 +714,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d2f371921c59433abf700ea842959c1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  input: {fileID: 1135759379}
-  token: Ujvb8Ra81EMLaxs0sDMSG4J2qWGGcpKU
+  input: {fileID: 0}
+  token: 
 --- !u!114 &779210633
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -806,7 +811,7 @@ GameObject:
   - 224: {fileID: 866158901}
   - 222: {fileID: 866158902}
   - 114: {fileID: 866158900}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -881,7 +886,7 @@ GameObject:
   - 223: {fileID: 1007142111}
   - 114: {fileID: 1007142110}
   - 114: {fileID: 1007142109}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -975,7 +980,7 @@ GameObject:
   - 114: {fileID: 1135759380}
   - 114: {fileID: 1135759379}
   - 114: {fileID: 1135759382}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: InputField
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1131,8 +1136,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b11a3240e41434061839eae4ee0e8214, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isSandbox: 1
-  payment: {fileID: 11412752, guid: 7098472acf7784f5eb856d86514147f8, type: 2}
+  isSandbox: 0
+  payment: {fileID: 0}
 --- !u!1 &1141150334
 GameObject:
   m_ObjectHideFlags: 0
@@ -1144,7 +1149,7 @@ GameObject:
   - 222: {fileID: 1141150338}
   - 114: {fileID: 1141150337}
   - 114: {fileID: 1141150336}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: DPI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1180,7 +1185,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 94166ecf66f904d079f98b8c88a64e7b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  text: {fileID: 1141150337}
+  text: {fileID: 0}
 --- !u!114 &1141150337
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1232,7 +1237,7 @@ GameObject:
   - 114: {fileID: 1167631244}
   - 114: {fileID: 1167631243}
   - 114: {fileID: 1167631242}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: HolderTokenBtn
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1269,8 +1274,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d2f371921c59433abf700ea842959c1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  input: {fileID: 1135759379}
-  token: hLqTLgOZlKaRuN2madJ9J7BrhzvZnoz8
+  input: {fileID: 0}
+  token: 
 --- !u!114 &1167631243
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1366,7 +1371,7 @@ GameObject:
   - 224: {fileID: 1220217669}
   - 222: {fileID: 1220217668}
   - 114: {fileID: 1220217667}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1440,7 +1445,7 @@ GameObject:
   - 224: {fileID: 1368864790}
   - 222: {fileID: 1368864792}
   - 114: {fileID: 1368864791}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: Inputs
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1511,7 +1516,7 @@ GameObject:
   m_Component:
   - 224: {fileID: 1514402388}
   - 114: {fileID: 1514402389}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: Toggle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1604,7 +1609,7 @@ GameObject:
   - 224: {fileID: 1600270149}
   - 222: {fileID: 1600270151}
   - 114: {fileID: 1600270150}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1678,7 +1683,7 @@ GameObject:
   - 224: {fileID: 1652441882}
   - 222: {fileID: 1652441884}
   - 114: {fileID: 1652441883}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: ButtonContainer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1836,7 +1841,7 @@ GameObject:
   - 224: {fileID: 1741310043}
   - 222: {fileID: 1741310045}
   - 114: {fileID: 1741310044}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1910,7 +1915,7 @@ GameObject:
   - 224: {fileID: 1743572846}
   - 222: {fileID: 1743572848}
   - 114: {fileID: 1743572847}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: Background
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1978,7 +1983,7 @@ GameObject:
   - 224: {fileID: 1916459794}
   - 222: {fileID: 1916459796}
   - 114: {fileID: 1916459795}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2053,7 +2058,7 @@ GameObject:
   - 222: {fileID: 2052297018}
   - 114: {fileID: 2052297017}
   - 114: {fileID: 2052297016}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: DirectBtn
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2174,7 +2179,7 @@ GameObject:
   - 224: {fileID: 2053837669}
   - 222: {fileID: 2053837668}
   - 114: {fileID: 2053837667}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: Panel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2247,7 +2252,7 @@ GameObject:
   - 224: {fileID: 2066371413}
   - 222: {fileID: 2066371415}
   - 114: {fileID: 2066371414}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: Background
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2316,7 +2321,7 @@ GameObject:
   - 224: {fileID: 2074234008}
   - 222: {fileID: 2074234010}
   - 114: {fileID: 2074234009}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: Panel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2387,7 +2392,7 @@ GameObject:
   - 222: {fileID: 2141771959}
   - 114: {fileID: 2141771958}
   - 114: {fileID: 2141771960}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: Placeholder
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2475,7 +2480,7 @@ GameObject:
   - 222: {fileID: 2145556800}
   - 114: {fileID: 2145556799}
   - 114: {fileID: 2145556798}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: CreateBtn
   m_TagString: Untagged
   m_Icon: {fileID: 0}

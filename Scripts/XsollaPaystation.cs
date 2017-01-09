@@ -15,7 +15,7 @@ namespace  Xsolla
 		private ActivePurchase currentPurchase;
 		private bool cancelStatusCheck = false;
 		private bool isSimple = false;
-		public string _countryCurr = "";
+		public string _countryCurr = "US";
 
 		private XsollaPaymentImpl __payment;
 		private XsollaPaymentImpl Payment
@@ -54,9 +54,11 @@ namespace  Xsolla
 		protected abstract void ShowPaymentsList (XsollaPaymentMethods paymentMethods);
 		protected abstract void ShowSavedPaymentsList(XsollaSavedPaymentMethods savedPaymentsMethods);
 		protected abstract void ShowCountries (XsollaCountries paymentMethods);
+
 		protected abstract void ApplyPromoCouponeCode(XsollaForm pForm);
 		protected abstract void ShowHistory(XsollaHistoryList pList);
 		protected abstract void UpdateCustomAmount(CustomVirtCurrAmountController.CustomAmountCalcRes pRes);
+		protected abstract void ShowSubs (XsollaSubscriptions pSubs);
 
 		protected abstract void ShowPaymentForm (XsollaUtils utils, XsollaForm form);
 
@@ -70,15 +72,11 @@ namespace  Xsolla
 		protected abstract void PaymentManagerRecieved(XsollaSavedPaymentMethods pResult);
 		protected abstract void DeleteSavedPaymentMethodRecieved();
 
-		//{"user":{ "id":{ "value":"1234567","hidden":true},"email":{"value":"support@xsolla.com"},"name":{"value":"Tardis"},"country":{"value":"US"} },"settings":{"project_id":15764,"language":"en","currency":"USD"}}
-		//jafS6nqbzRpZzA38
-		// BGKkyK2VetScsLgOcnchTB3r1XdkQaW4 - sandbox
-		//KVvI4jVlPaTbre4IAD2chJWTBRqQPkCD
 		public void OpenPaystation (string accessToken, bool isSandbox)
 		{
 //			AddHttpRequestObj();
 			SetLoading (isSandbox);
-			Logger.isLogRequired = true;//isSandbox;
+			Logger.isLogRequired = true;
 			Logger.Log ("Paystation initiated current mode sandbox");
 			currentPurchase = new ActivePurchase();
 			JSONNode rootNode = JSON.Parse(accessToken);
@@ -130,7 +128,10 @@ namespace  Xsolla
 			Payment.PricepointsRecieved += (pricepoints) => ShowPricepoints(Utils, pricepoints);
 			Payment.GoodsGroupsRecieved += (goods) => ShowGoodsGroups(goods);
 			Payment.GoodsRecieved += (goods) => UpdateGoods(goods);
+
 			Payment.CustomAmountCalcRecieved += (calcRes) => UpdateCustomAmount(calcRes);
+
+			Payment.SubsReceived += (pSubs) => ShowSubs(pSubs);
 
 			Payment.VirtualPaymentSummaryRecieved += (summary) => ShowVPSummary(Utils, summary);
 			Payment.VirtualPaymentProceedError += (error) => ShowVPError(Utils, error);
@@ -167,11 +168,17 @@ namespace  Xsolla
 			Payment.NextStep (xpsMap);
 		}
 
+		private void SelectRadioItem(RadioButton.RadioType pType)
+		{
+			GetComponentInParent<XsollaPaystationController> ().SelectRadioItem(pType);
+		}
+
 		public void LoadShopPricepoints()
 		{	
 			Logger.Log ("Load Pricepoints request");
 			SetLoading (true);
 			Payment.GetPricePoints (currentPurchase.GetMergedMap());
+			SelectRadioItem(RadioButton.RadioType.SCREEN_PRICEPOINT);
 		}
 		
 		public void LoadGoodsGroups()
@@ -179,6 +186,7 @@ namespace  Xsolla
 			Logger.Log ("Load Goods Groups request");
 			SetLoading (true);
 			Payment.GetItemsGroups (currentPurchase.GetMergedMap());
+			SelectRadioItem(RadioButton.RadioType.SCREEN_GOODS);
 		}
 
 		public void LoadGoods(long groupId)
@@ -187,10 +195,19 @@ namespace  Xsolla
 			Payment.GetItems (groupId, currentPurchase.GetMergedMap());
 		}
 
+		public void LoadSubscriptions()
+		{
+			Logger.Log("Load subscriptions");
+			SetLoading (true);
+			Payment.GetSubscriptions();
+			SelectRadioItem(RadioButton.RadioType.SCREEN_SUBSCRIPTION);
+		}
+
 		public void LoadFavorites()
 		{
 			Logger.Log ("Load Favorites request");
 			Payment.GetFavorites (currentPurchase.GetMergedMap());
+			SelectRadioItem(RadioButton.RadioType.SCREEN_FAVOURITE);
 		}
 
 		public void GetCouponProceed(string pCouponCode)

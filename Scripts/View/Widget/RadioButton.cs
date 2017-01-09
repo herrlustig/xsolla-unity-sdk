@@ -14,6 +14,22 @@ namespace Xsolla {
 
 		private bool isSelected = false;
 		private bool isStarted = false;
+		private RadioType _typeRadioBtn;
+
+		public enum RadioType
+		{
+			SCREEN_GOODS, SCREEN_PRICEPOINT, SCREEN_SUBSCRIPTION, SCREEN_REDEEMCOUPON, SCREEN_FAVOURITE
+		};
+
+		public void setType(RadioType pType)
+		{
+			_typeRadioBtn = pType;
+		}
+
+		public RadioType getType()
+		{
+			return _typeRadioBtn;
+		}
 
 		void Start() {
 			isStarted = true;
@@ -22,10 +38,8 @@ namespace Xsolla {
 		public void Select()
 		{
 			if (!isSelected) {
-				//if(image != null && activeImage != null)
 				if(image != null)
 					image.color = StyleManager.Instance.GetColor (activeImage);
-				//if(text != null && activeText != null)
 				if(text != null)
 					text.color = StyleManager.Instance.GetColor (activeText);
 				if(isStarted)
@@ -38,10 +52,8 @@ namespace Xsolla {
 		public void Deselect()
 		{
 			if (isSelected) {
-				//if(image != null && normalImage != null)
 				if(image != null)	
 					image.color = StyleManager.Instance.GetColor (normalImage);
-				//if(text != null && normalText != null)
 				if(text != null)	
 					text.color = StyleManager.Instance.GetColor (normalText);
 				isSelected = false;
@@ -50,17 +62,13 @@ namespace Xsolla {
 
 		void Update() {
 			if (isSelected) {
-				//if(image != null && activeImage != null)
 				if(image != null)
 					image.color = StyleManager.Instance.GetColor (activeImage);
-				//if(text != null && activeText != null)
 				if(text != null)
 					text.color = StyleManager.Instance.GetColor (activeText);
 			} else {
-				//if(image != null && normalImage != null)
 				if(image != null)
 					image.color = StyleManager.Instance.GetColor (normalImage);
-				//if(text != null && normalText != null)
 				if(text != null)
 					text.color = StyleManager.Instance.GetColor (normalText);
 			}

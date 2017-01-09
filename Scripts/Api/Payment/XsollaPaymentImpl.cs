@@ -11,7 +11,7 @@ namespace Xsolla
 
 		private string DOMAIN = "https://secure.xsolla.com";
 
-		private const string SDK_VERSION = "1.3.3";
+		private const string SDK_VERSION = "1.3.4";
 
 		private const int TRANSLATIONS 		 	= 0;
 		private const int DIRECTPAYMENT_FORM 	= 1;
@@ -27,12 +27,15 @@ namespace Xsolla
 		private const int VIRTUAL_PAYMENT_SUMMARY 	= 9;
 		private const int VIRTUAL_PROCEED 			= 10;
 		private const int VIRTUAL_STATUS 			= 11;
+
 		private const int APPLY_PROMO_COUPONE		= 12;
 		private const int COUPON_PROCEED			= 13;
 		private const int HISTORY					= 22;
 		private const int PAYMENT_MANAGER_LIST		= 15;
 		private const int CALCULATE_CUSTOM_AMOUNT   = 14;
-		private const int DELETE_SAVED_METHOD 		= 16;
+		private const int ACTIVE_SUBS				= 16;
+		private const int DELETE_SAVED_METHOD 		= 17;
+
 
 		public Action<XsollaUtils> 					UtilsRecieved;
 		public Action<XsollaTranslations> 			TranslationRecieved;
@@ -41,6 +44,7 @@ namespace Xsolla
 		public Action<XsollaPricepointsManager> 	PricepointsRecieved;
 		public Action<XsollaGroupsManager> 			GoodsGroupsRecieved;
 		public Action<XsollaGoodsManager> 			GoodsRecieved;
+		public Action<XsollaSubscriptions>			SubsReceived;
 
 		public Action<XsollaPaymentMethods> 		PaymentMethodsRecieved;
 		public Action<XsollaSavedPaymentMethods>    SavedPaymentMethodsRecieved;
@@ -156,6 +160,12 @@ namespace Xsolla
 		{
 			if(GoodsGroupsRecieved != null)
 				GoodsGroupsRecieved(groups);
+		}
+
+		private void OnSubscriptionsReceived(XsollaSubscriptions pSubs)
+		{
+			if(SubsReceived != null)
+				SubsReceived(pSubs);
 		}
 
 		// ---------------------------------------------------------------------------
@@ -283,21 +293,21 @@ namespace Xsolla
 				pararams.Add ("is_virtual_payment", 1);
 			else
 				pararams ["is_virtual_payment"] = 1;
-			POST (VIRTUAL_PAYMENT_SUMMARY, GetCartSummary(), pararams);
+			StartCoroutine(POST (VIRTUAL_PAYMENT_SUMMARY, GetCartSummary(), pararams));
 		}
 
 		public void ProceedVPayment(Dictionary<string, object> pararams) {
-			POST (VIRTUAL_PROCEED, ProceedVirtualPaymentLink (), pararams);
+			StartCoroutine(POST (VIRTUAL_PROCEED, ProceedVirtualPaymentLink (), pararams));
 		}
 
 		public void VPaymentStatus(Dictionary<string, object> pararams) {
-			POST (VIRTUAL_STATUS, GetVirtualPaymentStatusLink (), pararams);
+			StartCoroutine(POST (VIRTUAL_STATUS, GetVirtualPaymentStatusLink (), pararams));
 		}
 
 		void GetUtils(Dictionary<string, object> pararams)
 		{
 			//Dictionary<string, object> pararams = new Dictionary<string, object> ();
-			POST (TRANSLATIONS, GetUtilsLink(), pararams);
+			StartCoroutine(POST (TRANSLATIONS, GetUtilsLink(), pararams));
 		}
 
 		void GetNextStep(Dictionary<string, object> nextStepParams)
@@ -309,41 +319,48 @@ namespace Xsolla
 				nextStepParams.Add ("paymentWithSavedMethod", 0);
 //				nextStepParams.Add ("returnUrl", "");
 			}
-			POST (DIRECTPAYMENT_FORM, GetDirectpaymentLink(), nextStepParams);
+			StartCoroutine(POST (DIRECTPAYMENT_FORM, GetDirectpaymentLink(), nextStepParams));
 		}
 
 		public void GetStatus(Dictionary<string, object> statusParams)
 		{
-			POST (DIRECTPAYMENT_STATUS, GetStatusLink(), statusParams);
+			StartCoroutine(POST (DIRECTPAYMENT_STATUS, GetStatusLink(), statusParams));
 		}
 
 		public void GetPricePoints(Dictionary<string, object> requestParams)
 		{
 //			Dictionary<string, object> requestParams = new Dictionary<string, object>();
-			POST (PRICEPOINTS, GetPricepointsUrl(), requestParams);
+			StartCoroutine(POST (PRICEPOINTS, GetPricepointsUrl(), requestParams));
 		}
 
 		public void GetGoods(Dictionary<string, object> requestParams)
 		{
 //			Dictionary<string, object> requestParams = new Dictionary<string, object>();
-			POST (GOODS, GetGoodsUrl(), requestParams);
+			StartCoroutine(POST (GOODS, GetGoodsUrl(), requestParams));
 		}
 		public void GetItemsGroups(Dictionary<string, object> requestParams)
 		{
 //			Dictionary<string, object> requestParams = new Dictionary<string, object>();
-			POST (GOODS_GROUPS, GetItemsGroupsUrl(), requestParams);
+			StartCoroutine(POST (GOODS_GROUPS, GetItemsGroupsUrl(), requestParams));
 		}
 
 		public void GetItems(long groupId, Dictionary<string, object> requestParams)
 		{
 //			Dictionary<string, object> requestParams = new Dictionary<string, object>();
 			requestParams.Add ("group_id", groupId );//group_id <- NEW | OLD -> requestParams.Add ("id_group",groupId );
-			POST (GOODS_ITEMS, GetItemsUrl(), requestParams);
+			StartCoroutine(POST (GOODS_ITEMS, GetItemsUrl(), requestParams));
+		}
+
+		public void GetSubscriptions()
+		{
+			Dictionary<string,object> param = new Dictionary<string, object>();
+			param.Add(XsollaApiConst.ACCESS_TOKEN, baseParams[XsollaApiConst.ACCESS_TOKEN]);
+			StartCoroutine(POST(ACTIVE_SUBS, GetSubsUrl(), baseParams));
 		}
 
 		public void GetFavorites(Dictionary<string, object> requestParams)
 		{
-			POST (GOODS_ITEMS, GetFavoritsUrl(), requestParams);
+			StartCoroutine(POST (GOODS_ITEMS, GetFavoritsUrl(), requestParams));
 		}
 
 		public void GetCouponProceed(Dictionary<string, object> pParams)
@@ -351,20 +368,20 @@ namespace Xsolla
 			if (!pParams.ContainsKey(XsollaApiConst.ACCESS_TOKEN) && (baseParams.ContainsKey(XsollaApiConst.ACCESS_TOKEN)))
 				pParams.Add(XsollaApiConst.ACCESS_TOKEN, baseParams[XsollaApiConst.ACCESS_TOKEN]);
 
-			POST(COUPON_PROCEED, GetCouponProceed(), pParams);
+			StartCoroutine(POST(COUPON_PROCEED, GetCouponProceed(), pParams));
 		}	
 
 		public void SetFavorite(Dictionary<string, object> requestParams)
 		{
-			POST (999, SetFavoritsUrl(), requestParams);
+			StartCoroutine(POST (999, SetFavoritsUrl(), requestParams));
 		}
 
 		public void GetPaymentsInfo(Dictionary<string, object> requestParams)
 		{
 //			Dictionary<string, object> requestParams = new Dictionary<string, object>();
-			POST (QUICK_PAYMENT_LIST, GetQuickPaymentsUrl(), requestParams);
-			POST (PAYMENT_LIST, GetPaymentListUrl(), requestParams);
-			POST (COUNTRIES, GetCountriesListUrl(), requestParams);
+			StartCoroutine(POST (QUICK_PAYMENT_LIST, GetQuickPaymentsUrl(), requestParams));
+			StartCoroutine(POST (PAYMENT_LIST, GetPaymentListUrl(), requestParams));
+			StartCoroutine(POST (COUNTRIES, GetCountriesListUrl(), requestParams));
 		}
 
 		public void GetQuickPayments(string countryIso, Dictionary<string, object> requestParams)
@@ -373,7 +390,7 @@ namespace Xsolla
 			if (countryIso != null && !"".Equals (countryIso)) {
 				requestParams["country"] = countryIso;
 			}
-			POST (QUICK_PAYMENT_LIST, GetQuickPaymentsUrl(), requestParams);
+			StartCoroutine(POST (QUICK_PAYMENT_LIST, GetQuickPaymentsUrl(), requestParams));
 		}
 
 		public void GetPayments(string countryIso, Dictionary<string, object> requestParams)
@@ -383,12 +400,12 @@ namespace Xsolla
 			if (countryIso != null && !"".Equals (countryIso)) {
 				requestParams["country"] = countryIso;
 			}
-			POST (PAYMENT_LIST, GetPaymentListUrl(), requestParams);
+			StartCoroutine(POST (PAYMENT_LIST, GetPaymentListUrl(), requestParams));
 		}
 
 		public void GetSavedPayments(Dictionary<string, object> requestParams)
 		{
-			POST(SAVED_PAYMENT_LIST, GetSavedPaymentListUrl(), requestParams);
+			StartCoroutine(POST(SAVED_PAYMENT_LIST, GetSavedPaymentListUrl(), requestParams));
 		}
 
 		public void GetSavedPaymentsForManager(Dictionary<string, object> pParams)
@@ -399,7 +416,7 @@ namespace Xsolla
 		public void GetCountries(Dictionary<string, object> requestParams)
 		{
 //			Dictionary<string, object> requestParams = new Dictionary<string, object>();
-			POST (COUNTRIES, GetCountriesListUrl(), requestParams);
+			StartCoroutine(POST (COUNTRIES, GetCountriesListUrl(), requestParams));
 		}
 			
 		public void GetHistory(Dictionary<string, object> pParams)
@@ -407,20 +424,20 @@ namespace Xsolla
 			if (!pParams.ContainsKey(XsollaApiConst.ACCESS_TOKEN))
 				pParams.Add(XsollaApiConst.ACCESS_TOKEN, baseParams[XsollaApiConst.ACCESS_TOKEN]);
 
-			POST(HISTORY, GetHistoryUrl(), pParams);
+			StartCoroutine(POST(HISTORY, GetHistoryUrl(), pParams));
 		}
 		public void ApplyPromoCoupone(Dictionary<string, object> pParams)
 		{
-			POST(APPLY_PROMO_COUPONE, GetDirectpaymentLink(), pParams);
+			StartCoroutine(POST(APPLY_PROMO_COUPONE, GetDirectpaymentLink(), pParams));
 		}
 
 		public void CalculateCustomAmount(Dictionary<string, object> pParams)
 		{
 			if (!pParams.ContainsKey(XsollaApiConst.ACCESS_TOKEN))
 				pParams.Add(XsollaApiConst.ACCESS_TOKEN, baseParams[XsollaApiConst.ACCESS_TOKEN]);
-			POST(CALCULATE_CUSTOM_AMOUNT, GetCalculateCustomAmountUrl(), pParams);
+			StartCoroutine(POST(CALCULATE_CUSTOM_AMOUNT, GetCalculateCustomAmountUrl(), pParams));
 		}
-
+			
 		public void DeleteSavedMethod(Dictionary<string, object> pParam)
 		{
 			if (!pParam.ContainsKey(XsollaApiConst.ACCESS_TOKEN))
@@ -428,7 +445,9 @@ namespace Xsolla
 			POST(DELETE_SAVED_METHOD, GetDeleteSavedPaymentMethodUrl(), pParam);
 		}
 
-		public WWW POST(int type, string url, Dictionary<string, object> post)
+		//public WWW POST(int type, string url, Dictionary<string, object> post)
+
+		public IEnumerator POST(int type, string url, Dictionary<string, object> post)
 		{
 			WWWForm form = new WWWForm();
 			StringBuilder sb = new StringBuilder ();
@@ -452,265 +471,17 @@ namespace Xsolla
 				form.AddField(post_arg.Key, argValue);
 			}
 				
-//			if (httpreq == null)	
-//				httpreq = GameObject.Find(HttpTlsRequest.loaderGameObjName).GetComponent<HttpTlsRequest>();
-//
-//			StartCoroutine(httpreq.Request(url, post, (value) => ProcessingRequestResult(type, value, post)));
-
 			Debug.Log (url);
 			Debug.Log (sb.ToString());
 			WWW www = new WWW(url, form);
-			StartCoroutine(WaitForRequest(type, www, post));
-			return null;
-		}
 
-//		private void ProcessingRequestResult(int pType, RequestClass pRequestResult, Dictionary<string, object> pDataArgs)
-//		{
-//			if (!pRequestResult.HasError)
-//			{
-//				// Start Processing
-//				Debug.Log("Type -> " + pType);
-//				Debug.Log("WWW_request -> " + pRequestResult.TextRequest);
-//
-//				JSONNode rootNode = JSON.Parse(pRequestResult.TextRequest);
-//				if(rootNode != null && rootNode.Count > 2 || rootNode["error"] == null) {
-//					switch(pType)
-//					{
-//					case TRANSLATIONS:
-//						{
-//							if(rootNode.Count > 2){
-//								XsollaUtils utils = new XsollaUtils().Parse(rootNode) as XsollaUtils;
-//								projectId = utils.GetProject().id.ToString();
-//
-//								OnUtilsRecieved(utils);
-//								// if base param not containKey access token, then add token from util
-//								if (!baseParams.ContainsKey(XsollaApiConst.ACCESS_TOKEN))
-//									_accessToken = utils.GetAcceessToken();
-//								OnTranslationRecieved(utils.GetTranslations());
-//							} else {
-//								XsollaError error = new XsollaError();
-//								error.Parse(rootNode);
-//								OnErrorReceived(error);
-//							}
-//						}
-//						break;
-//					case DIRECTPAYMENT_FORM:
-//						{
-//							if(rootNode.Count > 8) {
-//								XsollaForm form = new XsollaForm();
-//								form.Parse(rootNode);
-//								switch (form.GetCurrentCommand()) {
-//								case XsollaForm.CurrentCommand.STATUS:
-//									GetStatus(form.GetXpsMap());
-//									break;
-//								case XsollaForm.CurrentCommand.CHECKOUT:
-//								case XsollaForm.CurrentCommand.CHECK:
-//								case XsollaForm.CurrentCommand.FORM:
-//								case XsollaForm.CurrentCommand.CREATE:
-//								case XsollaForm.CurrentCommand.ACCOUNT:
-//									OnFormReceived(form);
-//									break;
-//								case XsollaForm.CurrentCommand.UNKNOWN:
-//									if(rootNode.Count > 10)
-//									{
-//										OnFormReceived(form);
-//									} else {
-//										XsollaError error = new XsollaError();
-//										error.Parse(rootNode);
-//										OnErrorReceived(error);
-//									}
-//									break;
-//								default:
-//									break;
-//								}
-//							} else {
-//								XsollaStatusPing statusPing = new XsollaStatusPing();
-//								statusPing.Parse(rootNode);
-//								OnStatusChecked(statusPing);
-//							}
-//						}
-//						break;
-//					case DIRECTPAYMENT_STATUS:
-//						{
-//							XsollaForm form = new XsollaForm();
-//							form.Parse(rootNode);
-//							XsollaStatus status = new XsollaStatus();
-//							status.Parse(rootNode);
-//							OnStatusReceived(status, form);
-//						}
-//						break;
-//					case PRICEPOINTS:
-//						{
-//							XsollaPricepointsManager pricepoints = new XsollaPricepointsManager();
-//							pricepoints.Parse(rootNode);
-//							OnPricepointsRecieved(pricepoints);
-//						}
-//						break;
-//					case GOODS:
-//						{
-//							XsollaGoodsManager goods = new XsollaGoodsManager();
-//							goods.Parse(rootNode);
-//							OnGoodsRecieved(goods);
-//						}
-//						break;
-//					case GOODS_GROUPS:
-//						{
-//							XsollaGroupsManager groups = new XsollaGroupsManager();
-//							groups.Parse(rootNode);
-//							OnGoodsGroupsRecieved(groups);
-//						}
-//						break;
-//					case GOODS_ITEMS:
-//						{
-//							XsollaGoodsManager goods = new XsollaGoodsManager();
-//							goods.Parse(rootNode);
-//							OnGoodsRecieved(goods);
-//						}
-//						break;
-//					case PAYMENT_LIST:
-//						{
-//							XsollaPaymentMethods paymentMethods = new XsollaPaymentMethods();
-//							paymentMethods.Parse(rootNode);
-//							OnPaymentMethodsRecieved(paymentMethods);
-//						}
-//						break;
-//					case SAVED_PAYMENT_LIST:
-//						{
-//							XsollaSavedPaymentMethods savedPaymentsMethods = new XsollaSavedPaymentMethods();
-//							savedPaymentsMethods.Parse(rootNode);
-//							OnSavedPaymentMethodsRecieved(savedPaymentsMethods);
-//						}
-//						break;
-//					case QUICK_PAYMENT_LIST:
-//						{
-//							XsollaQuickPayments quickPayments = new XsollaQuickPayments();
-//							quickPayments.Parse(rootNode);
-//							OnQuickPaymentMethodsRecieved(quickPayments);
-//						}
-//						break;
-//					case COUNTRIES:
-//						{
-//							XsollaCountries countries = new XsollaCountries();
-//							countries.Parse(rootNode);
-//							OnCountriesRecieved(countries);
-//						}
-//						break;
-//					case VIRTUAL_PAYMENT_SUMMARY:
-//						{
-//							XVirtualPaymentSummary summary = new XVirtualPaymentSummary();
-//							summary.Parse(rootNode);
-//							Logger.Log("VIRTUAL_PAYMENT_SUMMARY " + summary.ToString());
-//							if(summary.IsSkipConfirmation) {
-//								Logger.Log("IsSkipConfirmation true");
-//								pDataArgs.Add("dont_ask_again", 0);
-//								ProceedVPayment(pDataArgs);
-//							} else {
-//								Logger.Log("IsSkipConfirmation false");							
-//								OnVPSummaryRecieved(summary);
-//							}
-//						}
-//						break;
-//					case VIRTUAL_PROCEED:
-//						{
-//							XProceed proceed = new XProceed();
-//							proceed.Parse(rootNode);
-//							Logger.Log ("VIRTUAL_PROCEED " + proceed.ToString());
-//							if(proceed.IsInvoiceCreated) {
-//								Logger.Log ("VIRTUAL_PROCEED 1");
-//								long operationId = proceed.OperationId;
-//								pDataArgs.Add("operation_id", operationId);
-//								VPaymentStatus(pDataArgs);
-//							} else {
-//								Logger.Log ("VIRTUAL_PROCEED 0 ");
-//								OnVPProceedError(proceed.Error);
-//							}
-//						}
-//						break;
-//					case VIRTUAL_STATUS:
-//						{
-//							XVPStatus vpStatus = new XVPStatus();
-//							vpStatus.Parse(rootNode);
-//							//{"errors":[ {"message":"Insufficient balance to complete operation"} ], "api":{"ver":"1.0.1"}, "invoice_created":"false", "operation_id":"0", "code":"0"}
-//							Logger.Log ("VIRTUAL_STATUS" + vpStatus.ToString());
-//							OnVPStatusRecieved(vpStatus);
-//						}
-//						break;
-//
-//					case APPLY_PROMO_COUPONE:
-//						{
-//							XsollaForm form = new XsollaForm();
-//							form.Parse(rootNode);
-//							OnApplyCouponeReceived(form);
-//						}
-//						break;
-//					case COUPON_PROCEED:
-//						{	
-//							XsollaCouponProceedResult couponProceed = new XsollaCouponProceedResult();
-//							couponProceed.Parse(rootNode);
-//							if (couponProceed._error != null)
-//							{
-//								Logger.Log("COUPON_PROCEED ERROR: " + couponProceed._error);
-//								OnCouponProceedErrorRecived(couponProceed);
-//							}
-//							else
-//							{
-//								long operationId = couponProceed._operationId;
-//                                if (pDataArgs.ContainsKey("coupon_code"))
-//                                	pDataArgs.Remove("coupon_code");
-//								pDataArgs.Add("operation_id", operationId);
-//								VPaymentStatus(pDataArgs);
-//							}
-//						}
-//						break;
-//
-//					case HISTORY:
-//						{
-//							XsollaHistoryList history = new XsollaHistoryList().Parse(rootNode["operations"]) as XsollaHistoryList;
-//							OnHistoryRecieved(history);
-//
-//						}
-//						break;
-//					case CALCULATE_CUSTOM_AMOUNT:
-//						{
-//							CustomVirtCurrAmountController.CustomAmountCalcRes res = new CustomVirtCurrAmountController.CustomAmountCalcRes().Parse(rootNode["calculation"]) as CustomVirtCurrAmountController.CustomAmountCalcRes;
-//							OnCustomAmountResRecieved(res);
-//						}
-//						break;
-//					case PAYMENT_MANAGER_LIST:
-//						{
-//							XsollaSavedPaymentMethods res = new XsollaSavedPaymentMethods().Parse(rootNode) as XsollaSavedPaymentMethods;
-//							OnPaymentManagerMethod(res);
-//						}
-//						break;
-//					default:
-//						break;
-//					}
-//				} else {
-//					XsollaError error = new XsollaError();
-//					error.Parse(rootNode);
-//					OnErrorReceived(error);
-//				}
-//			}
-//			else
-//			{
-//				JSONNode errorNode = JSON.Parse(pRequestResult.TextRequest);
-//				string errorMsg = errorNode["errors"].AsArray[0]["message"].Value 
-//					+ ". Support code " + errorNode["errors"].AsArray[0]["support_code"].Value;
-//				int errorCode = 0;
-//				if(pRequestResult.ErrorText.Length > 3)
-//					errorCode = int.Parse(pRequestResult.ErrorText.Substring(0, 3));
-//				else
-//					errorCode = int.Parse(pRequestResult.ErrorText);
-//				OnErrorReceived(new XsollaError(errorCode, errorMsg));
-//			}    
-//			if(projectId != null && !"".Equals(projectId))
-//				LogEvent ("UNITY " + SDK_VERSION + " REQUEST", projectId, pRequestResult.Url);
-//			else 
-//				LogEvent ("UNITY " + SDK_VERSION + " REQUEST", "undefined", pRequestResult.Url);
-//		}
-		
+			yield return StartCoroutine(WaitForRequest(type, www, post));	
+			//return null;
+		}
+			
 		private IEnumerator WaitForRequest(int pType, WWW www, Dictionary<string, object> post)
 		{
+			Logger.Log("Start get www");
 			yield return www;
 			// check for errors
 			if (www.error == null)
@@ -718,12 +489,15 @@ namespace Xsolla
 				Debug.Log("Type -> " + pType);
 				Debug.Log("WWW_request -> " + www.text);
 
+
 				string data = www.text;
+
+
 				JSONNode rootNode = JSON.Parse(www.text);
 				if(rootNode != null && rootNode.Count > 2 || rootNode["error"] == null) {
 					switch(pType)
 					{
-						case TRANSLATIONS:
+					case TRANSLATIONS: 
 						{
 							if(rootNode.Count > 2){
 								XsollaUtils utils = new XsollaUtils().Parse(rootNode) as XsollaUtils;
@@ -909,6 +683,7 @@ namespace Xsolla
 								if (post.ContainsKey("coupon_code"))
 									post.Remove("coupon_code");
 								post.Add("operation_id", operationId);
+
 								VPaymentStatus(post);
 							}
 						}
@@ -923,6 +698,14 @@ namespace Xsolla
 						{
 							CustomVirtCurrAmountController.CustomAmountCalcRes res = new CustomVirtCurrAmountController.CustomAmountCalcRes().Parse(rootNode["calculation"]) as CustomVirtCurrAmountController.CustomAmountCalcRes;
 							OnCustomAmountResRecieved(res);
+
+						}
+						break;
+					case ACTIVE_SUBS:
+						{
+							XsollaSubscriptions subs = new XsollaSubscriptions();
+							subs.Parse(rootNode);
+							OnSubscriptionsReceived(subs);
 						}
 						break;
 						case PAYMENT_MANAGER_LIST:
@@ -947,12 +730,16 @@ namespace Xsolla
 						default:
 						break;
 					}
-				} else {
+				} 
+				else 
+				{
 					XsollaError error = new XsollaError();
 					error.Parse(rootNode);
 					OnErrorReceived(error);
 				}
-			} else {
+			} 
+			else 
+			{
 				JSONNode errorNode = JSON.Parse(www.text);
 				string errorMsg = errorNode["errors"].AsArray[0]["message"].Value 
 					+ ". Support code " + errorNode["errors"].AsArray[0]["support_code"].Value;
@@ -968,7 +755,7 @@ namespace Xsolla
 			else 
 				LogEvent ("UNITY " + SDK_VERSION + " REQUEST", "undefined", www.url);
 		}
-			
+
 		private string GetUtilsLink(){
 			return DOMAIN + "/paystation2/api/utils";
 		}
@@ -1040,6 +827,11 @@ namespace Xsolla
 
 		private string GetCountriesListUrl(){
 			return DOMAIN + "/paystation2/api/country";
+		}
+
+		private string GetSubsUrl()
+		{
+			return DOMAIN + "/paystation2/api/recurring/active";
 		}
 		
 		/*		BUY WITH VIRTUAL CURERENCY	 */
