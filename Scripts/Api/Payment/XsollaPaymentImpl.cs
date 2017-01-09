@@ -435,7 +435,7 @@ namespace Xsolla
 			if (!post.ContainsKey (XsollaApiConst.ACCESS_TOKEN) && !post.ContainsKey ("project") && !post.ContainsKey ("access_data") && baseParams != null)
 			{
 				foreach (KeyValuePair<string, object> kv in baseParams)
-					post.Add (kv.Key, kv.Value);//.Add (XsollaApiConst.ACCESS_TOKEN, _accessToken);
+					post.Add (kv.Key, kv.Value);
 				if (!post.ContainsKey(XsollaApiConst.ACCESS_TOKEN) && !baseParams.ContainsKey(XsollaApiConst.ACCESS_TOKEN) && (_accessToken != ""))
 					post.Add(XsollaApiConst.ACCESS_TOKEN, _accessToken);
 
@@ -748,6 +748,11 @@ namespace Xsolla
 								form.Parse(rootNode);
 								switch (form.GetCurrentCommand()) {
 								case XsollaForm.CurrentCommand.STATUS:
+									// if we replaced or add saved account, we must start loop on get list saved account
+									if (post.ContainsKey("save_payment_account_only") || (post.ContainsKey("replace_payment_account")))
+									{
+										break;
+									}
 									GetStatus(form.GetXpsMap());
 									break;
 								case XsollaForm.CurrentCommand.CHECKOUT:

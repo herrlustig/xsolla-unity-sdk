@@ -379,8 +379,10 @@ namespace Xsolla
 			Dictionary<string, object> reqParams = new Dictionary<string, object>();
 			reqParams.Add("save_payment_account_only",1);
 			FillPurchase(ActivePurchase.Part.PAYMENT_MANAGER, reqParams);
-			// reload payment methods
+			// load payment methods
 			LoadPaymentMethods();
+			// start loop on wait status
+			_SavedPaymentController.WaitChangeLoop();
 		}
 
 		private void setCurrentScreenValue(ActiveScreen pValue)

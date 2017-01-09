@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
-
+using System.Text;
 
 namespace Xsolla
 {
@@ -39,9 +39,12 @@ namespace Xsolla
 		private ArrayList 	mListBtnsObjs;
 		private XsollaPaystationController.ActiveScreen mPrevScreen;
 		private Action<XsollaPaystationController.ActiveScreen> mOnClose;
+		public XsollaSavedPaymentMethods mListMethods { get;  set;}
+
 
 		private ArrayList mListReplacedMethods;
 		private string mSelectedMethod;
+
 
 
 		public PaymentManagerController ()
@@ -60,6 +63,9 @@ namespace Xsolla
 
 		public void initScreen(XsollaUtils pUtils, XsollaSavedPaymentMethods pMethods, Action pAddPaymentMethod)
 		{
+			if (pMethods != null)
+				mListMethods = pMethods;
+
 			if (mListBtnsObjs == null)
 				mListBtnsObjs = new ArrayList();
 			else
@@ -87,7 +93,7 @@ namespace Xsolla
 				Destroy(mBtnGrid.transform.GetChild(i).gameObject);
 			}
 
-			if (pMethods.GetCount() == 0)
+			if (mListMethods.GetCount() == 0)
 			{
 				mContainer.SetActive(false);
 				mDelPanelMethod.SetActive(false);
@@ -104,7 +110,7 @@ namespace Xsolla
 				mDelPanelMethod.SetActive(false);
 				mReplacePanelMethod.SetActive(false);
 				mContainer.SetActive(true);
-				foreach (XsollaSavedPaymentMethod item in pMethods.GetItemList())
+				foreach (XsollaSavedPaymentMethod item in mListMethods.GetItemList())
 				{
 					// Create prefab on btn saved method, set parent and set controller on them
 					GameObject methodBtn = Instantiate(Resources.Load("Prefabs/SimpleView/_PaymentFormElements/SavedMethodBtnNew")) as GameObject;
@@ -331,12 +337,6 @@ namespace Xsolla
 
 			XsollaPaystationController controller = gameObject.GetComponentInParent<XsollaPaystationController>();
 			controller.DeleteSavedPaymentMethod(reqParams);
-
-// 			https://secure.xsolla.com/paystation2/api/savedmethods/delete
-//			access_token:W8SaoL896NvrC3NfhN42gS7tgklgC2lN
-//			id:1957827
-//			type:paypal
-
 		}
 
 		private void onClickCancelEditMethod()
@@ -356,6 +356,40 @@ namespace Xsolla
 		{
 			Logger.Log("Click Btn to Delete saved method");
 			initDeleteMethodPanel(pMethodObj);
+		}
+
+		public void WaitChangeLoop()
+		{
+			WWWForm form = new WWWForm();
+			string url = "https://secure.xsolla.com/paystation2/api/savedmethods";
+			Dictionary<string, object> post = new Dictionary<string, object>();
+			StringBuilder sb = new StringBuilder ();
+
+			post.Add(XsollaApiConst.ACCESS_TOKEN, mUtilsLink.GetAcceessToken());
+
+			foreach(KeyValuePair<string,object> post_arg in post)
+			{
+				string argValue = post_arg.Value != null ? post_arg.Value.ToString() : "";
+				sb.Append(post_arg.Key).Append("=").Append(argValue).Append("&");
+				form.AddField(post_arg.Key, argValue);
+			}
+
+			Debug.Log (url);
+			Debug.Log (sb.ToString());
+			WWW www = new WWW(url, form);
+			StartCoroutine(GetListSavedMethod(www));
+		}
+
+		private IEnumerator GetListSavedMethod(WWW www)
+		{
+			yield return www;
+			// check for errors
+			if (www.error == null)
+			{
+				Debug.Log("Wait saved account list");
+				Debug.Log("WWW_request -> " + www.text);
+			}
+
 		}
 	}
 }
