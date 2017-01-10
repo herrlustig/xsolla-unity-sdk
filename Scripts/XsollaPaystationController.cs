@@ -48,7 +48,7 @@ namespace Xsolla
 		{
 			SHOP, P_LIST, VP_PAYMENT, PAYMENT, STATUS, ERROR, UNKNOWN, FAV_ITEMS_LIST, REDEEM_COUPONS, HISTORY_LIST, SUBSCRIPTIONS, PAYMENT_MANAGER
 		}
-
+			
 		protected override void RecieveUtils (XsollaUtils utils)
 		{
 			StyleManager.Instance.ChangeTheme(utils.GetSettings().GetTheme());

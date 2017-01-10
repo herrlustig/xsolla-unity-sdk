@@ -12,12 +12,12 @@ GameObject:
   - 114: {fileID: 11498786}
   - 114: {fileID: 11452444}
   m_Layer: 5
-  m_Name: 
+  m_Name: panelbtns
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!1 &105228
 GameObject:
   m_ObjectHideFlags: 1
@@ -28,14 +28,14 @@ GameObject:
   - 224: {fileID: 22409498}
   - 222: {fileID: 22292736}
   - 114: {fileID: 11499708}
-  - 114: {fileID: 114643613437382234}
+  - 114: {fileID: 114000012248175756}
   m_Layer: 5
-  m_Name: 
+  m_Name: panelForBtns
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!1 &121494
 GameObject:
   m_ObjectHideFlags: 1
@@ -47,12 +47,12 @@ GameObject:
   - 222: {fileID: 22231926}
   - 114: {fileID: 11451800}
   m_Layer: 5
-  m_Name: 
+  m_Name: Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!1 &122194
 GameObject:
   m_ObjectHideFlags: 1
@@ -63,12 +63,12 @@ GameObject:
   - 224: {fileID: 22440730}
   - 114: {fileID: 11453576}
   m_Layer: 5
-  m_Name: 
+  m_Name: BtnGrid
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!1 &130254
 GameObject:
   m_ObjectHideFlags: 1
@@ -81,12 +81,12 @@ GameObject:
   - 114: {fileID: 11400842}
   - 114: {fileID: 11423948}
   m_Layer: 5
-  m_Name: 
+  m_Name: TitleText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!1 &131246
 GameObject:
   m_ObjectHideFlags: 1
@@ -100,12 +100,12 @@ GameObject:
   - 114: {fileID: 11411240}
   - 114: {fileID: 11497136}
   m_Layer: 5
-  m_Name: 
+  m_Name: BtnAddPayment
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!1 &131970
 GameObject:
   m_ObjectHideFlags: 1
@@ -118,12 +118,12 @@ GameObject:
   - 114: {fileID: 11438800}
   - 114: {fileID: 11405510}
   m_Layer: 5
-  m_Name: 
+  m_Name: LinkText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!1 &132560
 GameObject:
   m_ObjectHideFlags: 1
@@ -136,12 +136,12 @@ GameObject:
   - 114: {fileID: 11497996}
   - 114: {fileID: 11498450}
   m_Layer: 5
-  m_Name: 
+  m_Name: Info
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!1 &134308
 GameObject:
   m_ObjectHideFlags: 1
@@ -153,12 +153,12 @@ GameObject:
   - 222: {fileID: 22254924}
   - 114: {fileID: 11415426}
   m_Layer: 5
-  m_Name: 
+  m_Name: Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!1 &136186
 GameObject:
   m_ObjectHideFlags: 1
@@ -172,7 +172,7 @@ GameObject:
   - 114: {fileID: 11462742}
   - 114: {fileID: 11429868}
   m_Layer: 5
-  m_Name: 
+  m_Name: DelStatusPanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -190,7 +190,7 @@ GameObject:
   - 114: {fileID: 11400576}
   - 114: {fileID: 11494552}
   m_Layer: 5
-  m_Name: 
+  m_Name: InfoPanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -207,14 +207,14 @@ GameObject:
   - 222: {fileID: 22246614}
   - 114: {fileID: 11450284}
   - 114: {fileID: 11420728}
-  - 114: {fileID: 114288918838735560}
+  - 114: {fileID: 114000013081097208}
   m_Layer: 5
-  m_Name: 
+  m_Name: linkAnotherMethod
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!1 &146502
 GameObject:
   m_ObjectHideFlags: 1
@@ -226,12 +226,12 @@ GameObject:
   - 222: {fileID: 22237132}
   - 114: {fileID: 11400114}
   m_Layer: 5
-  m_Name: 
+  m_Name: linkAnotherMethod
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!1 &148890
 GameObject:
   m_ObjectHideFlags: 1
@@ -245,12 +245,12 @@ GameObject:
   - 114: {fileID: 11435704}
   - 114: {fileID: 11409342}
   m_Layer: 5
-  m_Name: 
+  m_Name: linkBack
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!1 &149706
 GameObject:
   m_ObjectHideFlags: 0
@@ -264,12 +264,12 @@ GameObject:
   - 114: {fileID: 11418982}
   - 114: {fileID: 11418108}
   m_Layer: 5
-  m_Name: 
+  m_Name: Title
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!1 &155690
 GameObject:
   m_ObjectHideFlags: 1
@@ -283,12 +283,12 @@ GameObject:
   - 114: {fileID: 11490786}
   - 114: {fileID: 11448952}
   m_Layer: 5
-  m_Name: 
+  m_Name: btnContinue
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!1 &161824
 GameObject:
   m_ObjectHideFlags: 1
@@ -302,12 +302,12 @@ GameObject:
   - 114: {fileID: 11423452}
   - 114: {fileID: 11497938}
   m_Layer: 5
-  m_Name: 
+  m_Name: linkDelete
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!1 &163256
 GameObject:
   m_ObjectHideFlags: 0
@@ -320,12 +320,12 @@ GameObject:
   - 114: {fileID: 11429710}
   - 114: {fileID: 11491412}
   m_Layer: 5
-  m_Name: 
+  m_Name: PaymentScreenContent
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!1 &164372
 GameObject:
   m_ObjectHideFlags: 0
@@ -336,12 +336,12 @@ GameObject:
   - 224: {fileID: 22438612}
   - 114: {fileID: 11421564}
   m_Layer: 5
-  m_Name: 
+  m_Name: ImageLoader
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!1 &171200
 GameObject:
   m_ObjectHideFlags: 1
@@ -354,12 +354,12 @@ GameObject:
   - 114: {fileID: 11495434}
   - 114: {fileID: 11467466}
   m_Layer: 5
-  m_Name: 
+  m_Name: TitleDivider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!1 &172366
 GameObject:
   m_ObjectHideFlags: 1
@@ -372,12 +372,12 @@ GameObject:
   - 114: {fileID: 11445710}
   - 114: {fileID: 11438536}
   m_Layer: 5
-  m_Name: 
+  m_Name: InfoTitle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!1 &172420
 GameObject:
   m_ObjectHideFlags: 1
@@ -387,14 +387,14 @@ GameObject:
   m_Component:
   - 224: {fileID: 22432696}
   - 114: {fileID: 11433656}
-  - 114: {fileID: 114520665338926842}
+  - 114: {fileID: 114000013406641868}
   m_Layer: 5
-  m_Name: 
+  m_Name: mainEditPanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!1 &179366
 GameObject:
   m_ObjectHideFlags: 1
@@ -407,12 +407,12 @@ GameObject:
   - 114: {fileID: 11407452}
   - 114: {fileID: 11495212}
   m_Layer: 5
-  m_Name: 
+  m_Name: BtnPanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!1 &182794
 GameObject:
   m_ObjectHideFlags: 0
@@ -432,7 +432,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!1 &190138
 GameObject:
   m_ObjectHideFlags: 1
@@ -446,12 +446,12 @@ GameObject:
   - 114: {fileID: 11424044}
   - 114: {fileID: 11439666}
   m_Layer: 5
-  m_Name: 
+  m_Name: SavedMethodsContainer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!1 &193098
 GameObject:
   m_ObjectHideFlags: 1
@@ -463,12 +463,12 @@ GameObject:
   - 222: {fileID: 22228582}
   - 114: {fileID: 11400884}
   m_Layer: 5
-  m_Name: 
+  m_Name: Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!1 &195198
 GameObject:
   m_ObjectHideFlags: 1
@@ -479,12 +479,12 @@ GameObject:
   - 224: {fileID: 22432266}
   - 114: {fileID: 11470228}
   m_Layer: 5
-  m_Name: 
+  m_Name: emptySpace
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!1 &199736
 GameObject:
   m_ObjectHideFlags: 1
@@ -496,7 +496,7 @@ GameObject:
   - 222: {fileID: 22203092}
   - 114: {fileID: 11465570}
   m_Layer: 5
-  m_Name: 
+  m_Name: ReplacePanelMethod
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2600,16 +2600,14 @@ GameObject:
   m_Component:
   - 224: {fileID: 224582558408690458}
   - 222: {fileID: 222900114402684470}
-  - 114: {fileID: 114205413062764650}
-  - 114: {fileID: 114817407237599884}
-  - 114: {fileID: 114995083389673002}
+  - 114: {fileID: 114000011176609074}
   m_Layer: 5
-  m_Name: 
+  m_Name: panelContainer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!1 &1080794100520154
 GameObject:
   m_ObjectHideFlags: 1
@@ -2622,12 +2620,12 @@ GameObject:
   - 114: {fileID: 114914481160169692}
   - 114: {fileID: 114568653844031558}
   m_Layer: 5
-  m_Name: 
+  m_Name: TextOfQuiestion
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!1 &1122395584674330
 GameObject:
   m_ObjectHideFlags: 1
@@ -2639,7 +2637,7 @@ GameObject:
   - 222: {fileID: 222875088304267246}
   - 114: {fileID: 114805043145055102}
   m_Layer: 5
-  m_Name: 
+  m_Name: DelPanelMethod
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2658,7 +2656,7 @@ GameObject:
   - 114: {fileID: 114262899411608748}
   - 114: {fileID: 114037743237762128}
   m_Layer: 5
-  m_Name: 
+  m_Name: linkCancel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2674,12 +2672,12 @@ GameObject:
   - 224: {fileID: 224252240184501854}
   - 114: {fileID: 114591490404085550}
   m_Layer: 5
-  m_Name: 
+  m_Name: mainEditPanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!1 &1497943013459220
 GameObject:
   m_ObjectHideFlags: 1
@@ -2693,12 +2691,12 @@ GameObject:
   - 114: {fileID: 114561823880614174}
   - 114: {fileID: 114849835357107812}
   m_Layer: 5
-  m_Name: 
+  m_Name: btnReplace
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!1 &1527816657443290
 GameObject:
   m_ObjectHideFlags: 1
@@ -2711,12 +2709,12 @@ GameObject:
   - 114: {fileID: 114543420450374416}
   - 114: {fileID: 114537971410367972}
   m_Layer: 5
-  m_Name: 
+  m_Name: panelForMethod
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!1 &1567446719062010
 GameObject:
   m_ObjectHideFlags: 1
@@ -2727,12 +2725,12 @@ GameObject:
   - 224: {fileID: 224035214906885220}
   - 114: {fileID: 114882348412407852}
   m_Layer: 5
-  m_Name: 
+  m_Name: emptySpace
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!1 &1644102009008410
 GameObject:
   m_ObjectHideFlags: 1
@@ -2745,12 +2743,12 @@ GameObject:
   - 114: {fileID: 114638428993880164}
   - 114: {fileID: 114323555375073254}
   m_Layer: 5
-  m_Name: 
+  m_Name: panelForBtns
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!1 &1877027378131702
 GameObject:
   m_ObjectHideFlags: 1
@@ -2762,12 +2760,117 @@ GameObject:
   - 222: {fileID: 222279599036014770}
   - 114: {fileID: 114651816796027476}
   m_Layer: 5
-  m_Name: 
+  m_Name: Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
+--- !u!114 &114000011176609074
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1018389813451818}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1367256648, guid: f5f67c52d1564df4a8936ccd202a3bd8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Content: {fileID: 22432696}
+  m_Horizontal: 1
+  m_Vertical: 1
+  m_MovementType: 2
+  m_Elasticity: 0.1
+  m_Inertia: 1
+  m_DecelerationRate: 0.135
+  m_ScrollSensitivity: 1
+  m_Viewport: {fileID: 0}
+  m_HorizontalScrollbar: {fileID: 0}
+  m_VerticalScrollbar: {fileID: 0}
+  m_HorizontalScrollbarVisibility: 0
+  m_VerticalScrollbarVisibility: 0
+  m_HorizontalScrollbarSpacing: 0
+  m_VerticalScrollbarSpacing: 0
+  m_OnValueChanged:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.UI.ScrollRect+ScrollRectEvent, UnityEngine.UI, Version=1.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+--- !u!114 &114000012248175756
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 105228}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1297475563, guid: f5f67c52d1564df4a8936ccd202a3bd8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Padding:
+    m_Left: 0
+    m_Right: 0
+    m_Top: 0
+    m_Bottom: 0
+  m_ChildAlignment: 0
+  m_Spacing: 10
+  m_ChildForceExpandWidth: 1
+  m_ChildForceExpandHeight: 0
+--- !u!114 &114000013081097208
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 142220}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1392445389, guid: f5f67c52d1564df4a8936ccd202a3bd8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Navigation:
+    m_Mode: 3
+    m_SelectOnUp: {fileID: 0}
+    m_SelectOnDown: {fileID: 0}
+    m_SelectOnLeft: {fileID: 0}
+    m_SelectOnRight: {fileID: 0}
+  m_Transition: 1
+  m_Colors:
+    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
+    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
+    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_ColorMultiplier: 1
+    m_FadeDuration: 0.1
+  m_SpriteState:
+    m_HighlightedSprite: {fileID: 0}
+    m_PressedSprite: {fileID: 0}
+    m_DisabledSprite: {fileID: 0}
+  m_AnimationTriggers:
+    m_NormalTrigger: Normal
+    m_HighlightedTrigger: Highlighted
+    m_PressedTrigger: Pressed
+    m_DisabledTrigger: Disabled
+  m_Interactable: 1
+  m_TargetGraphic: {fileID: 11450284}
+  m_OnClick:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+--- !u!114 &114000013406641868
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 172420}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1741964061, guid: f5f67c52d1564df4a8936ccd202a3bd8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_HorizontalFit: 0
+  m_VerticalFit: 2
 --- !u!114 &114037743237762128
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2809,33 +2912,6 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
---- !u!114 &114205413062764650
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1018389813451818}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: -765806418, guid: f70555f144d8491a825f0804e09c671c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.392}
-  m_RaycastTarget: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
-      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Sprite: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 3}
-  m_Type: 1
-  m_PreserveAspect: 0
-  m_FillCenter: 1
-  m_FillMethod: 4
-  m_FillAmount: 1
-  m_FillClockwise: 1
-  m_FillOrigin: 0
 --- !u!114 &114254853927554878
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2887,47 +2963,6 @@ MonoBehaviour:
   m_PreferredHeight: -1
   m_FlexibleWidth: -1
   m_FlexibleHeight: 0
---- !u!114 &114288918838735560
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 142220}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 1392445389, guid: f70555f144d8491a825f0804e09c671c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Navigation:
-    m_Mode: 3
-    m_SelectOnUp: {fileID: 0}
-    m_SelectOnDown: {fileID: 0}
-    m_SelectOnLeft: {fileID: 0}
-    m_SelectOnRight: {fileID: 0}
-  m_Transition: 1
-  m_Colors:
-    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
-    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
-    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
-    m_ColorMultiplier: 1
-    m_FadeDuration: 0.1
-  m_SpriteState:
-    m_HighlightedSprite: {fileID: 0}
-    m_PressedSprite: {fileID: 0}
-    m_DisabledSprite: {fileID: 0}
-  m_AnimationTriggers:
-    m_NormalTrigger: Normal
-    m_HighlightedTrigger: Highlighted
-    m_PressedTrigger: Pressed
-    m_DisabledTrigger: Disabled
-  m_Interactable: 1
-  m_TargetGraphic: {fileID: 11450284}
-  m_OnClick:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
-      Culture=neutral, PublicKeyToken=null
 --- !u!114 &114323555375073254
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2946,19 +2981,6 @@ MonoBehaviour:
   m_PreferredHeight: -1
   m_FlexibleWidth: -1
   m_FlexibleHeight: 0
---- !u!114 &114520665338926842
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 172420}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 1741964061, guid: f70555f144d8491a825f0804e09c671c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_HorizontalFit: 0
-  m_VerticalFit: 2
 --- !u!114 &114537971410367972
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3103,28 +3125,6 @@ MonoBehaviour:
   m_Spacing: 10
   m_ChildForceExpandWidth: 0
   m_ChildForceExpandHeight: 1
---- !u!114 &114643613437382234
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 105228}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 1297475563, guid: f70555f144d8491a825f0804e09c671c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Padding:
-    m_Left: 0
-    m_Right: 0
-    m_Top: 0
-    m_Bottom: 0
-  m_ChildAlignment: 0
-  m_Spacing: 10
-  m_ChildForceExpandWidth: 1
-  m_ChildForceExpandHeight: 0
-  m_ChildControlWidth: 1
-  m_ChildControlHeight: 1
 --- !u!114 &114651816796027476
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3185,18 +3185,6 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
---- !u!114 &114817407237599884
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1018389813451818}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: -1200242548, guid: f70555f144d8491a825f0804e09c671c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_ShowMaskGraphic: 0
 --- !u!114 &114849835357107812
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3293,37 +3281,6 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
---- !u!114 &114995083389673002
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1018389813451818}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 1367256648, guid: f70555f144d8491a825f0804e09c671c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Content: {fileID: 22432696}
-  m_Horizontal: 0
-  m_Vertical: 1
-  m_MovementType: 2
-  m_Elasticity: 0.1
-  m_Inertia: 1
-  m_DecelerationRate: 0.135
-  m_ScrollSensitivity: 1
-  m_Viewport: {fileID: 0}
-  m_HorizontalScrollbar: {fileID: 0}
-  m_VerticalScrollbar: {fileID: 0}
-  m_HorizontalScrollbarVisibility: 0
-  m_VerticalScrollbarVisibility: 0
-  m_HorizontalScrollbarSpacing: 0
-  m_VerticalScrollbarSpacing: 0
-  m_OnValueChanged:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: UnityEngine.UI.ScrollRect+ScrollRectEvent, UnityEngine.UI, Version=1.0.0.0,
-      Culture=neutral, PublicKeyToken=null
 --- !u!222 &222058264452134962
 CanvasRenderer:
   m_ObjectHideFlags: 1

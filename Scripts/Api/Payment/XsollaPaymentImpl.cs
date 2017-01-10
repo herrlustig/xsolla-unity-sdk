@@ -410,7 +410,7 @@ namespace Xsolla
 
 		public void GetSavedPaymentsForManager(Dictionary<string, object> pParams)
 		{
-			POST(PAYMENT_MANAGER_LIST, GetSavedPaymentListUrl(), pParams);
+			StartCoroutine(POST(PAYMENT_MANAGER_LIST, GetSavedPaymentListUrl(), pParams));
 		}
 
 		public void GetCountries(Dictionary<string, object> requestParams)
@@ -442,11 +442,9 @@ namespace Xsolla
 		{
 			if (!pParam.ContainsKey(XsollaApiConst.ACCESS_TOKEN))
 				pParam.Add(XsollaApiConst.ACCESS_TOKEN, baseParams[XsollaApiConst.ACCESS_TOKEN]);
-			POST(DELETE_SAVED_METHOD, GetDeleteSavedPaymentMethodUrl(), pParam);
+			StartCoroutine(POST(DELETE_SAVED_METHOD, GetDeleteSavedPaymentMethodUrl(), pParam));
 		}
-
-		//public WWW POST(int type, string url, Dictionary<string, object> post)
-
+			
 		public IEnumerator POST(int type, string url, Dictionary<string, object> post)
 		{
 			WWWForm form = new WWWForm();
@@ -476,7 +474,6 @@ namespace Xsolla
 			WWW www = new WWW(url, form);
 
 			yield return StartCoroutine(WaitForRequest(type, www, post));	
-			//return null;
 		}
 			
 		private IEnumerator WaitForRequest(int pType, WWW www, Dictionary<string, object> post)
@@ -767,8 +764,7 @@ namespace Xsolla
 		private string GetStatusLink(){
 			return DOMAIN + "/paystation2/api/directpayment";
 		}
-		
-		
+
 		/*		PAYMENT METHODS LINKS	 */
 		private string GetPricepointsUrl(){
 			return DOMAIN + "/paystation2/api/pricepoints";

@@ -13,12 +13,12 @@ GameObject:
   - 114: {fileID: 11418264}
   - 114: {fileID: 11496042}
   m_Layer: 5
-  m_Name: 
+  m_Name: AgreementText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!1 &109818
 GameObject:
   m_ObjectHideFlags: 1
@@ -31,12 +31,12 @@ GameObject:
   - 114: {fileID: 11421916}
   - 114: {fileID: 11449856}
   m_Layer: 5
-  m_Name: 
+  m_Name: ConnectionText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!1 &115060
 GameObject:
   m_ObjectHideFlags: 1
@@ -49,12 +49,12 @@ GameObject:
   - 114: {fileID: 11474196}
   - 114: {fileID: 11467244}
   m_Layer: 5
-  m_Name: 
+  m_Name: XsollaText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!1 &119134
 GameObject:
   m_ObjectHideFlags: 1
@@ -67,12 +67,12 @@ GameObject:
   - 114: {fileID: 11440416}
   - 114: {fileID: 11494042}
   m_Layer: 5
-  m_Name: 
+  m_Name: Image
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!1 &119404
 GameObject:
   m_ObjectHideFlags: 0
@@ -87,12 +87,12 @@ GameObject:
   - 114: {fileID: 11431048}
   - 114: {fileID: 11464264}
   m_Layer: 5
-  m_Name: 
+  m_Name: ShopHeader
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!1 &120068
 GameObject:
   m_ObjectHideFlags: 1
@@ -104,12 +104,12 @@ GameObject:
   - 222: {fileID: 22210328}
   - 114: {fileID: 11402216}
   m_Layer: 5
-  m_Name: 
+  m_Name: Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!1 &120624
 GameObject:
   m_ObjectHideFlags: 1
@@ -121,12 +121,12 @@ GameObject:
   - 222: {fileID: 22240328}
   - 114: {fileID: 11404624}
   m_Layer: 5
-  m_Name: 
+  m_Name: TextContactUs
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!1 &123712
 GameObject:
   m_ObjectHideFlags: 1
@@ -139,12 +139,12 @@ GameObject:
   - 114: {fileID: 11405856}
   - 114: {fileID: 11472482}
   m_Layer: 5
-  m_Name: 
+  m_Name: WindowTitle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!1 &127704
 GameObject:
   m_ObjectHideFlags: 1
@@ -157,12 +157,12 @@ GameObject:
   - 114: {fileID: 11462292}
   - 114: {fileID: 11469670}
   m_Layer: 5
-  m_Name: 
+  m_Name: userName
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!1 &132750
 GameObject:
   m_ObjectHideFlags: 1
@@ -174,12 +174,12 @@ GameObject:
   - 222: {fileID: 22255702}
   - 114: {fileID: 11420998}
   m_Layer: 5
-  m_Name: 
+  m_Name: btnDown
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!1 &137800
 GameObject:
   m_ObjectHideFlags: 1
@@ -191,12 +191,12 @@ GameObject:
   - 222: {fileID: 22262808}
   - 114: {fileID: 11450198}
   m_Layer: 5
-  m_Name: 
+  m_Name: TextCustomerSupport
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!1 &138690
 GameObject:
   m_ObjectHideFlags: 1
@@ -209,12 +209,12 @@ GameObject:
   - 114: {fileID: 11469998}
   - 114: {fileID: 11485030}
   m_Layer: 5
-  m_Name: 
+  m_Name: ButtonContactUs
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!1 &141950
 GameObject:
   m_ObjectHideFlags: 1
@@ -226,12 +226,12 @@ GameObject:
   - 222: {fileID: 22231060}
   - 114: {fileID: 11431958}
   m_Layer: 5
-  m_Name: 
+  m_Name: CloseText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!1 &154186
 GameObject:
   m_ObjectHideFlags: 1
@@ -246,12 +246,12 @@ GameObject:
   - 114: {fileID: 11458708}
   - 114: {fileID: 11409462}
   m_Layer: 5
-  m_Name: 
+  m_Name: CloseBtn
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!1 &160750
 GameObject:
   m_ObjectHideFlags: 1
@@ -264,12 +264,12 @@ GameObject:
   - 114: {fileID: 11430296}
   - 114: {fileID: 11430564}
   m_Layer: 5
-  m_Name: 
+  m_Name: TextContainer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!1 &161748
 GameObject:
   m_ObjectHideFlags: 1
@@ -281,12 +281,12 @@ GameObject:
   - 222: {fileID: 22223894}
   - 114: {fileID: 11445456}
   m_Layer: 5
-  m_Name: 
+  m_Name: Divider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!1 &163608
 GameObject:
   m_ObjectHideFlags: 0
@@ -300,12 +300,12 @@ GameObject:
   - 114: {fileID: 11474406}
   - 114: {fileID: 11474932}
   m_Layer: 5
-  m_Name: 
+  m_Name: ShopFooter
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!1 &172604
 GameObject:
   m_ObjectHideFlags: 0
@@ -320,12 +320,12 @@ GameObject:
   - 114: {fileID: 11419018}
   - 114: {fileID: 11484646}
   m_Layer: 5
-  m_Name: 
+  m_Name: ScrollContainer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!1 &179382
 GameObject:
   m_ObjectHideFlags: 1
@@ -338,7 +338,7 @@ GameObject:
   - 114: {fileID: 11480110}
   - 114: {fileID: 11423790}
   m_Layer: 5
-  m_Name: 
+  m_Name: Title
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -361,7 +361,7 @@ GameObject:
   - 114: {fileID: 11425830}
   - 114: {fileID: 11443920}
   m_Layer: 5
-  m_Name: 
+  m_Name: ScrollableList
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -385,7 +385,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!1 &184436
 GameObject:
   m_ObjectHideFlags: 0
@@ -401,7 +401,7 @@ GameObject:
   - 114: {fileID: 11428836}
   - 114: {fileID: 11489612}
   m_Layer: 5
-  m_Name: 
+  m_Name: DropDownMenu
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -418,12 +418,12 @@ GameObject:
   - 222: {fileID: 22279498}
   - 114: {fileID: 11465330}
   m_Layer: 5
-  m_Name: 
+  m_Name: Container
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!1 &192116
 GameObject:
   m_ObjectHideFlags: 0
@@ -438,12 +438,12 @@ GameObject:
   - 114: {fileID: 11411648}
   - 114: {fileID: 11479952}
   m_Layer: 5
-  m_Name: 
+  m_Name: NavigationMenu
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!1 &194632
 GameObject:
   m_ObjectHideFlags: 1
@@ -458,12 +458,12 @@ GameObject:
   - 114: {fileID: 11481750}
   - 114: {fileID: 11482966}
   m_Layer: 5
-  m_Name: 
+  m_Name: btnUserProfile
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &11400954
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2333,7 +2333,7 @@ RectTransform:
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: -51.4, y: -27.1}
-  m_SizeDelta: {x: 160.7, y: 41}
+  m_SizeDelta: {x: 130.2, y: 41}
   m_Pivot: {x: 1.0000001, y: 0.9999994}
 --- !u!224 &22420502
 RectTransform:
