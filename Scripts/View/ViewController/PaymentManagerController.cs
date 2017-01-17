@@ -4,6 +4,7 @@ using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
+using SimpleJSON;
 
 namespace Xsolla
 {
@@ -17,7 +18,7 @@ namespace Xsolla
 		public GameObject mContainer;
 		public GameObject mBtnGrid;
 		public GameObject mBtnAddPaymentObj;
-		public ImageLoader mImgLoader; 
+		public ImageLoader mImgLoader;
 
 		// for replace
 		public GameObject mReplacePanelMethod;
@@ -35,6 +36,11 @@ namespace Xsolla
 		public GameObject mBtnReplace;
 		public GameObject mDelStatusPanel;
 
+		// wait screen
+		public GameObject mWaitChangeScreen;
+		public GameObject mCancelWaitBtn;
+		public MyRotation mProgressBar;
+
 		private XsollaUtils mUtilsLink;
 		private ArrayList 	mListBtnsObjs;
 		private XsollaPaystationController.ActiveScreen mPrevScreen;
@@ -44,8 +50,6 @@ namespace Xsolla
 
 		private ArrayList mListReplacedMethods;
 		private string mSelectedMethod;
-
-
 
 		public PaymentManagerController ()
 		{
@@ -59,6 +63,82 @@ namespace Xsolla
 		public void setOnCloseMethod(Action<XsollaPaystationController.ActiveScreen> pAction)
 		{
 			mOnClose = pAction;
+		}
+
+		private Action _addPaymentMethod;
+
+		public void initWaitScreen(XsollaUtils pUtils, Action pAddPaymentMethod)
+		{
+			mUtilsLink = pUtils;
+			_addPaymentMethod = pAddPaymentMethod;
+			mWaitChangeScreen.SetActive(true);
+			mProgressBar.SetLoading(true);
+
+			// Start wait change loop
+			InvokeRepeating("StartChangesavedPaymentLoop", 0f, 5f);
+			mCancelWaitBtn.GetComponent<Button>().onClick.AddListener(() => CancelWait());
+		}
+
+		private void CancelWait()
+		{
+			mProgressBar.SetLoading(false);
+			mWaitChangeScreen.SetActive(false);
+			CancelInvoke("StartChangesavedPaymentLoop");
+			initScreen(mUtilsLink, _MethodsOnWaitLoop, _addPaymentMethod);
+		}
+
+		private void StartChangesavedPaymentLoop()
+		{
+			WWWForm form = new WWWForm();
+			string url = "https://secure.xsolla.com/paystation2/api/savedmethods";
+			Dictionary<string, object> post = new Dictionary<string, object>();
+			StringBuilder sb = new StringBuilder ();
+
+			post.Add(XsollaApiConst.ACCESS_TOKEN, mUtilsLink.GetAcceessToken());
+
+			foreach(KeyValuePair<string,object> post_arg in post)
+			{
+				string argValue = post_arg.Value != null ? post_arg.Value.ToString() : "";
+				sb.Append(post_arg.Key).Append("=").Append(argValue).Append("&");
+				form.AddField(post_arg.Key, argValue);
+			}
+
+			Debug.Log (url);
+			Debug.Log (sb.ToString());
+			WWW www = new WWW(url, form);
+			StartCoroutine(GetListSavedMethod(www));
+		}
+
+		XsollaSavedPaymentMethods _MethodsOnWaitLoop = null;
+
+		private IEnumerator GetListSavedMethod(WWW www)
+		{
+			Debug.Log("Wait saved account list");
+			yield return www;
+			// check for errors
+			if (www.error == null)
+			{
+				Debug.Log("WWW_request -> " + www.text);
+				JSONNode rootNode = JSON.Parse(www.text);
+				if(rootNode != null && rootNode.Count > 2 || rootNode["error"] == null) 
+				{
+					XsollaSavedPaymentMethods tempOnWaitLoop = new XsollaSavedPaymentMethods();
+					tempOnWaitLoop.Parse(rootNode);
+					if (_MethodsOnWaitLoop == null)
+						_MethodsOnWaitLoop = tempOnWaitLoop;
+					else
+					{
+						if (tempOnWaitLoop.Equals(_MethodsOnWaitLoop))
+							_MethodsOnWaitLoop = tempOnWaitLoop;
+						else
+						{
+							Logger.Log("Stop wait end show result");
+							_MethodsOnWaitLoop = tempOnWaitLoop;
+							CancelWait();
+						}
+					}
+				}
+			}
 		}
 
 		public void initScreen(XsollaUtils pUtils, XsollaSavedPaymentMethods pMethods, Action pAddPaymentMethod)
@@ -230,7 +310,6 @@ namespace Xsolla
 			// TODO
 			// if we don't have account on replace we must click on another method
 
-
 			// set all 
 			foreach (GameObject btnObj in mListBtnsObjs)
 			{
@@ -358,39 +437,38 @@ namespace Xsolla
 			initDeleteMethodPanel(pMethodObj);
 		}
 
-		public void WaitChangeLoop()
-		{
-			WWWForm form = new WWWForm();
-			string url = "https://secure.xsolla.com/paystation2/api/savedmethods";
-			Dictionary<string, object> post = new Dictionary<string, object>();
-			StringBuilder sb = new StringBuilder ();
-
-			post.Add(XsollaApiConst.ACCESS_TOKEN, mUtilsLink.GetAcceessToken());
-
-			foreach(KeyValuePair<string,object> post_arg in post)
-			{
-				string argValue = post_arg.Value != null ? post_arg.Value.ToString() : "";
-				sb.Append(post_arg.Key).Append("=").Append(argValue).Append("&");
-				form.AddField(post_arg.Key, argValue);
-			}
-
-			Debug.Log (url);
-			Debug.Log (sb.ToString());
-			WWW www = new WWW(url, form);
-			StartCoroutine(GetListSavedMethod(www));
-		}
-
-		private IEnumerator GetListSavedMethod(WWW www)
-		{
-			yield return www;
-			// check for errors
-			if (www.error == null)
-			{
-				Debug.Log("Wait saved account list");
-				Debug.Log("WWW_request -> " + www.text);
-			}
-
-		}
+//		public void WaitChangeLoop()
+//		{
+//			WWWForm form = new WWWForm();
+//			string url = "https://secure.xsolla.com/paystation2/api/savedmethods";
+//			Dictionary<string, object> post = new Dictionary<string, object>();
+//			StringBuilder sb = new StringBuilder ();
+//
+//			post.Add(XsollaApiConst.ACCESS_TOKEN, mUtilsLink.GetAcceessToken());
+//
+//			foreach(KeyValuePair<string,object> post_arg in post)
+//			{
+//				string argValue = post_arg.Value != null ? post_arg.Value.ToString() : "";
+//				sb.Append(post_arg.Key).Append("=").Append(argValue).Append("&");
+//				form.AddField(post_arg.Key, argValue);
+//			}
+//
+//			Debug.Log (url);
+//			Debug.Log (sb.ToString());
+//			WWW www = new WWW(url, form);
+//			StartCoroutine(GetListSavedMethod(www));
+//		}
+//
+//		private IEnumerator GetListSavedMethod(WWW www)
+//		{
+//			Debug.Log("Wait saved account list");
+//			yield return www;
+//			// check for errors
+//			if (www.error == null)
+//			{
+//				Debug.Log("WWW_request -> " + www.text);
+//			}
+//		}
 	}
 }
 

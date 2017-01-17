@@ -66,6 +66,7 @@ namespace Xsolla
 
 		public Action<XsollaSavedPaymentMethods>	PaymentManagerMethods;
 		public Action								DeleteSavedPaymentMethodRespond;
+		public Action 								WaitChangeSavedMethods;
 
 		//TODO CHANGE PARAMS
 		protected string _accessToken;
@@ -285,6 +286,12 @@ namespace Xsolla
 			if (DeleteSavedPaymentMethodRespond != null)
 				DeleteSavedPaymentMethodRespond();
 		}
+
+		private void OnWaitPaymentChange()
+		{
+			if(WaitChangeSavedMethods != null)
+				WaitChangeSavedMethods();	
+		}
 		
 		// ---------------------------------------------------------------------------
 
@@ -485,10 +492,7 @@ namespace Xsolla
 			{
 				Debug.Log("Type -> " + pType);
 				Debug.Log("WWW_request -> " + www.text);
-
-
 				string data = www.text;
-
 
 				JSONNode rootNode = JSON.Parse(www.text);
 				if(rootNode != null && rootNode.Count > 2 || rootNode["error"] == null) {
@@ -499,11 +503,12 @@ namespace Xsolla
 							if(rootNode.Count > 2){
 								XsollaUtils utils = new XsollaUtils().Parse(rootNode) as XsollaUtils;
 								projectId = utils.GetProject().id.ToString();
+								utils.SetAccessToken(baseParams[XsollaApiConst.ACCESS_TOKEN].ToString());
 
 								OnUtilsRecieved(utils);
-								// if base param not containKey access token, then add token from util
-								if (!baseParams.ContainsKey(XsollaApiConst.ACCESS_TOKEN))
-									_accessToken = utils.GetAcceessToken();
+//								// if base param not containKey access token, then add token from util
+//								if (!baseParams.ContainsKey(XsollaApiConst.ACCESS_TOKEN))
+//									_accessToken = utils.GetAcceessToken();
 								OnTranslationRecieved(utils.GetTranslations());
 							} else {
 								XsollaError error = new XsollaError();
@@ -522,6 +527,7 @@ namespace Xsolla
 									// if we replaced or add saved account, we must start loop on get list saved account
 									if (post.ContainsKey("save_payment_account_only") || (post.ContainsKey("replace_payment_account")))
 									{
+										OnWaitPaymentChange();
 										break;
 									}
 									GetStatus(form.GetXpsMap());

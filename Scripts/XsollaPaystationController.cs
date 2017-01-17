@@ -3,6 +3,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Collections.Generic;
 using System;
+using System.Text;
+using System.Collections;
 
 namespace Xsolla
 {
@@ -301,6 +303,25 @@ namespace Xsolla
 			}
 		}
 
+		protected override void WaitChangeSavedMethod ()
+		{
+			if (currentActive != ActiveScreen.PAYMENT_MANAGER)
+			{
+				GameObject paymentManager = Instantiate(Resources.Load(PREFAB_SCREEN_PAYMENT_MANAGER)) as GameObject;
+				_SavedPaymentController = paymentManager.GetComponent<PaymentManagerController>();
+				_SavedPaymentController.setPrevScreen(currentActive);
+				_SavedPaymentController.setOnCloseMethod(setCurrentScreenValue);
+				paymentManager.transform.SetParent (mainScreenContainer.transform);
+				paymentManager.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, 0);
+				Resizer.ResizeToParrent (paymentManager);
+				currentActive = ActiveScreen.PAYMENT_MANAGER;
+			}
+
+			// Remove purchase part 
+			Restart();
+			_SavedPaymentController.initWaitScreen(Utils, AddPaymentAccount);
+		}
+
 		// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 		// <<<<<<<<<<<<<<<<<<<<<<<<<<<< PAYMENT METHODS <<<<<<<<<<<<<<<<<<<<<<<<<<<< 
 		// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -405,8 +426,6 @@ namespace Xsolla
 			FillPurchase(ActivePurchase.Part.PAYMENT_MANAGER, reqParams);
 			// load payment methods
 			LoadPaymentMethods();
-			// start loop on wait status
-			_SavedPaymentController.WaitChangeLoop();
 		}
 
 		private void setCurrentScreenValue(ActiveScreen pValue)

@@ -73,7 +73,9 @@ namespace Xsolla
 		void Clear()
 		{
 			List<GameObject> children = new List<GameObject>();
-			foreach (Transform child in transform) children.Add(child.gameObject);
+			for(int i = 0; i < transform.childCount; i++)
+				children.Add(transform.GetChild(i).gameObject);
+
 			children.ForEach(child => Destroy(child));
 		}
 	}

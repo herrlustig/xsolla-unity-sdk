@@ -71,6 +71,7 @@ namespace  Xsolla
 		protected abstract void GetCouponErrorProceed(XsollaCouponProceedResult presult);
 		protected abstract void PaymentManagerRecieved(XsollaSavedPaymentMethods pResult);
 		protected abstract void DeleteSavedPaymentMethodRecieved();
+		protected abstract void WaitChangeSavedMethod();
 
 		public void OpenPaystation (string accessToken, bool isSandbox)
 		{
@@ -140,6 +141,7 @@ namespace  Xsolla
 			Payment.CouponProceedErrorRecived += (proceed) => GetCouponErrorProceed(proceed);
 			Payment.PaymentManagerMethods += (savedMethods) => PaymentManagerRecieved(savedMethods);
 			Payment.DeleteSavedPaymentMethodRespond += () => DeleteSavedPaymentMethodRecieved();
+			Payment.WaitChangeSavedMethods += () => WaitChangeSavedMethod();
 			
 			Payment.ErrorReceived += ShowPaymentError;
 			Payment.SetModeSandbox (isSandbox);

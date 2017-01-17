@@ -43,11 +43,15 @@ namespace Xsolla
 			return translations;
 		}
 
+		public void SetAccessToken(string pToken)
+		{
+			accessToken = pToken;
+		}
 
 
 		public IParseble Parse (JSONNode utilsNode)
 		{
-			accessToken 	= utilsNode [XsollaApiConst.ACCESS_TOKEN].Value;
+			//accessToken 	= utilsNode [XsollaApiConst.ACCESS_TOKEN].Value;
 			user 			= new XsollaUser ().Parse (utilsNode [XsollaApiConst.R_USER]) as XsollaUser;
 			project 		= new XsollaProject ().Parse (utilsNode [XsollaApiConst.R_PROJECT]) as XsollaProject;
 			purchase 		= new XsollaPurchase ().Parse (utilsNode [XsollaApiConst.R_PURCHASE]) as XsollaPurchase;

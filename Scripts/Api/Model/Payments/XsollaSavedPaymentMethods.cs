@@ -39,6 +39,35 @@ namespace Xsolla
 			api = new XsollaApi().Parse(paymentListNode["api"]) as XsollaApi;
 			return this;
 		}
+
+		public override bool Equals (object obj)
+		{
+			if(this.Count != (obj as XsollaSavedPaymentMethods).Count)
+				return false;
+
+			foreach(XsollaSavedPaymentMethod methodinner in this.GetItemsList())
+			{
+					bool isContains = false;
+				foreach(XsollaSavedPaymentMethod method in (obj as XsollaSavedPaymentMethods).GetItemList())
+				{
+					if (methodinner.Equals(method)) 
+					{
+						isContains = true;
+						break;
+					}
+					else
+						continue;
+				}
+					if(!isContains)
+						return false;
+			}
+			return true;
+		}
+
+		public override int GetHashCode ()
+		{
+			return base.GetHashCode ();
+		}
 	}
 
 	public class XsollaSavedPaymentMethod : IXsollaObject, IParseble
@@ -125,6 +154,20 @@ namespace Xsolla
 		public override string ToString ()
 		{
 			return string.Format ("[XsollaSavedPaymentMethod: id={0}, type={1}, currency={2}, name={3}, pid={4}, reccurentType={5}, form={6}, replaced={7}, psName={8}, iconSrc={9}, isSelected={10}]", id, type, currency, name, pid, reccurentType, form, replaced, psName, iconSrc, isSelected);
+		}
+
+
+		public override bool Equals (object obj)
+		{
+			if (this.id == (obj as XsollaSavedPaymentMethod).id)
+				return true;
+			else
+				return false;
+		}
+
+		public override int GetHashCode ()
+		{
+			return base.GetHashCode ();
 		}
 	}
 
