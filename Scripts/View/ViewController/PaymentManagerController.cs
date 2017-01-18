@@ -156,6 +156,7 @@ namespace Xsolla
 			mInformationTitle.text = pUtils.GetTranslations().Get("payment_account_add_title");
 			mInformation.text = pUtils.GetTranslations().Get("payment_account_add_info");
 			mContinueLink.text = pUtils.GetTranslations().Get("payment_account_back_button") + " >";
+			mCancelWaitBtn.GetComponentInChildren<Text>().text = pUtils.GetTranslations().Get("cancel");
 
 			Button continueBtn = mContinueLink.GetComponent<Button>();
 			continueBtn.onClick.RemoveAllListeners();

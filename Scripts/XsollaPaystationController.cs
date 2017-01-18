@@ -425,7 +425,7 @@ namespace Xsolla
 			reqParams.Add("save_payment_account_only",1);
 			FillPurchase(ActivePurchase.Part.PAYMENT_MANAGER, reqParams);
 			// load payment methods
-			LoadPaymentMethods();
+			LoadQuickPayment();
 		}
 
 		private void setCurrentScreenValue(ActiveScreen pValue)
