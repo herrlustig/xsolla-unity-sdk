@@ -45,7 +45,7 @@ namespace Xsolla
 			_paymentMethods = paymentMethods;
 			quickController.SetQuickMethods(_paymentMethods.GetListOnType(XsollaPaymentMethod.TypePayment.QUICK));
 			quickController.SetAllMethods(_paymentMethods.GetListOnType(XsollaPaymentMethod.TypePayment.REGULAR));
-			allController.SetPaymentMethods(_paymentMethods.GetListOnType());;
+			allController.SetPaymentMethods(_paymentMethods.GetListOnType());
 		}
 
 		public void SetCountries(string pStartCountry, XsollaCountries countries, XsollaUtils pUtils)

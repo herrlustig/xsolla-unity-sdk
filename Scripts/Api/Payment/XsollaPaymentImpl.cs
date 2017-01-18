@@ -527,8 +527,20 @@ namespace Xsolla
 									// if we replaced or add saved account, we must start loop on get list saved account
 									if (post.ContainsKey("save_payment_account_only") || (post.ContainsKey("replace_payment_account")))
 									{
-										OnWaitPaymentChange();
-										break;
+										string checkoutToken = form.GetCheckoutToken();
+										bool isLinkRequired = checkoutToken != null 
+											&& !"".Equals(checkoutToken) 
+											&& !"null".Equals(checkoutToken)
+											&& !"false".Equals(checkoutToken) 
+											&& !"".Equals(checkoutToken) 
+											&& !"null".Equals(checkoutToken)
+											&& !"false".Equals(checkoutToken);
+
+										if (isLinkRequired)
+										{
+											OnWaitPaymentChange();
+											break;
+										}
 									}
 									GetStatus(form.GetXpsMap());
 									break;
