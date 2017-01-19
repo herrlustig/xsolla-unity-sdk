@@ -12,6 +12,8 @@ namespace Xsolla
 
 		public void SetAdapter(IBaseAdapter adapter, int columnCount)
 		{
+			if (this == null)
+				return;
 			this.adapter = adapter;
 			this.itemCount = adapter.GetCount ();
 			this.columnCount = columnCount;
@@ -20,6 +22,8 @@ namespace Xsolla
 
 		public void Draw()
 		{
+			if (this == null)
+				return;
 			Clear ();
 			RectTransform itemRectTransform = adapter.GetPrefab().GetComponent<RectTransform>();//itemPrefab.GetComponent<RectTransform>();
 			RectTransform containerRectTransform = gameObject.GetComponent<RectTransform>();
@@ -73,8 +77,18 @@ namespace Xsolla
 		void Clear()
 		{
 			List<GameObject> children = new List<GameObject>();
-			foreach (Transform child in transform) children.Add(child.gameObject);
-			children.ForEach(child => Destroy(child));
+			if (this == null)
+				return;
+			for(int i = 0; i < transform.childCount; i++)
+				children.Add(transform.GetChild(i).gameObject);
+
+			foreach (GameObject obj in children)
+			{
+				if (obj != null)
+					Destroy(obj);
+			}
+
+			//children.ForEach(child => Destroy(child));
 		}
 	}
 }
