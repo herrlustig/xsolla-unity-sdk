@@ -42,14 +42,15 @@ namespace Xsolla
 		public MyRotation mProgressBar;
 
 		private XsollaUtils mUtilsLink;
+		private Action 		mActionAddPayment;
 		private ArrayList 	mListBtnsObjs;
 		private XsollaPaystationController.ActiveScreen mPrevScreen;
-		private Action<XsollaPaystationController.ActiveScreen> mOnClose;
+		private Action mOnClose;
 		public XsollaSavedPaymentMethods mListMethods { get;  set;}
 
 
 		private ArrayList mListReplacedMethods;
-		private string mSelectedMethod;
+		private XsollaSavedPaymentMethod mSelectedMethod;
 
 		public PaymentManagerController ()
 		{
@@ -60,7 +61,7 @@ namespace Xsolla
 			mPrevScreen = pScreen;
 		}
 
-		public void setOnCloseMethod(Action<XsollaPaystationController.ActiveScreen> pAction)
+		public void setOnCloseMethod(Action pAction)
 		{
 			mOnClose = pAction;
 		}
@@ -75,19 +76,24 @@ namespace Xsolla
 			mProgressBar.SetLoading(true);
 
 			// Start wait change loop
-			InvokeRepeating("StartChangesavedPaymentLoop", 0f, 5f);
+			InvokeRepeating("StartGetSavedMethodLoop", 0f, 5f);
 			mCancelWaitBtn.GetComponent<Button>().onClick.AddListener(() => CancelWait());
+		}
+
+		private void StartGetSavedMethodLoop()
+		{
+			GetSavedMethod();
 		}
 
 		private void CancelWait()
 		{
 			mProgressBar.SetLoading(false);
 			mWaitChangeScreen.SetActive(false);
-			CancelInvoke("StartChangesavedPaymentLoop");
+			CancelInvoke("StartGetSavedMethodLoop");
 			initScreen(mUtilsLink, _MethodsOnWaitLoop, _addPaymentMethod);
 		}
 
-		private void StartChangesavedPaymentLoop()
+		private void GetSavedMethod(bool pInitAfter = false)
 		{
 			WWWForm form = new WWWForm();
 			string url = "https://secure.xsolla.com/paystation2/api/savedmethods";
@@ -106,12 +112,12 @@ namespace Xsolla
 			Debug.Log (url);
 			Debug.Log (sb.ToString());
 			WWW www = new WWW(url, form);
-			StartCoroutine(GetListSavedMethod(www));
+			StartCoroutine(GetListSavedMethod(www, pInitAfter));
 		}
 
 		XsollaSavedPaymentMethods _MethodsOnWaitLoop = null;
 
-		private IEnumerator GetListSavedMethod(WWW www)
+		private IEnumerator GetListSavedMethod(WWW www, bool pInitAfter)
 		{
 			Debug.Log("Wait saved account list");
 			yield return www;
@@ -124,6 +130,8 @@ namespace Xsolla
 				{
 					XsollaSavedPaymentMethods tempOnWaitLoop = new XsollaSavedPaymentMethods();
 					tempOnWaitLoop.Parse(rootNode);
+					if (pInitAfter)
+						initScreen(mUtilsLink, tempOnWaitLoop, mActionAddPayment);
 					if (_MethodsOnWaitLoop == null)
 						_MethodsOnWaitLoop = tempOnWaitLoop;
 					else
@@ -143,15 +151,22 @@ namespace Xsolla
 
 		public void initScreen(XsollaUtils pUtils, XsollaSavedPaymentMethods pMethods, Action pAddPaymentMethod)
 		{
+			mUtilsLink = pUtils;
+			mActionAddPayment = pAddPaymentMethod;
+
 			if (pMethods != null)
 				mListMethods = pMethods;
+			else
+			{
+				GetSavedMethod(true);
+				return;
+			}
 
 			if (mListBtnsObjs == null)
 				mListBtnsObjs = new ArrayList();
 			else
 				mListBtnsObjs.Clear();
 			
-			mUtilsLink = pUtils;
 			mTitle.text = pUtils.GetTranslations().Get("payment_account_page_title");
 			mInformationTitle.text = pUtils.GetTranslations().Get("payment_account_add_title");
 			mInformation.text = pUtils.GetTranslations().Get("payment_account_add_info");
@@ -163,7 +178,7 @@ namespace Xsolla
 			continueBtn.onClick.AddListener(() => 
 				{
 					Destroy(this.gameObject);
-					mOnClose(mPrevScreen);
+					mOnClose();
 				});
 			Text textBtn = mBtnAddPaymentObj.GetComponentInChildren<Text>();
 			textBtn.text = pUtils.GetTranslations().Get("payment_account_add_button");
@@ -183,7 +198,7 @@ namespace Xsolla
 
 				Button btnAddPayment = mBtnAddPaymentObj.GetComponent<Button>();
 				btnAddPayment.onClick.RemoveAllListeners();
-				btnAddPayment.onClick.AddListener(() => pAddPaymentMethod());
+				btnAddPayment.onClick.AddListener(() => mActionAddPayment());
 			}
 			else
 			{
@@ -226,7 +241,7 @@ namespace Xsolla
 				//set onclickListener
 				Button btnAddMethod = objAddMethodClone.GetComponent<Button>();
 				btnAddMethod.onClick.RemoveAllListeners();
-				btnAddMethod.onClick.AddListener(() => pAddPaymentMethod());
+				btnAddMethod.onClick.AddListener(() => mActionAddPayment());
 
 			}
 				
@@ -362,7 +377,7 @@ namespace Xsolla
 			{
 				if ((method.getMethod().GetKey() == pMethodKey) && (pState))
 				{
-					mSelectedMethod = pMethodKey;
+					mSelectedMethod = method.getMethod();
 					continue;
 				}
 				method.setToggleState(false);
@@ -375,8 +390,8 @@ namespace Xsolla
 			Dictionary<string, object> reqParams = new Dictionary<string, object>();
 			reqParams.Add("id_payment_account", pMethod.GetKey());
 
-			reqParams.Add("saved_method_id", mSelectedMethod);
-			reqParams.Add("pid", pMethod.GetPid());
+			reqParams.Add("saved_method_id", mSelectedMethod.GetKey());
+			reqParams.Add("pid", mSelectedMethod.GetPid());
 			reqParams.Add("paymentWithSavedMethod", 1);
 			reqParams.Add("paymentSid", pMethod.GetFormSid());
 			reqParams.Add("type_payment_account", pMethod.GetMethodType());

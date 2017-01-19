@@ -274,18 +274,20 @@ namespace Xsolla
 
 		protected override void PaymentManagerRecieved (XsollaSavedPaymentMethods pResult)
 		{
-			if (currentActive != ActiveScreen.PAYMENT_MANAGER)
+			if (_SavedPaymentController == null)
 			{
 				GameObject paymentManager = Instantiate(Resources.Load(PREFAB_SCREEN_PAYMENT_MANAGER)) as GameObject;
 				_SavedPaymentController = paymentManager.GetComponent<PaymentManagerController>();
 				_SavedPaymentController.setPrevScreen(currentActive);
-				_SavedPaymentController.setOnCloseMethod(setCurrentScreenValue);
+				_SavedPaymentController.setOnCloseMethod(() => {_radioController.SelectItem(RadioButton.RadioType.SCREEN_GOODS);
+																LoadGoodsGroups();});
 				paymentManager.transform.SetParent (mainScreenContainer.transform);
 				paymentManager.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, 0);
 				Resizer.ResizeToParrent (paymentManager);
 				currentActive = ActiveScreen.PAYMENT_MANAGER;
 			}
 		
+			SetLoading(false);
 			// Remove purchase part 
 			Restart();
 			_SavedPaymentController.initScreen(Utils, pResult, AddPaymentAccount);
@@ -305,18 +307,20 @@ namespace Xsolla
 
 		protected override void WaitChangeSavedMethod ()
 		{
-			if (currentActive != ActiveScreen.PAYMENT_MANAGER)
+			if (_SavedPaymentController == null)
 			{
 				GameObject paymentManager = Instantiate(Resources.Load(PREFAB_SCREEN_PAYMENT_MANAGER)) as GameObject;
 				_SavedPaymentController = paymentManager.GetComponent<PaymentManagerController>();
 				_SavedPaymentController.setPrevScreen(currentActive);
-				_SavedPaymentController.setOnCloseMethod(setCurrentScreenValue);
+				_SavedPaymentController.setOnCloseMethod(() => {_radioController.SelectItem(RadioButton.RadioType.SCREEN_GOODS);
+					LoadGoodsGroups();});
 				paymentManager.transform.SetParent (mainScreenContainer.transform);
 				paymentManager.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, 0);
 				Resizer.ResizeToParrent (paymentManager);
 				currentActive = ActiveScreen.PAYMENT_MANAGER;
 			}
 
+			SetLoading(false);
 			// Remove purchase part 
 			Restart();
 			_SavedPaymentController.initWaitScreen(Utils, AddPaymentAccount);
