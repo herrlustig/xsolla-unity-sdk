@@ -39,6 +39,7 @@ namespace Xsolla
 		// wait screen
 		public GameObject mWaitChangeScreen;
 		public GameObject mCancelWaitBtn;
+		public Text       mCanceltext;
 		public MyRotation mProgressBar;
 
 		private XsollaUtils mUtilsLink;
@@ -78,6 +79,7 @@ namespace Xsolla
 			// Start wait change loop
 			InvokeRepeating("StartGetSavedMethodLoop", 0f, 5f);
 			mCancelWaitBtn.GetComponent<Button>().onClick.AddListener(() => CancelWait());
+			mCanceltext.text = pUtils.GetTranslations().Get("cancel");
 		}
 
 		private void StartGetSavedMethodLoop()
@@ -171,7 +173,7 @@ namespace Xsolla
 			mInformationTitle.text = pUtils.GetTranslations().Get("payment_account_add_title");
 			mInformation.text = pUtils.GetTranslations().Get("payment_account_add_info");
 			mContinueLink.text = pUtils.GetTranslations().Get("payment_account_back_button") + " >";
-			mCancelWaitBtn.GetComponentInChildren<Text>().text = pUtils.GetTranslations().Get("cancel");
+			mCanceltext.text = pUtils.GetTranslations().Get("cancel");
 
 			Button continueBtn = mContinueLink.GetComponent<Button>();
 			continueBtn.onClick.RemoveAllListeners();

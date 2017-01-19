@@ -189,6 +189,7 @@ GameObject:
   - 222: {fileID: 22261354}
   - 114: {fileID: 11400576}
   - 114: {fileID: 11494552}
+  - 114: {fileID: 114000011148725262}
   m_Layer: 5
   m_Name: InfoPanel
   m_TagString: Untagged
@@ -1519,6 +1520,7 @@ MonoBehaviour:
   mDelStatusPanel: {fileID: 136186}
   mWaitChangeScreen: {fileID: 199736}
   mCancelWaitBtn: {fileID: 1000011539502226}
+  mCanceltext: {fileID: 114000010184599442}
   mProgressBar: {fileID: 114000012008284304}
 --- !u!114 &11483024
 MonoBehaviour:
@@ -2997,6 +2999,22 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
+--- !u!114 &114000011148725262
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 139728}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fc117f59f61de4868b1f1d085ec2e3e1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemsToColor:
+  - color: 18
+    whatToColor: {fileID: 11445710}
+  - color: 18
+    whatToColor: {fileID: 11497996}
 --- !u!114 &114000011176609074
 MonoBehaviour:
   m_ObjectHideFlags: 1
