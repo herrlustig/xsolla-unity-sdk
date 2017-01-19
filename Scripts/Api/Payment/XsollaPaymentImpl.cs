@@ -64,7 +64,7 @@ namespace Xsolla
 		public Action<string> 						VirtualPaymentProceedError;
 		public Action<XVPStatus> 					VirtualPaymentStatusRecieved;
 
-		public Action<XsollaSavedPaymentMethods>	PaymentManagerMethods;
+		public Action<XsollaSavedPaymentMethods, bool>	PaymentManagerMethods;
 		public Action								DeleteSavedPaymentMethodRespond;
 		public Action 								WaitChangeSavedMethods;
 
@@ -275,10 +275,10 @@ namespace Xsolla
 				CustomAmountCalcRecieved(pRes);
 		}
 
-		protected virtual void OnPaymentManagerMethod(XsollaSavedPaymentMethods pRes)
+		protected virtual void OnPaymentManagerMethod(XsollaSavedPaymentMethods pRes, bool pAddState)
 		{
 			if (PaymentManagerMethods != null)
-				PaymentManagerMethods(pRes);
+				PaymentManagerMethods(pRes, pAddState);
 		}
 
 		protected virtual void OnDeleteSavedPaymentMethod()
@@ -535,7 +535,7 @@ namespace Xsolla
 										}
 										else
 										{
-											OnPaymentManagerMethod(null);
+											OnPaymentManagerMethod(null, post.ContainsKey("replace_payment_account")?false:true);
 											break;
 										}
 									}
@@ -723,7 +723,7 @@ namespace Xsolla
 						case PAYMENT_MANAGER_LIST:
 						{
 							XsollaSavedPaymentMethods res = new XsollaSavedPaymentMethods().Parse(rootNode) as XsollaSavedPaymentMethods;
-							OnPaymentManagerMethod(res);
+							OnPaymentManagerMethod(res, false);
 						}
 						break;
 						case DELETE_SAVED_METHOD:

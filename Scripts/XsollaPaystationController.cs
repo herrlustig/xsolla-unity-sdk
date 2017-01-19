@@ -272,7 +272,7 @@ namespace Xsolla
 				Logger.Log("Custom amount controller not found");	
 		}
 
-		protected override void PaymentManagerRecieved (XsollaSavedPaymentMethods pResult)
+		protected override void PaymentManagerRecieved (XsollaSavedPaymentMethods pResult, bool pAddState)
 		{
 			if (_SavedPaymentController == null)
 			{
@@ -290,7 +290,7 @@ namespace Xsolla
 			SetLoading(false);
 			// Remove purchase part 
 			Restart();
-			_SavedPaymentController.initScreen(Utils, pResult, AddPaymentAccount);
+			_SavedPaymentController.initScreen(Utils, pResult, AddPaymentAccount, pAddState);
 			
 		}
 

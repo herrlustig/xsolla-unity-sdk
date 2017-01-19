@@ -69,7 +69,7 @@ namespace  Xsolla
 		protected abstract void ShowVPError (XsollaUtils utils, string error);
 		protected abstract void ShowVPStatus (XsollaUtils utils, XVPStatus status);
 		protected abstract void GetCouponErrorProceed(XsollaCouponProceedResult presult);
-		protected abstract void PaymentManagerRecieved(XsollaSavedPaymentMethods pResult);
+		protected abstract void PaymentManagerRecieved(XsollaSavedPaymentMethods pResult, bool pAddState);
 		protected abstract void DeleteSavedPaymentMethodRecieved();
 		protected abstract void WaitChangeSavedMethod();
 
@@ -139,7 +139,7 @@ namespace  Xsolla
 			Payment.VirtualPaymentStatusRecieved += (status) => ShowVPStatus(Utils, status);
 
 			Payment.CouponProceedErrorRecived += (proceed) => GetCouponErrorProceed(proceed);
-			Payment.PaymentManagerMethods += (savedMethods) => PaymentManagerRecieved(savedMethods);
+			Payment.PaymentManagerMethods += (savedMethods, addState) => PaymentManagerRecieved(savedMethods, addState);
 			Payment.DeleteSavedPaymentMethodRespond += () => DeleteSavedPaymentMethodRecieved();
 			Payment.WaitChangeSavedMethods += () => WaitChangeSavedMethod();
 			

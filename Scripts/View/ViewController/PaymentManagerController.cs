@@ -92,10 +92,10 @@ namespace Xsolla
 			mProgressBar.SetLoading(false);
 			mWaitChangeScreen.SetActive(false);
 			CancelInvoke("StartGetSavedMethodLoop");
-			initScreen(mUtilsLink, _MethodsOnWaitLoop, _addPaymentMethod);
+			initScreen(mUtilsLink, _MethodsOnWaitLoop, _addPaymentMethod, false);
 		}
 
-		private void GetSavedMethod(bool pInitAfter = false)
+		private void GetSavedMethod(bool pAddState = false, bool pInitAfter = false)
 		{
 			WWWForm form = new WWWForm();
 			string url = "https://secure.xsolla.com/paystation2/api/savedmethods";
@@ -114,12 +114,12 @@ namespace Xsolla
 			Debug.Log (url);
 			Debug.Log (sb.ToString());
 			WWW www = new WWW(url, form);
-			StartCoroutine(GetListSavedMethod(www, pInitAfter));
+			StartCoroutine(GetListSavedMethod(www, pInitAfter, pAddState));
 		}
 
 		XsollaSavedPaymentMethods _MethodsOnWaitLoop = null;
 
-		private IEnumerator GetListSavedMethod(WWW www, bool pInitAfter)
+		private IEnumerator GetListSavedMethod(WWW www, bool pInitAfter, bool pAddMethod)
 		{
 			Debug.Log("Wait saved account list");
 			yield return www;
@@ -133,7 +133,14 @@ namespace Xsolla
 					XsollaSavedPaymentMethods tempOnWaitLoop = new XsollaSavedPaymentMethods();
 					tempOnWaitLoop.Parse(rootNode);
 					if (pInitAfter)
-						initScreen(mUtilsLink, tempOnWaitLoop, mActionAddPayment);
+					{
+						initScreen(mUtilsLink, tempOnWaitLoop, mActionAddPayment, false);
+						if (pAddMethod)
+							SetStatusAddOk();
+						else
+							SetStatusReplaceOk();
+						yield break;
+					}
 					if (_MethodsOnWaitLoop == null)
 						_MethodsOnWaitLoop = tempOnWaitLoop;
 					else
@@ -144,6 +151,7 @@ namespace Xsolla
 						{
 							Logger.Log("Stop wait end show result");
 							_MethodsOnWaitLoop = tempOnWaitLoop;
+							SetStatusAddOk();
 							CancelWait();
 						}
 					}
@@ -151,7 +159,7 @@ namespace Xsolla
 			}
 		}
 
-		public void initScreen(XsollaUtils pUtils, XsollaSavedPaymentMethods pMethods, Action pAddPaymentMethod)
+		public void initScreen(XsollaUtils pUtils, XsollaSavedPaymentMethods pMethods, Action pAddPaymentMethod, bool pAddState)
 		{
 			mUtilsLink = pUtils;
 			mActionAddPayment = pAddPaymentMethod;
@@ -160,7 +168,7 @@ namespace Xsolla
 				mListMethods = pMethods;
 			else
 			{
-				GetSavedMethod(true);
+				GetSavedMethod(pAddState ,true);
 				return;
 			}
 
@@ -172,7 +180,7 @@ namespace Xsolla
 			mTitle.text = pUtils.GetTranslations().Get("payment_account_page_title");
 			mInformationTitle.text = pUtils.GetTranslations().Get("payment_account_add_title");
 			mInformation.text = pUtils.GetTranslations().Get("payment_account_add_info");
-			mContinueLink.text = pUtils.GetTranslations().Get("payment_account_back_button") + " >";
+			mContinueLink.text = pUtils.GetTranslations().Get("payment_account_back_button");
 			mCanceltext.text = pUtils.GetTranslations().Get("cancel");
 
 			Button continueBtn = mContinueLink.GetComponent<Button>();
@@ -254,6 +262,19 @@ namespace Xsolla
 			string statusText = mUtilsLink.GetTranslations().Get("payment_account_message_delete_account_successfully");
 			StartCoroutine(ShowStatusBar(statusText,3));
 		}
+
+		public void SetStatusAddOk()
+		{
+			string statusText = mUtilsLink.GetTranslations().Get("payment_account_message_success");
+			StartCoroutine(ShowStatusBar(statusText,3));
+		}
+
+		public void SetStatusReplaceOk()
+		{
+			string statusText = mUtilsLink.GetTranslations().Get("payment_account_message_success_replace");
+			StartCoroutine(ShowStatusBar(statusText,3));
+		}
+
 
 		private IEnumerator ShowStatusBar(string pStatus,float time)
 		{
@@ -412,16 +433,10 @@ namespace Xsolla
 			Dictionary<string, object> reqParams = new Dictionary<string, object>();
 			reqParams.Add("id_payment_account", pMethod.GetKey());
 			reqParams.Add("replace_payment_account", 1);
-			//reqParams.Add("pid", pMethod.GetPid());
 			reqParams.Add("type_payment_account", pMethod.GetMethodType());
 
-			//Dictionary<string, object> replacedParam = new Dictionary<string, object>();
-			//replacedParam.Add("replace_payment_account", 1);
-
 			XsollaPaystationController payController = GetComponentInParent<XsollaPaystationController> ();
-			//payController.FillPurchase(ActivePurchase.Part.PAYMENT_MANAGER_REPLACED, reqParams);
 			payController.ChooseItem(reqParams);
-
 		}
 
 		private void onClickConfirmDeletePaymentMethod(XsollaSavedPaymentMethod pMethod)
