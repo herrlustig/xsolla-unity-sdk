@@ -35,6 +35,7 @@ namespace Xsolla
 		public GameObject mLinkDelete;
 		public GameObject mBtnReplace;
 		public GameObject mDelStatusPanel;
+		public Button mCloseNotify;
 
 		// wait screen
 		public GameObject mWaitChangeScreen;
@@ -182,6 +183,7 @@ namespace Xsolla
 			mInformation.text = pUtils.GetTranslations().Get("payment_account_add_info");
 			mContinueLink.text = pUtils.GetTranslations().Get("payment_account_back_button");
 			mCanceltext.text = pUtils.GetTranslations().Get("cancel");
+			mCloseNotify.onClick.AddListener(CloseStatus);
 
 			Button continueBtn = mContinueLink.GetComponent<Button>();
 			continueBtn.onClick.RemoveAllListeners();
@@ -254,33 +256,34 @@ namespace Xsolla
 				btnAddMethod.onClick.AddListener(() => mActionAddPayment());
 
 			}
-				
 		}
 
 		public void SetStatusDeleteOk()
 		{
 			string statusText = mUtilsLink.GetTranslations().Get("payment_account_message_delete_account_successfully");
-			StartCoroutine(ShowStatusBar(statusText,3));
+			ShowStatusBar(statusText);
 		}
 
 		public void SetStatusAddOk()
 		{
 			string statusText = mUtilsLink.GetTranslations().Get("payment_account_message_success");
-			StartCoroutine(ShowStatusBar(statusText,3));
+			ShowStatusBar(statusText);
 		}
 
 		public void SetStatusReplaceOk()
 		{
 			string statusText = mUtilsLink.GetTranslations().Get("payment_account_message_success_replace");
-			StartCoroutine(ShowStatusBar(statusText,3));
+			ShowStatusBar(statusText);
 		}
-
-
-		private IEnumerator ShowStatusBar(string pStatus,float time)
+			
+		private void ShowStatusBar(string pStatus)
 		{
 			mDelStatusPanel.GetComponentInChildren<Text>().text = pStatus;
 			mDelStatusPanel.SetActive(true);
-			yield return new WaitForSeconds(time);
+		}
+
+		private void CloseStatus()
+		{
 			mDelStatusPanel.SetActive(false);
 		}
 
