@@ -274,7 +274,7 @@ namespace  Xsolla
 			Dictionary<string, object> lParams = new Dictionary<string, object>();
 			lParams.Add("userInitialCurrency", "");
 			Payment.GetSavedPaymentsForManager(lParams);
-			SetLoading(true);
+			//SetLoading(true);
 		}
 
 		public void UpdateCountries(string countryIso)

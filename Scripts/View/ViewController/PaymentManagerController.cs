@@ -69,6 +69,7 @@ namespace Xsolla
 		}
 
 		private Action _addPaymentMethod;
+		private XsollaSavedPaymentMethods _MethodsOnWaitLoop = null;
 
 		public void initWaitScreen(XsollaUtils pUtils, Action pAddPaymentMethod)
 		{
@@ -76,6 +77,7 @@ namespace Xsolla
 			_addPaymentMethod = pAddPaymentMethod;
 			mWaitChangeScreen.SetActive(true);
 			mProgressBar.SetLoading(true);
+			_MethodsOnWaitLoop = null;
 
 			// Start wait change loop
 			InvokeRepeating("StartGetSavedMethodLoop", 0f, 5f);
@@ -117,8 +119,6 @@ namespace Xsolla
 			WWW www = new WWW(url, form);
 			StartCoroutine(GetListSavedMethod(www, pInitAfter, pAddState));
 		}
-
-		XsollaSavedPaymentMethods _MethodsOnWaitLoop = null;
 
 		private IEnumerator GetListSavedMethod(WWW www, bool pInitAfter, bool pAddMethod)
 		{
@@ -210,7 +210,7 @@ namespace Xsolla
 
 				Button btnAddPayment = mBtnAddPaymentObj.GetComponent<Button>();
 				btnAddPayment.onClick.RemoveAllListeners();
-				btnAddPayment.onClick.AddListener(() => mActionAddPayment());
+				btnAddPayment.onClick.AddListener(() => { CloseStatus(); mActionAddPayment();});
 			}
 			else
 			{
@@ -244,7 +244,7 @@ namespace Xsolla
 					// Set icon
 					mImgLoader.LoadImage(controller._iconMethod, item.GetImageUrl());		
 					// Set BtnDelAction
-					controller.getBtnDelete().onClick.AddListener(() => onClickDeletePaymentMethod(controller));
+					controller.getBtnDelete().onClick.AddListener(() => { CloseStatus(); onClickDeletePaymentMethod(controller);});
 				}
 
 				// Add button "Add payment metnod"
@@ -253,7 +253,7 @@ namespace Xsolla
 				//set onclickListener
 				Button btnAddMethod = objAddMethodClone.GetComponent<Button>();
 				btnAddMethod.onClick.RemoveAllListeners();
-				btnAddMethod.onClick.AddListener(() => mActionAddPayment());
+				btnAddMethod.onClick.AddListener(() => { CloseStatus(); mActionAddPayment();});
 
 			}
 		}
