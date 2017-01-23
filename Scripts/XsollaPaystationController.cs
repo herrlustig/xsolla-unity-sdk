@@ -78,7 +78,6 @@ namespace Xsolla
 		{
 			Logger.Log ("Goods Groups recived");
 			OpenGoods (groups);
-//			SetLoading (false);
 		}
 
 		protected override void UpdateGoods (XsollaGoodsManager goods)
@@ -276,6 +275,7 @@ namespace Xsolla
 		{
 			if (_SavedPaymentController == null)
 			{
+				Resizer.DestroyChilds(mainScreenContainer.transform);
 				GameObject paymentManager = Instantiate(Resources.Load(PREFAB_SCREEN_PAYMENT_MANAGER)) as GameObject;
 				_SavedPaymentController = paymentManager.GetComponent<PaymentManagerController>();
 				_SavedPaymentController.setPrevScreen(currentActive);
@@ -338,6 +338,7 @@ namespace Xsolla
 			if (_shopViewController == null) {
 				GameObject paymentListScreen = Instantiate (shopScreenPrefab);
 				_shopViewController = paymentListScreen.GetComponent<ShopViewController> ();
+				_shopViewController.DestroyAfter = DestroyShopScreen;
 				_shopViewController.transform.SetParent (mainScreenContainer.transform);
 				_shopViewController.GetComponent<RectTransform> ().anchoredPosition = new Vector2 (0, 0);
 				mainScreenContainer.GetComponentInParent<ScrollRect> ().content = _shopViewController.GetComponent<RectTransform> ();
@@ -360,9 +361,26 @@ namespace Xsolla
 		public void OpenGoods(XsollaGroupsManager groups)
 		{
 			DrawShopScreen ();
+			// Show favority Btn
+			ShowFavorityBtn();
 			LoadGoods (groups.GetItemByPosition(0).id);
 			_shopViewController.OpenGoods(groups);
 			_radioController.SelectItem(0);
+		}
+
+		public void DestroyShopScreen()
+		{
+			HideFavorityBtn();
+		}
+
+		private void ShowFavorityBtn()
+		{
+			_radioController.radioButtons.Find(x => x.getType() == RadioButton.RadioType.SCREEN_FAVOURITE).visibleBtn(true);
+		}
+
+		private void HideFavorityBtn()
+		{
+			_radioController.radioButtons.Find(x => x.getType() == RadioButton.RadioType.SCREEN_FAVOURITE).visibleBtn(false);
 		}
 			
 		// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
