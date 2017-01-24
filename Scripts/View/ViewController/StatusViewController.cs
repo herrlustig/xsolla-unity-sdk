@@ -26,7 +26,8 @@ namespace Xsolla {
 			string input = translations.Get (XsollaTranslations.STATUS_PURCHASED_DESCRIPTION);
 			XsollaStatusText statusText = xsollaStatus.GetStatusText ();
 			XsollaStatus.Group currentStatus = xsollaStatus.GetGroup ();
-			if (input != null) {
+			if (input != null) 
+			{
 				string pattern = "{{.*?}}";
 				Regex regex = new Regex (pattern);
 
@@ -42,7 +43,7 @@ namespace Xsolla {
 			{
 				input = "";
 			}
-			PrepareStatus (currentStatus, xsollaStatus.GetStatusText().GetState (), input, xsollaStatus.GetInvoice());
+			PrepareStatus (currentStatus, xsollaStatus.GetStatusText().GetState (), input, xsollaStatus.GetInvoice(), xsollaStatus);
 			AddTitle (statusText.GetProjectString());
 			if(currentStatus == XsollaStatus.Group.DONE)
 				AddStatus (translations.Get (XsollaTranslations.VIRTUALSTATUS_DONE_DESCRIPTIONS));
@@ -71,18 +72,12 @@ namespace Xsolla {
 			AddLine ();
 			AddBigElement (statusText.Get("sum").GetPref(), statusText.Get("sum").GetValue());
 
-//			if(statusText.backUrlCaption != null && !"".Equals(statusText.backUrlCaption))
-//				statusViewExitButton.gameObject.GetComponent<Text> ().text = statusText.backUrlCaption;
-//			else
-//				statusViewExitButton.gameObject.GetComponent<Text> ().text = translations.Get(XsollaTranslations.BACK_TO_STORE);
-
 			statusViewExitButton.gameObject.GetComponent<Text> ().text = translations.Get(XsollaTranslations.BACK_TO_STORE);
 			statusViewExitButton.onClick.AddListener (delegate 
 				{
 					//OnClickExit(currentStatus, xsollaStatus.GetStatusData().GetInvoice(), xsollaStatus.GetStatusData().GetStatus(), null);
 					OnClickBack(currentStatus, xsollaStatus.GetStatusData().GetInvoice(), xsollaStatus.GetStatusData().GetStatus(), null);
 				});
-
 		}
 
 		public void DrawVpStatus(XsollaUtils utils, XVPStatus status){
@@ -116,7 +111,7 @@ namespace Xsolla {
 				});
 		}
 
-		public void PrepareStatus(XsollaStatus.Group group, string state, string purchase, string invoice){
+		public void PrepareStatus(XsollaStatus.Group group, string state, string purchase, string invoice, XsollaStatus pStatus = null){
 			Component[] texts = status.GetComponentsInChildren(typeof(Text),true);// [0] Icon [1] Title [2] purchse
 			ColorController colorController = GetComponent<ColorController> ();
 			((Text)texts[1]).text = state;
@@ -127,6 +122,23 @@ namespace Xsolla {
 			}
 			else
 				texts[2].gameObject.SetActive(false);
+
+
+//			if (pStatus != null)
+//			{
+//				if (pStatus.GetNeedCheck())
+//				{
+//					((Text)texts[0]).text = "";
+//					((Text)texts[0]).gameObject.AddComponent<MyRotation>();
+//					colorController.ChangeColor(1, StyleManager.BaseColor.selected);
+//					StartCoroutine(UpdateStatus(invoice));
+//					return;
+//				}
+//				if (pStatus.IsCancelUser())
+//				{
+//					Logger.Log("User canceled operation");
+//				}
+//			}
 
 			switch (group){
 				case XsollaStatus.Group.DONE:
@@ -167,6 +179,10 @@ namespace Xsolla {
 		}
 
 		private void AddElement(string s, string s1){
+			// if key and value is empty
+			if ((s == "") && (s1 == ""))
+				return;
+			
 			GameObject elementInstance = Instantiate (rowInfoElementPrefab) as GameObject;
 			elementInstance.transform.SetParent (checkListTransform);
 			Text[] texts = elementInstance.GetComponentsInChildren<Text> ();

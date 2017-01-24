@@ -76,6 +76,11 @@ namespace Xsolla
 			}
 		}
 
+		public int getPid()
+		{
+			return pid;
+		}
+
 		public bool Contains(string name)
 		{
 			return map.ContainsKey (name);
@@ -129,6 +134,11 @@ namespace Xsolla
 		public XsollaCheckout GetCheckout()
 		{
 			return chekout;
+		}
+
+		public bool IsCardPayment()
+		{
+			return pid == 26 || pid == 490 || pid == 1380;
 		}
 
 		public bool IsValidPaymentSystem() {

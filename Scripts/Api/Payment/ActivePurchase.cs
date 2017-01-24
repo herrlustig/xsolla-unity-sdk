@@ -13,7 +13,7 @@ namespace Xsolla
 
 		public enum Part
 		{
-			TOKEN, INFO, ITEM, PID, XPS, INVOICE, PROCEED, NULL
+			TOKEN, INFO, ITEM, PID, XPS, INVOICE, PROCEED, NULL, PAYMENT_MANAGER, PAYMENT_MANAGER_REPLACED
 		}
 
 		public ActivePurchase(){
@@ -57,8 +57,8 @@ namespace Xsolla
 		}
 
 
-		public void ContainsKey(Part part){
-			purchase.ContainsKey (part);
+		public bool ContainsKey(Part part){
+			return purchase.ContainsKey (part);
 		}
 
 		public Dictionary<string, object> GetPart(Part part){

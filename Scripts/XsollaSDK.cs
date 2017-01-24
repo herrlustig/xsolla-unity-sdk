@@ -42,7 +42,6 @@ namespace Xsolla {
 			// Prepare args
 			Dictionary<string, object> dataArgs = new Dictionary<string, object>();
 			dataArgs.Add("data", request);
-			XsollaPaystation.AddHttpRequestObj();
 			StartCoroutine(XsollaJsonGenerator.FreshToken ((token) => SetToken(formController, token)));
 		}
 

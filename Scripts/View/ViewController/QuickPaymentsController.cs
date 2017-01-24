@@ -110,6 +110,13 @@ namespace Xsolla{
 			GameObject popularBtn = Instantiate(Resources.Load("Prefabs/SimpleView/_PaymentFormElements/ShopPaymentBtn")) as GameObject;
 			popularBtn.transform.SetParent(recPanel.transform);
 			ShopPaymentBtnController controller = popularBtn.GetComponent<ShopPaymentBtnController>();
+
+			if (!pMethod.isVisible)
+			{
+				controller.Hide();
+				return;
+			}
+
 			listPopularBtns.Add(controller);
 			// Set method
 			controller.setMethod(pMethod);

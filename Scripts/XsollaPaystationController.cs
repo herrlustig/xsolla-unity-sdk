@@ -3,6 +3,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Collections.Generic;
 using System;
+using System.Text;
+using System.Collections;
 
 namespace Xsolla
 {
@@ -20,6 +22,7 @@ namespace Xsolla
 		private const string PREFAB_VIEW_MENU_ITEM		 = "Prefabs/SimpleView/MenuItem";
 		private const string PREFAB_VIEW_MENU_ITEM_ICON	 = "Prefabs/SimpleView/MenuItemIcon";
 		private const string PREFAB_VIEW_MENU_ITEM_EMPTY = "Prefabs/SimpleView/MenuItemEmpty";
+		private const string PREFAB_SCREEN_PAYMENT_MANAGER = "Prefabs/Screens/ScreenPaymentManager";
 
 		public event Action<XsollaResult> 	OkHandler;
 		public event Action<XsollaError> 	ErrorHandler;
@@ -37,16 +40,17 @@ namespace Xsolla
 		private RedeemCouponViewController  _couponController;
 		private SubscriptionsViewController _subsController;
 		private RadioGroupController 		_radioController;
+		private PaymentManagerController 	_SavedPaymentController;
 
 		private static ActiveScreen 		currentActive = ActiveScreen.UNKNOWN;
 		private Transform 					menuTransform;
 		private GameObject 					mainScreenContainer;
 
-		enum ActiveScreen
+		public enum ActiveScreen
 		{
-			SHOP, P_LIST, VP_PAYMENT, PAYMENT, STATUS, ERROR, UNKNOWN, FAV_ITEMS_LIST, REDEEM_COUPONS, HISTORY_LIST, SUBSCRIPTIONS
+			SHOP, P_LIST, VP_PAYMENT, PAYMENT, STATUS, ERROR, UNKNOWN, FAV_ITEMS_LIST, REDEEM_COUPONS, HISTORY_LIST, SUBSCRIPTIONS, PAYMENT_MANAGER
 		}
-
+			
 		protected override void RecieveUtils (XsollaUtils utils)
 		{
 			StyleManager.Instance.ChangeTheme(utils.GetSettings().GetTheme());
@@ -74,7 +78,6 @@ namespace Xsolla
 		{
 			Logger.Log ("Goods Groups recived");
 			OpenGoods (groups);
-//			SetLoading (false);
 		}
 
 		protected override void UpdateGoods (XsollaGoodsManager goods)
@@ -158,6 +161,7 @@ namespace Xsolla
 			_paymentListScreenController.InitScreen(base.Utils);
 			_paymentListScreenController.SetPaymentsMethods (paymentMethods);
 			_paymentListScreenController.OpenPayments();
+
 			SetLoading (false);
 			return;
 		}
@@ -267,6 +271,61 @@ namespace Xsolla
 				Logger.Log("Custom amount controller not found");	
 		}
 
+		protected override void PaymentManagerRecieved (XsollaSavedPaymentMethods pResult, bool pAddState)
+		{
+			if (_SavedPaymentController == null)
+			{
+				Resizer.DestroyChilds(mainScreenContainer.transform);
+				GameObject paymentManager = Instantiate(Resources.Load(PREFAB_SCREEN_PAYMENT_MANAGER)) as GameObject;
+				_SavedPaymentController = paymentManager.GetComponent<PaymentManagerController>();
+				_SavedPaymentController.setPrevScreen(currentActive);
+				_SavedPaymentController.setOnCloseMethod(() => {_radioController.SelectItem(RadioButton.RadioType.SCREEN_GOODS);
+																LoadGoodsGroups();});
+				paymentManager.transform.SetParent (mainScreenContainer.transform);
+				paymentManager.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, 0);
+				Resizer.ResizeToParrent (paymentManager);
+				currentActive = ActiveScreen.PAYMENT_MANAGER;
+			}
+		
+			SetLoading(false);
+			// Remove purchase part 
+			Restart();
+			_SavedPaymentController.initScreen(Utils, pResult, AddPaymentAccount, pAddState);
+			
+		}
+
+		protected override void DeleteSavedPaymentMethodRecieved()
+		{
+			// Send message on delete to form
+			if ((currentActive == ActiveScreen.PAYMENT_MANAGER) && (_SavedPaymentController != null))
+			{
+				_SavedPaymentController.SetStatusDeleteOk();
+				// Reload savedMethods
+				LoadPaymentManager();
+			}
+		}
+
+		protected override void WaitChangeSavedMethod ()
+		{
+			if (_SavedPaymentController == null)
+			{
+				GameObject paymentManager = Instantiate(Resources.Load(PREFAB_SCREEN_PAYMENT_MANAGER)) as GameObject;
+				_SavedPaymentController = paymentManager.GetComponent<PaymentManagerController>();
+				_SavedPaymentController.setPrevScreen(currentActive);
+				_SavedPaymentController.setOnCloseMethod(() => {_radioController.SelectItem(RadioButton.RadioType.SCREEN_GOODS);
+					LoadGoodsGroups();});
+				paymentManager.transform.SetParent (mainScreenContainer.transform);
+				paymentManager.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, 0);
+				Resizer.ResizeToParrent (paymentManager);
+				currentActive = ActiveScreen.PAYMENT_MANAGER;
+			}
+
+			SetLoading(false);
+			// Remove purchase part 
+			Restart();
+			_SavedPaymentController.initWaitScreen(Utils, AddPaymentAccount);
+		}
+
 		// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 		// <<<<<<<<<<<<<<<<<<<<<<<<<<<< PAYMENT METHODS <<<<<<<<<<<<<<<<<<<<<<<<<<<< 
 		// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -279,6 +338,7 @@ namespace Xsolla
 			if (_shopViewController == null) {
 				GameObject paymentListScreen = Instantiate (shopScreenPrefab);
 				_shopViewController = paymentListScreen.GetComponent<ShopViewController> ();
+				_shopViewController.DestroyAfter = DestroyShopScreen;
 				_shopViewController.transform.SetParent (mainScreenContainer.transform);
 				_shopViewController.GetComponent<RectTransform> ().anchoredPosition = new Vector2 (0, 0);
 				mainScreenContainer.GetComponentInParent<ScrollRect> ().content = _shopViewController.GetComponent<RectTransform> ();
@@ -301,9 +361,26 @@ namespace Xsolla
 		public void OpenGoods(XsollaGroupsManager groups)
 		{
 			DrawShopScreen ();
+			// Show favority Btn
+			ShowFavorityBtn();
 			LoadGoods (groups.GetItemByPosition(0).id);
 			_shopViewController.OpenGoods(groups);
 			_radioController.SelectItem(0);
+		}
+
+		public void DestroyShopScreen()
+		{
+			HideFavorityBtn();
+		}
+
+		private void ShowFavorityBtn()
+		{
+			_radioController.radioButtons.Find(x => x.getType() == RadioButton.RadioType.SCREEN_FAVOURITE).visibleBtn(true);
+		}
+
+		private void HideFavorityBtn()
+		{
+			_radioController.radioButtons.Find(x => x.getType() == RadioButton.RadioType.SCREEN_FAVOURITE).visibleBtn(false);
 		}
 			
 		// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -362,6 +439,21 @@ namespace Xsolla
 			Logger.Log("ClickApply" + " - " + pCode);
 			GetCouponProceed(pCode);
 		}
+
+		private void AddPaymentAccount()
+		{
+			Logger.Log("Click addAccount");
+			Dictionary<string, object> reqParams = new Dictionary<string, object>();
+			reqParams.Add("save_payment_account_only",1);
+			FillPurchase(ActivePurchase.Part.PAYMENT_MANAGER, reqParams);
+			// load payment methods
+			LoadQuickPayment();
+		}
+
+		private void setCurrentScreenValue(ActiveScreen pValue)
+		{
+			currentActive = pValue;
+		}
 			
 		private void DrawError(XsollaError error)
 		{
@@ -378,13 +470,14 @@ namespace Xsolla
 				GameObject errorScreen = Instantiate (Resources.Load (PREFAB_SCREEN_ERROR_MAIN)) as GameObject;
 				errorScreen.transform.SetParent (container.transform);
 				Text[] texts = errorScreen.GetComponentsInChildren<Text>();
-				texts[1].text = "Somthing went wrong";
+				texts[1].text = "Something went wrong";
 				texts[2].text = error.errorMessage;
 				texts[3].text = error.errorCode.ToString();
 				texts[3].gameObject.SetActive(false);
 				Resizer.ResizeToParrent (errorScreen);
 			}
 		}
+			
 
 		private void DrawForm(XsollaUtils utils, XsollaForm form)
 		{
