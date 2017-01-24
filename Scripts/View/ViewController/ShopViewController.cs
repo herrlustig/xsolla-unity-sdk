@@ -139,7 +139,8 @@ namespace Xsolla
 
 		public void SetTitle(string s)
 		{
-			title.text = s;
+			if (title.gameObject != null)
+				title.text = s;
 		}
 
 		private void DrawContent(IBaseAdapter adapter, int columnsCount){
