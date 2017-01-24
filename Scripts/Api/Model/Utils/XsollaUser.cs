@@ -27,10 +27,15 @@ namespace Xsolla
 			return requisites.value;
 		}
 
+		public bool IdAllowModify()
+		{
+			return requisites.idAllowModify;
+		}
+
 		public IParseble Parse (SimpleJSON.JSONNode userNode)
 		{
 			if(userNode ["requisites"].Count > 1)
-				requisites = new Requisites (userNode ["requisites"] ["value"], userNode ["requisites"] ["isVisible"].AsBool);
+				requisites = new Requisites (userNode ["requisites"] ["value"], userNode ["requisites"] ["isVisible"].AsBool, userNode ["requisites"] ["id_allow_modify"].AsBool);
 			country = new Country (userNode ["country"] ["value"], userNode ["country"] ["allow_modify"].AsBool);
 			local = userNode ["local"];
 			savedPaymentMethodCount = userNode ["savedPaymentMethodCount"].AsInt;
@@ -47,11 +52,13 @@ namespace Xsolla
 		{
 			public string value { get; private set;}// "value":"John Smith",
 			public bool isVisible { get; private set;}// "isVisible":true
+			public bool idAllowModify { get; private set;} //id_allow_modify:false
 
-			public Requisites(string newValue, bool newIsVisible):this()
+			public Requisites(string newValue, bool newIsVisible, bool pIdAllowModify):this()
 			{
 				value = newValue;
 				isVisible = newIsVisible;
+				idAllowModify = pIdAllowModify;
 			} 
 
 		}

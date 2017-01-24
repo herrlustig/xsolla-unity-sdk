@@ -77,6 +77,7 @@ namespace Xsolla
 		void Clear()
 		{
 			List<GameObject> children = new List<GameObject>();
+
 			if (this == null)
 				return;
 			for(int i = 0; i < transform.childCount; i++)
@@ -87,8 +88,6 @@ namespace Xsolla
 				if (obj != null)
 					Destroy(obj);
 			}
-
-			//children.ForEach(child => Destroy(child));
 		}
 	}
 }

@@ -26,13 +26,25 @@ namespace Xsolla
 			{
 				GameObject obj = Instantiate(Resources.Load(PREFAB_VIEW_MENU_ITEM_EMPTY)) as GameObject;
 				UserProfileBtnController controller = obj.GetComponentInChildren<UserProfileBtnController>();
-				controller.InitScreen("History", ShowHistory);
+				controller.InitScreen(pUtils.GetTranslations().Get("user_menu_balance"), ShowHistory);
 				obj.transform.SetParent(_btnDropDownObj.transform);
 				_pMenuBtnComponent.enabled = true;
 			}
+
+			if (!pUtils.GetUser().IdAllowModify())
+			{
+				GameObject obj = Instantiate(Resources.Load(PREFAB_VIEW_MENU_ITEM_EMPTY)) as GameObject;
+				UserProfileBtnController controller = obj.GetComponentInChildren<UserProfileBtnController>();
+				controller.InitScreen(pUtils.GetTranslations().Get("user_menu_payment_accounts"), ShowPaymentManager);
+				obj.transform.SetParent(_btnDropDownObj.transform);
+			}
 			else
 				_pMenuBtnComponent.enabled = false;
-				
+		}
+
+		private void ShowPaymentManager()
+		{
+			GetComponentInParent<XsollaPaystation> ().LoadPaymentManager();
 		}
 
 		public void ShowHistory()

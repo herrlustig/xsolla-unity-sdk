@@ -54,7 +54,15 @@ namespace Xsolla
 			}
 		}
 
-
+		public void Hide()
+		{
+			CanvasGroup canvas = GetComponent<CanvasGroup>();
+			if (canvas != null)
+			{
+				canvas.alpha = 0f;
+				canvas.blocksRaycasts = false;
+			}
+		}
 	}
 }
 

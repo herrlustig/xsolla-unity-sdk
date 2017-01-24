@@ -2,6 +2,7 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.UI;
+using System;
 
 namespace Xsolla 
 {
@@ -20,6 +21,7 @@ namespace Xsolla
 		public GameObject 			CustomAmountScreen;
 		public GameObject			ShopPanel;
 
+		public Action				DestroyAfter;
 
 		public void OpenPricepoints(string title, XsollaPricepointsManager pricepoints, string virtualCurrencyName, string buyBtnText, bool pCustomHref = false, XsollaUtils pUtils = null)
 		{
@@ -98,7 +100,7 @@ namespace Xsolla
 			}
 			DrawContent (sAdapter, 1);
 		}
-		
+			
 		public void OpenGoods(XsollaGroupsManager groups)
 		{
 			Resizer.ResizeToParrent (gameObject);
@@ -167,6 +169,12 @@ namespace Xsolla
 		private void SetFavorite(Dictionary<string, object> purchase)
 		{
 			gameObject.GetComponentInParent<XsollaPaystationController> ().SetFavorite (purchase);
+		}
+
+		void OnDestroy() {
+			Logger.Log("ShopController was destroyed");
+			if (DestroyAfter != null)
+				DestroyAfter();
 		}
 
 	}

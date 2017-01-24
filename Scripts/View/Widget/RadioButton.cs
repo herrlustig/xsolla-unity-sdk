@@ -74,5 +74,9 @@ namespace Xsolla {
 			}
 		}
 
+		public void visibleBtn(bool pState)
+		{
+			this.gameObject.SetActive(pState);
+		}
 	}
 }

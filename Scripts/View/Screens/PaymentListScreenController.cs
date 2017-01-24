@@ -45,12 +45,13 @@ namespace Xsolla
 			_paymentMethods = paymentMethods;
 			quickController.SetQuickMethods(_paymentMethods.GetListOnType(XsollaPaymentMethod.TypePayment.QUICK));
 			quickController.SetAllMethods(_paymentMethods.GetListOnType(XsollaPaymentMethod.TypePayment.REGULAR));
-			allController.SetPaymentMethods(_paymentMethods.GetListOnType());;
+			allController.SetPaymentMethods(_paymentMethods.GetListOnType());
 		}
 
 		public void SetCountries(string pStartCountry, XsollaCountries countries, XsollaUtils pUtils)
 		{
 			_countries = countries;
+
 			if (pUtils.GetUser ().IsAllowChangeCountry ()) 
 				allController.SetCountries (pStartCountry!=""?pStartCountry:startCountryIso, _countries);
 		}
@@ -63,7 +64,7 @@ namespace Xsolla
 
 		public void OpenPayments()
 		{
-			if (_savedPaymetnsMethods.Count != 0)
+			if ((_savedPaymetnsMethods != null) && (_savedPaymetnsMethods.Count != 0))
 				OpenSavedMethod();
 			else
 				OpenQuickPayments();

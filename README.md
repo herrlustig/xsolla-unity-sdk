@@ -1,4 +1,4 @@
-# Xsolla Inc. Unity SDK VERSION 1.3.4
+# Xsolla Inc. Unity SDK VERSION 1.3.5
 
 ### GETTING STARTED
 

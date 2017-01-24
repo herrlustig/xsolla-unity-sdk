@@ -69,10 +69,13 @@ namespace  Xsolla
 		protected abstract void ShowVPError (XsollaUtils utils, string error);
 		protected abstract void ShowVPStatus (XsollaUtils utils, XVPStatus status);
 		protected abstract void GetCouponErrorProceed(XsollaCouponProceedResult presult);
+		protected abstract void PaymentManagerRecieved(XsollaSavedPaymentMethods pResult, bool pAddState);
+		protected abstract void DeleteSavedPaymentMethodRecieved();
+		protected abstract void WaitChangeSavedMethod();
 
 		public void OpenPaystation (string accessToken, bool isSandbox)
 		{
-			AddHttpRequestObj();
+//			AddHttpRequestObj();
 			SetLoading (isSandbox);
 			Logger.isLogRequired = true;
 			Logger.Log ("Paystation initiated current mode sandbox");
@@ -135,7 +138,10 @@ namespace  Xsolla
 			Payment.VirtualPaymentProceedError += (error) => ShowVPError(Utils, error);
 			Payment.VirtualPaymentStatusRecieved += (status) => ShowVPStatus(Utils, status);
 
-			Payment.CouponProceedErrorRecived += (proceed) => GetCouponErrorProceed(proceed); 
+			Payment.CouponProceedErrorRecived += (proceed) => GetCouponErrorProceed(proceed);
+			Payment.PaymentManagerMethods += (savedMethods, addState) => PaymentManagerRecieved(savedMethods, addState);
+			Payment.DeleteSavedPaymentMethodRespond += () => DeleteSavedPaymentMethodRecieved();
+			Payment.WaitChangeSavedMethods += () => WaitChangeSavedMethod();
 			
 			Payment.ErrorReceived += ShowPaymentError;
 			Payment.SetModeSandbox (isSandbox);
@@ -232,14 +238,16 @@ namespace  Xsolla
 			LoadSavedPaymentMethods();
 			LoadPaymentMethods ();
 			LoadCountries ();
+			SetLoading (true);
 		}
 
 		public void LoadPaymentMethods()
 		{
 			Logger.Log ("Load Payment Methods request");
-			SetLoading (true);
+			SetLoading (true);	
 			Payment.GetPayments (_countryCurr, currentPurchase.GetMergedMap());
 		}
+			
 
 		public void LoadSavedPaymentMethods()
 		{
@@ -258,6 +266,15 @@ namespace  Xsolla
 		public void LoadHistory(Dictionary<string, object> pParams)
 		{
 			Payment.GetHistory(pParams);
+		}
+
+		public void LoadPaymentManager()
+		{
+			Logger.Log("Show Payment manager");
+			Dictionary<string, object> lParams = new Dictionary<string, object>();
+			lParams.Add("userInitialCurrency", "");
+			Payment.GetSavedPaymentsForManager(lParams);
+			//SetLoading(true);
 		}
 
 		public void UpdateCountries(string countryIso)
@@ -321,6 +338,19 @@ namespace  Xsolla
 			
 		}
 
+		public void DeleteSavedPaymentMethod(Dictionary<string, object> pParams)
+		{
+			Logger.Log("Delete method");
+			Payment.DeleteSavedMethod(pParams);
+		}
+
+		public void ReplacedOnSavedMethod(Dictionary<string, object> pParams)
+		{
+			Logger.Log("Replaced saved method on saved method");
+			FillPurchase(ActivePurchase.Part.PAYMENT_MANAGER_REPLACED, pParams);
+			TryPay();
+		}
+
 		public void DoPayment(Dictionary<string, object> items)
 		{
 			Logger.Log ("Do payment");
@@ -354,7 +384,7 @@ namespace  Xsolla
 			TryPay();
 		}
 		
-		private void FillPurchase(ActivePurchase.Part part, Dictionary<string, object> items)
+		public void FillPurchase(ActivePurchase.Part part, Dictionary<string, object> items)
 		{
 			if (currentPurchase == null) {
 				currentPurchase = new ActivePurchase();
@@ -363,6 +393,17 @@ namespace  Xsolla
 				currentPurchase.Remove(part);
 				currentPurchase.Add(part, new Dictionary<string, object>(items));
 			}
+		}
+
+		public void RemovePurchasePart(ActivePurchase.Part pPart)
+		{
+			Logger.Log("Remove purchase part: " + pPart.ToString());
+			if ((currentPurchase != null) && (currentPurchase.ContainsKey(pPart)))
+			{
+				currentPurchase.Remove(pPart);		
+			}
+			else
+				Logger.Log("purchase is null or don't contain key");
 		}
 
 		private void TryApplyCoupone()
