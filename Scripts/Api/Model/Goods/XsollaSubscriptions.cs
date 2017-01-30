@@ -30,6 +30,12 @@ namespace Xsolla
 		{
 			return activeUserPackage;
 		}
+
+		public override string ToString ()
+		{
+			return string.Format ("[XsollaSubscriptions: api={0}, activeUserPackage={1}]", api, activeUserPackage);
+		}
+		
 	}
 
 	public class XsollaActivePackage : IParseble

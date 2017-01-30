@@ -37,6 +37,11 @@ namespace Xsolla
 				UserProfileBtnController controller = obj.GetComponentInChildren<UserProfileBtnController>();
 				controller.InitScreen(pUtils.GetTranslations().Get("user_menu_payment_accounts"), ShowPaymentManager);
 				obj.transform.SetParent(_btnDropDownObj.transform);
+
+				GameObject objSubs = Instantiate(Resources.Load(PREFAB_VIEW_MENU_ITEM_EMPTY)) as GameObject;
+				UserProfileBtnController controllerSubs = objSubs.GetComponentInChildren<UserProfileBtnController>();
+				controllerSubs.InitScreen(pUtils.GetTranslations().Get("user_menu_user_subscription"), ShowSubscriptionManager);
+				obj.transform.SetParent(_btnDropDownObj.transform);
 			}
 			else
 				_pMenuBtnComponent.enabled = false;
@@ -47,7 +52,7 @@ namespace Xsolla
 			GetComponentInParent<XsollaPaystation> ().LoadPaymentManager();
 		}
 
-		public void ShowHistory()
+		private void ShowHistory()
 		{
 			Logger.Log("Show user history");
 			Dictionary<string, object> lParams = new Dictionary<string, object>();
@@ -57,6 +62,11 @@ namespace Xsolla
 			lParams.Add("sortDesc", true);
 			lParams.Add("sortKey", "dateTimestamp");
 			GetComponentInParent<XsollaPaystation> ().LoadHistory(lParams);
+		}
+
+		private void ShowSubscriptionManager()
+		{
+			GetComponentInParent<XsollaPaystation> ().LoadSubscriptionsManager();
 		}
 
 		public MainHeaderController ()

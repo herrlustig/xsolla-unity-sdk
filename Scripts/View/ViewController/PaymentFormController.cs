@@ -237,8 +237,9 @@ namespace Xsolla
 						if(isLinkRequired){
 							string link = "https://secure.xsolla.com/pages/checkout/?token=" + _form.GetCheckoutToken();
 							if (Application.platform == RuntimePlatform.WebGLPlayer 
-								|| Application.platform == RuntimePlatform.OSXWebPlayer 
-								|| Application.platform == RuntimePlatform.WindowsWebPlayer) {
+								//|| Application.platform == RuntimePlatform.OSXWebPlayer 
+								//|| Application.platform == RuntimePlatform.WindowsWebPlayer
+							) {
 								Application.ExternalEval("window.open('" + link + "','Window title')");
 							} else {
 								Application.OpenURL(link);
@@ -276,8 +277,9 @@ namespace Xsolla
 				if(isLinkRequired){
 					string link = "https://secure.xsolla.com/pages/checkout/?token=" + _form.GetCheckoutToken();
 					if (Application.platform == RuntimePlatform.WebGLPlayer 
-					           || Application.platform == RuntimePlatform.OSXWebPlayer 
-	       						|| Application.platform == RuntimePlatform.WindowsWebPlayer) {
+					           //|| Application.platform == RuntimePlatform.OSXWebPlayer 
+	       						//|| Application.platform == RuntimePlatform.WindowsWebPlayer
+					) {
 							Application.ExternalEval("window.open('" + link + "','Window title')");
 					} else {
 						Application.OpenURL(link);

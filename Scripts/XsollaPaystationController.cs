@@ -278,7 +278,6 @@ namespace Xsolla
 				Resizer.DestroyChilds(mainScreenContainer.transform);
 				GameObject paymentManager = Instantiate(Resources.Load(PREFAB_SCREEN_PAYMENT_MANAGER)) as GameObject;
 				_SavedPaymentController = paymentManager.GetComponent<PaymentManagerController>();
-				_SavedPaymentController.setPrevScreen(currentActive);
 				_SavedPaymentController.setOnCloseMethod(() => {_radioController.SelectItem(RadioButton.RadioType.SCREEN_GOODS);
 																LoadGoodsGroups();});
 				paymentManager.transform.SetParent (mainScreenContainer.transform);
@@ -311,7 +310,6 @@ namespace Xsolla
 			{
 				GameObject paymentManager = Instantiate(Resources.Load(PREFAB_SCREEN_PAYMENT_MANAGER)) as GameObject;
 				_SavedPaymentController = paymentManager.GetComponent<PaymentManagerController>();
-				_SavedPaymentController.setPrevScreen(currentActive);
 				_SavedPaymentController.setOnCloseMethod(() => {_radioController.SelectItem(RadioButton.RadioType.SCREEN_GOODS);
 					LoadGoodsGroups();});
 				paymentManager.transform.SetParent (mainScreenContainer.transform);

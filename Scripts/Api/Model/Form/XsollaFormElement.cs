@@ -163,7 +163,7 @@ namespace Xsolla
         private void SetOptions(JSONNode optionsNode)
         {
             List<Option> options = new List<Option>(optionsNode.Count);
-            Dictionary<string, List<object>> tableOptions = new Dictionary<string, List<object>>();
+            //Dictionary<string, List<object>> tableOptions = new Dictionary<string, List<object>>();
             IEnumerable<JSONNode> optionsEnumerable = optionsNode.Childs;
             IEnumerator<JSONNode> optionsEnumerator = optionsEnumerable.GetEnumerator();
             while (optionsEnumerator.MoveNext())

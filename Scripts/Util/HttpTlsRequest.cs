@@ -36,7 +36,7 @@ namespace Xsolla {
 			{
 			case RuntimePlatform.OSXEditor:
 			case RuntimePlatform.OSXPlayer:	
-			case RuntimePlatform.OSXWebPlayer:	
+			//case RuntimePlatform.OSXWebPlayer:	
 			case RuntimePlatform.LinuxPlayer:
 				{
 					CaptureConsoleCmdOutput("curl", args , out res);
@@ -44,7 +44,7 @@ namespace Xsolla {
 				}
 			case RuntimePlatform.WindowsEditor:
 			case RuntimePlatform.WindowsPlayer:
-			case RuntimePlatform.WindowsWebPlayer:
+			//case RuntimePlatform.WindowsWebPlayer:
 				{
 					CaptureConsoleCmdOutputWin(@"" + Application.dataPath +"/Plugins/" + "ExecConnectWin.dll", args, out res);
 					break;
