@@ -41,7 +41,7 @@ namespace Xsolla
 				GameObject objSubs = Instantiate(Resources.Load(PREFAB_VIEW_MENU_ITEM_EMPTY)) as GameObject;
 				UserProfileBtnController controllerSubs = objSubs.GetComponentInChildren<UserProfileBtnController>();
 				controllerSubs.InitScreen(pUtils.GetTranslations().Get("user_menu_user_subscription"), ShowSubscriptionManager);
-				obj.transform.SetParent(_btnDropDownObj.transform);
+				objSubs.transform.SetParent(_btnDropDownObj.transform);
 			}
 			else
 				_pMenuBtnComponent.enabled = false;

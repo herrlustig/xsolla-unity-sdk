@@ -71,6 +71,7 @@ namespace  Xsolla
 		protected abstract void PaymentManagerRecieved(XsollaSavedPaymentMethods pResult, bool pAddState);
 		protected abstract void DeleteSavedPaymentMethodRecieved();
 		protected abstract void WaitChangeSavedMethod();
+		protected abstract void SubsManagerListRecived(XsollaManagerSubscriptions pSubsList);
 
 		public void OpenPaystation (string accessToken, bool isSandbox)
 		{
@@ -141,6 +142,7 @@ namespace  Xsolla
 			Payment.PaymentManagerMethods += (savedMethods, addState) => PaymentManagerRecieved(savedMethods, addState);
 			Payment.DeleteSavedPaymentMethodRespond += () => DeleteSavedPaymentMethodRecieved();
 			Payment.WaitChangeSavedMethods += () => WaitChangeSavedMethod();
+			Payment.SubsManagerListRecived += (SubsList) => SubsManagerListRecived(SubsList);
 			
 			Payment.ErrorReceived += ShowPaymentError;
 			Payment.SetModeSandbox (isSandbox);

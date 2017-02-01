@@ -23,6 +23,7 @@ namespace Xsolla
 		private const string PREFAB_VIEW_MENU_ITEM_ICON	 = "Prefabs/SimpleView/MenuItemIcon";
 		private const string PREFAB_VIEW_MENU_ITEM_EMPTY = "Prefabs/SimpleView/MenuItemEmpty";
 		private const string PREFAB_SCREEN_PAYMENT_MANAGER = "Prefabs/Screens/ScreenPaymentManager";
+		private const string PREFAB_SCREEN_SUBSCRIPTION_MANAGER = "Prefabs/Screens/ScreenSubsManager";
 
 		public event Action<XsollaResult> 	OkHandler;
 		public event Action<XsollaError> 	ErrorHandler;
@@ -41,6 +42,7 @@ namespace Xsolla
 		private SubscriptionsViewController _subsController;
 		private RadioGroupController 		_radioController;
 		private PaymentManagerController 	_SavedPaymentController;
+		private SubsManagerController 		_SubsManagerController;
 
 		private static ActiveScreen 		currentActive = ActiveScreen.UNKNOWN;
 		private Transform 					menuTransform;
@@ -253,8 +255,6 @@ namespace Xsolla
 				controller = screenHistoryView.GetComponent<HistoryController>();	
 				if (controller != null)
 					controller.InitScreen(Utils.GetTranslations(), pList, Utils.GetProject().virtualCurrencyName);
-				// clear container
-				//Resizer.DestroyChilds(mainScreenContainer.transform);
 				screenHistoryView.transform.SetParent (mainScreenContainer.transform);
 				screenHistoryView.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, 0);
 				Resizer.ResizeToParrent (screenHistoryView);
@@ -322,6 +322,20 @@ namespace Xsolla
 			// Remove purchase part 
 			Restart();
 			_SavedPaymentController.initWaitScreen(Utils, AddPaymentAccount);
+		}
+
+		protected override void SubsManagerListRecived (XsollaManagerSubscriptions pSubsList)
+		{
+			if (_SubsManagerController == null)
+			{
+				GameObject obj = Instantiate(Resources.Load(PREFAB_SCREEN_SUBSCRIPTION_MANAGER)) as GameObject;
+				_SubsManagerController = obj.GetComponent<SubsManagerController>();
+				_SubsManagerController.initScreen(Utils, pSubsList);
+
+				obj.transform.SetParent(mainScreenContainer.transform);
+				obj.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, 0);
+				Resizer.ResizeToParrent(obj);
+			}
 		}
 
 		// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<

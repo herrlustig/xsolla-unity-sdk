@@ -19,22 +19,25 @@ namespace Xsolla
 
 			return this;
 		}
+
+		public override string ToString ()
+		{
+			return string.Format ("[XsollaManagerSubscriptions: api={0}]", api);
+		}
 	}
 
 	public class XsollaManagerSubscription: IXsollaObject, IParseble
 	{
-		XsollaSubCharge mCharge;			//		charge:{amount: 0.3, currency: "USD"}
-				//		amount:0.3
-				//		currency:"USD"
-		String mDateNextCharge;		//		date_next_charge:"2017-02-06T12:41:40+03:00"
-		String mDesc;		//		description:"7 days"
+		public XsollaSubCharge mCharge;			//		charge:{amount: 0.3, currency: "USD"}
+		public String mDateNextCharge;		//		date_next_charge:"2017-02-06T12:41:40+03:00"
+		public String mDesc;		//		description:"7 days"
 		String mHoldDates;		//		hold_dates:null
 		String mId;				//		id:9510073
 		String mIdExternal;		//		id_external:"187fc9f4"
-		String mName;		//		name:"7 days"
-		String mPaymentMethod;		//		payment_method:"PayPal"
+		public String mName;		//		name:"7 days"
+		public String mPaymentMethod;		//		payment_method:"PayPal"
 		String mPaymentType;		//		payment_type:"charge"
-		String mPaymentVisibleName;		//		payment_visible_name:"qualityqontrol@xsolla.com"
+		public String mPaymentVisibleName;		//		payment_visible_name:"qualityqontrol@xsolla.com"
 		XsollaSubPeriod mPeriod;		//		period:{value: 7, unit: "day"}
 		int mValue;		//		value:7
 		String mStatus;		//		status:"active"
@@ -67,6 +70,11 @@ namespace Xsolla
 		{
 			return mName;
 		}
+
+		public override string ToString ()
+		{
+			return string.Format ("[XsollaManagerSubscription: mCharge={0}, mDateNextCharge={1}, mDesc={2}, mHoldDates={3}, mId={4}, mIdExternal={5}, mName={6}, mPaymentMethod={7}, mPaymentType={8}, mPaymentVisibleName={9}, mPeriod={10}, mValue={11}, mStatus={12}]", mCharge, mDateNextCharge, mDesc, mHoldDates, mId, mIdExternal, mName, mPaymentMethod, mPaymentType, mPaymentVisibleName, mPeriod, mValue, mStatus);
+		}
 	}
 
 	public class XsollaSubCharge: IParseble
@@ -83,10 +91,8 @@ namespace Xsolla
 
 		public override string ToString ()
 		{
-			return string.Format ("[XsollaSubCharge: mAmount={0}, mCurrency={1}]", mAmount, mCurrency);
+			return CurrencyFormatter.FormatPrice(mCurrency, mAmount.ToString());
 		}
-		
-
 	}
 
 	public class XsollaSubPeriod: IParseble

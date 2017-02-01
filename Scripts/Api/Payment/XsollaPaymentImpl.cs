@@ -68,6 +68,7 @@ namespace Xsolla
 		public Action<XsollaSavedPaymentMethods, bool>	PaymentManagerMethods;
 		public Action								DeleteSavedPaymentMethodRespond;
 		public Action 								WaitChangeSavedMethods;
+		public Action<XsollaManagerSubscriptions> 	SubsManagerListRecived;
 
 		//TODO CHANGE PARAMS
 		protected string _accessToken;
@@ -280,6 +281,12 @@ namespace Xsolla
 		{
 			if (PaymentManagerMethods != null)
 				PaymentManagerMethods(pRes, pAddState);
+		}
+
+		protected virtual void OnManageSubsListrecived(XsollaManagerSubscriptions pListSubs)
+		{
+			if (SubsManagerListRecived != null)
+				SubsManagerListRecived(pListSubs);
 		}
 
 		protected virtual void OnDeleteSavedPaymentMethod()
@@ -738,7 +745,7 @@ namespace Xsolla
 						case SUBSCRIPTIONS_MANAGER_LIST:
 						{
 							XsollaManagerSubscriptions lSubsList = new XsollaManagerSubscriptions().Parse(rootNode["subscriptions"]) as XsollaManagerSubscriptions;
-								 
+							OnManageSubsListrecived(lSubsList);	 
 							break;
 						}
 						default:
