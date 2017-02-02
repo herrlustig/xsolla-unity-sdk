@@ -32,7 +32,7 @@ namespace Xsolla
 		public String mDateNextCharge;		//		date_next_charge:"2017-02-06T12:41:40+03:00"
 		public String mDesc;		//		description:"7 days"
 		String mHoldDates;		//		hold_dates:null
-		String mId;				//		id:9510073
+		int mId;				//		id:9510073
 		String mIdExternal;		//		id_external:"187fc9f4"
 		public String mName;		//		name:"7 days"
 		public String mPaymentMethod;		//		payment_method:"PayPal"
@@ -48,7 +48,7 @@ namespace Xsolla
 			mDateNextCharge = rootNode["date_next_charge"];
 			mDesc = rootNode["description"];
 			mHoldDates = rootNode["hold_dates"];
-			mId = rootNode["id"];
+			mId = rootNode["id"].AsInt;
 			mIdExternal = rootNode["id_external"];
 			mName = rootNode["name"];
 			mPaymentMethod = rootNode["payment_method"];
@@ -62,6 +62,11 @@ namespace Xsolla
 		}
 
 		public string GetKey ()
+		{
+			return mId.ToString();
+		}
+
+		public int GetId()
 		{
 			return mId;
 		}

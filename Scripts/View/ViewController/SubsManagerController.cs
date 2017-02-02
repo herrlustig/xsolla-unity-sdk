@@ -4,6 +4,8 @@ using UnityEditor;
 using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
+using System.Text;
+using SimpleJSON;
 
 namespace Xsolla
 {
@@ -16,6 +18,7 @@ namespace Xsolla
 		public GameObject mSubsContainer;
 
 		private XsollaUtils mUtils;
+		private const String DOMAIN = "https://secure.xsolla.com";
 		private const String mBtnPrefab = "Prefabs/SimpleView/_PaymentFormElements/SubManagerBtn";
 
 		public SubsManagerController ()
@@ -54,6 +57,7 @@ namespace Xsolla
 		private void onDetailBtnClick(XsollaManagerSubscription pSub)
 		{
 			Logger.Log("On Detail click. Id: " + pSub.GetKey());
+			GetDetailSub(pSub.GetId());
 		}
 
 		private void GetDetailSub(int pSubId)
@@ -63,20 +67,36 @@ namespace Xsolla
 			lParams.Add("subscription_id",pSubId);
 			lParams.Add("userInitialCurrency",pSubId);
 
-			String lUrl = "";
+			// send params
+			String lUrl = DOMAIN + "/paystation2/api/useraccount/subscription";
 			WWWForm lForm = new WWWForm();
+			StringBuilder sb = new StringBuilder ();
+			foreach(KeyValuePair<string, object> pair in lParams)
+			{
+				string argValue = pair.Value != null ? pair.Value.ToString() : "";
+				sb.Append(pair.Key).Append("=").Append(argValue).Append("&");
+				lForm.AddField(pair.Key, argValue);
+			}
 
 			WWW lwww = new WWW(lUrl, lForm);
-		
 			StartCoroutine(getSubscriptionDetail(lwww));
-
 		}
 
 
 		private IEnumerator getSubscriptionDetail(WWW pWww)
 		{
 			yield return pWww;
+			if (pWww.error == null)
+			{
+				JSONNode rootNode = JSON.Parse(pWww.text);
+				XsollaManagerSubDetails subDetail = new XsollaManagerSubDetails().Parse(rootNode) as XsollaManagerSubDetails;
+				Logger.Log("Parse");
 
+			}
+			else
+			{
+				//TODO show error 
+			}
 
 		}
 
