@@ -90,13 +90,28 @@ namespace Xsolla
 			{
 				JSONNode rootNode = JSON.Parse(pWww.text);
 				XsollaManagerSubDetails subDetail = new XsollaManagerSubDetails().Parse(rootNode) as XsollaManagerSubDetails;
-				Logger.Log("Parse");
+				showSubDetail(subDetail);
 
 			}
 			else
 			{
 				//TODO show error 
 			}
+		}
+
+		private void showSubDetail(XsollaManagerSubDetails pSubDetail)
+		{
+			// убрать то что было на панели и построить новое?
+			// скрыть то что было на панели и построить новое?
+			// после возвращения обратно, перестраивать полностью подписки?
+
+
+			// TODO кнопки Unhold | Hold or Cancel | Change Plan
+
+
+			// TODO кнопки Delete 
+
+
 
 		}
 
