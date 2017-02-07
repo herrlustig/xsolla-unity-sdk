@@ -19,7 +19,8 @@ namespace Xsolla
 
 		private XsollaUtils mUtils;
 		private const String DOMAIN = "https://secure.xsolla.com";
-		private const String mBtnPrefab = "Prefabs/SimpleView/_PaymentFormElements/SubManagerBtn";
+		private const String mBtnPrefab = "Prefabs/Screens/SubsManager/Simple/SubManagerBtn";
+		private const String mDetailPartPrefab = "Prefabs/Screens/SubsManager/Detail/SubDetailPart";
 
 		public SubsManagerController ()
 		{
@@ -102,11 +103,25 @@ namespace Xsolla
 		private void showSubDetail(XsollaManagerSubDetails pSubDetail)
 		{
 			// убрать то что было на панели и построить новое?
-			// скрыть то что было на панели и построить новое?
+			var children = new List<GameObject>();
+			foreach (Transform child in mSubsContainer.transform) 
+				children.Add(child.gameObject);
+			children.ForEach(child => Destroy(child));
+
+			// если в типе метода идет notify то нужно выдать уведомление о том что метод оплаты не привязан и дать ссылку на линку метода
+			if (pSubDetail.mPaymentMethodType == "notify")
+			{
+				//TODO реализовать префаб с уведомлением 
+			}
+				
+			// добавить часть детализации 
+			GameObject detailPart = Instantiate(Resources.Load(mDetailPartPrefab)) as GameObject;
+			SubManagerDetailPartController controller = detailPart.GetComponent<SubManagerDetailPartController>() as SubManagerDetailPartController;
+			controller.initScreen(pSubDetail, mUtils);
+			detailPart.transform.SetParent(mSubsContainer.transform);
+
 			// после возвращения обратно, перестраивать полностью подписки?
 
-
-			// TODO кнопки Unhold | Hold or Cancel | Change Plan
 
 
 			// TODO кнопки Delete 
@@ -114,7 +129,6 @@ namespace Xsolla
 
 
 		}
-
 	}
 }
 

@@ -23,7 +23,7 @@ namespace Xsolla
 		private const string PREFAB_VIEW_MENU_ITEM_ICON	 = "Prefabs/SimpleView/MenuItemIcon";
 		private const string PREFAB_VIEW_MENU_ITEM_EMPTY = "Prefabs/SimpleView/MenuItemEmpty";
 		private const string PREFAB_SCREEN_PAYMENT_MANAGER = "Prefabs/Screens/ScreenPaymentManager";
-		private const string PREFAB_SCREEN_SUBSCRIPTION_MANAGER = "Prefabs/Screens/ScreenSubsManager";
+		private const string PREFAB_SCREEN_SUBSCRIPTION_MANAGER = "Prefabs/Screens/SubsManager/ScreenSubsManager";
 
 		public event Action<XsollaResult> 	OkHandler;
 		public event Action<XsollaError> 	ErrorHandler;

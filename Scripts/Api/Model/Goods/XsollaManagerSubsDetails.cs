@@ -25,17 +25,17 @@ namespace Xsolla
 		public Boolean mIsHoldPossible;
 		public Boolean mIsRenewPossible;
 		public Boolean mIsSheduledHoldExist;
-		public XsollaSubLimitHoldPerios mLimitHoldPeriod;
+		public XsollaSubLimitHoldPeriod mLimitHoldPeriod;
 		public String mName;
 		public XsollaSubCharge mNextCharge;
-		public String mNextPeriodPlanChange;
+		public XsollaSubNextPeriodPlanChange mNextPeriodPlanChange;
 		public XsollaSubDetailPaymentAcc mPaymentAccount;
 		public String mPaymentIcoSrc;
 		public String mPaymentMethodName;
 		public String mPaymentMethodType;
 		public String mPaymentMethodVisName;
 		public XsollaSubDetailPeriod mPeriod;
-		public String mSheduledHoldDates;
+		public XsollaSubSheduledHoldDates mSheduledHoldDates;
 		public String mStatus;
 
 		public IParseble Parse (SimpleJSON.JSONNode rootNode)
@@ -63,17 +63,17 @@ namespace Xsolla
 			mIsHoldPossible = subsNode["is_hold_possible"].AsBool;
 			mIsRenewPossible = subsNode["is_renew_possible"].AsBool;
 			mIsSheduledHoldExist = subsNode["is_scheduled_hold_exist"].AsBool;
-			mLimitHoldPeriod = new XsollaSubLimitHoldPerios().Parse(subsNode["limit_hold_period"]) as XsollaSubLimitHoldPerios;
+			mLimitHoldPeriod = new XsollaSubLimitHoldPeriod().Parse(subsNode["limit_hold_period"]) as XsollaSubLimitHoldPeriod;
 			mName = subsNode["name"].Value;
 			mNextCharge = new XsollaSubCharge().Parse(subsNode["next_charge"]) as XsollaSubCharge;
-			mNextPeriodPlanChange = subsNode["next_period_plan_change"];
+			mNextPeriodPlanChange = new XsollaSubNextPeriodPlanChange().Parse(subsNode["next_period_plan_change"]) as XsollaSubNextPeriodPlanChange;
 			mPaymentAccount = new XsollaSubDetailPaymentAcc().Parse(subsNode["payment_account"]) as XsollaSubDetailPaymentAcc;
 			mPaymentIcoSrc = subsNode["payment_icon_src"].Value;
 			mPaymentMethodName = subsNode["payment_method"].Value;
 			mPaymentMethodType = subsNode["payment_type"].Value;
 			mPaymentMethodVisName = subsNode["payment_visible_name"].Value;
 			mPeriod = new XsollaSubDetailPeriod().Parse(subsNode["period"]) as XsollaSubDetailPeriod;
-			mSheduledHoldDates = subsNode["scheduled_hold_dates"].Value;
+			mSheduledHoldDates = new XsollaSubSheduledHoldDates().Parse(subsNode["scheduled_hold_dates"]) as XsollaSubSheduledHoldDates;
 			mStatus = subsNode["status"].Value;
 
 			return this;
@@ -92,6 +92,12 @@ namespace Xsolla
 			mValue = rootNode["value"].AsInt;
 			return this;
 		}
+
+		public override string ToString ()
+		{
+			return string.Format ("{1} {0}", mUnit, mValue);
+		}
+		
 	}
 
 	public class XsollaSubDetailPaymentAcc: IParseble
@@ -107,7 +113,43 @@ namespace Xsolla
 		}
 	}
 
-	public class XsollaSubLimitHoldPerios: IParseble
+	public class XsollaSubNextPeriodPlanChange: IParseble
+	{
+		public String name;
+		public DateTime date;
+
+		public IParseble Parse (SimpleJSON.JSONNode rootNode)
+		{
+			if (rootNode["name"] != null)
+				name = rootNode["name"].Value;
+			if (rootNode["date"] != null)
+			date = DateTime.Parse(rootNode["date"].Value);
+			return this;
+		}
+	}
+
+	public class XsollaSubSheduledHoldDates: IParseble
+	{
+		public DateTime dateFrom;
+		public DateTime dateTo;
+
+		public IParseble Parse (SimpleJSON.JSONNode rootNode)
+		{
+			if (rootNode["date_from"] != null)
+				dateFrom = DateTime.Parse(rootNode["date_from"].Value);
+			if (rootNode["date_to"] != null)
+				dateTo = DateTime.Parse(rootNode["date_to"].Value);
+			return this;
+		}
+
+		public override string ToString ()
+		{
+			return string.Format ("{0} - {1}", dateFrom.ToString("d"), dateTo.ToString("d"));
+		}
+		
+	}
+
+	public class XsollaSubLimitHoldPeriod: IParseble
 	{
 		public int maxDays;
 		public int minDays;

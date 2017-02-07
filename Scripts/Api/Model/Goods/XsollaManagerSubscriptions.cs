@@ -96,7 +96,7 @@ namespace Xsolla
 
 		public override string ToString ()
 		{
-			return CurrencyFormatter.FormatPrice(mCurrency, mAmount.ToString());
+			return CurrencyFormatter.FormatPrice(mCurrency, mAmount.ToString("0.00"));
 		}
 	}
 
