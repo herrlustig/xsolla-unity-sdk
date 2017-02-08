@@ -579,10 +579,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   itemsToColor:
-  - color: 7
+  - color: 11
     whatToColor: {fileID: 114000010536840814}
   - color: 34
     whatToColor: {fileID: 114000010227157058}
+  - color: 15
+    whatToColor: {fileID: 114000011345329082}
+  - color: 14
+    whatToColor: {fileID: 114000011603290924}
+  - color: 14
+    whatToColor: {fileID: 114000011375392144}
 --- !u!222 &222000011466880786
 CanvasRenderer:
   m_ObjectHideFlags: 1

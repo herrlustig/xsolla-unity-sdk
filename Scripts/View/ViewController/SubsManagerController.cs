@@ -21,6 +21,7 @@ namespace Xsolla
 		private const String DOMAIN = "https://secure.xsolla.com";
 		private const String mBtnPrefab = "Prefabs/Screens/SubsManager/Simple/SubManagerBtn";
 		private const String mDetailPartPrefab = "Prefabs/Screens/SubsManager/Detail/SubDetailPart";
+		private const String mDetailPaymentPartPrefab = "Prefabs/Screens/SubsManager/Detail/SubDetailPaymentPart";
 
 		public SubsManagerController ()
 		{
@@ -83,7 +84,6 @@ namespace Xsolla
 			StartCoroutine(getSubscriptionDetail(lwww));
 		}
 
-
 		private IEnumerator getSubscriptionDetail(WWW pWww)
 		{
 			yield return pWww;
@@ -108,8 +108,12 @@ namespace Xsolla
 				children.Add(child.gameObject);
 			children.ForEach(child => Destroy(child));
 
+			// скрыть заголовок
+			mLabel.gameObject.SetActive(false);
+			mTitleScreen.text = mUtils.GetTranslations().Get("user_subscription_info_page_title");
+
 			// если в типе метода идет notify то нужно выдать уведомление о том что метод оплаты не привязан и дать ссылку на линку метода
-			if (pSubDetail.mPaymentMethodType == "notify")
+			if (false)
 			{
 				//TODO реализовать префаб с уведомлением 
 			}
@@ -119,6 +123,16 @@ namespace Xsolla
 			SubManagerDetailPartController controller = detailPart.GetComponent<SubManagerDetailPartController>() as SubManagerDetailPartController;
 			controller.initScreen(pSubDetail, mUtils);
 			detailPart.transform.SetParent(mSubsContainer.transform);
+
+			// добавить префаб платежного метода
+			if (pSubDetail.mStatus != "non_renewing")
+			{
+				GameObject detailPaymentPart = Instantiate(Resources.Load(mDetailPaymentPartPrefab)) as GameObject;
+				SubManagerDetailPaymentPartController paymentPartController = detailPaymentPart.GetComponent<SubManagerDetailPaymentPartController>() as SubManagerDetailPaymentPartController;
+				paymentPartController.init(pSubDetail, mUtils);
+				paymentPartController.transform.SetParent(mSubsContainer.transform);
+			}
+
 
 			// после возвращения обратно, перестраивать полностью подписки?
 

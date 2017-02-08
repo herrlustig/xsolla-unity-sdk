@@ -91,18 +91,65 @@ namespace Xsolla
 			// ценa
 			list.Add(new LabelValue(translation.Get("user_subscription_charge"), mSubDetail.mCharge.ToString()));
 			// цикл платежа
-			list.Add(new LabelValue(translation.Get("user_subscription_period"), mSubDetail.mPeriod.ToString()));
+			list.Add(new LabelValue(translation.Get("user_subscription_period"), formattedPeriod(mSubDetail.mPeriod.mValue.ToString(), mSubDetail.mPeriod.mUnit)));
 
 			if (mSubDetail.mStatus == "non_renewing")
-				list.Add(new LabelValue(translation.Get("user_subscription_end_bill_date"), string.Format("{0:dd/MM/yyyy}", mSubDetail.mDateNextCharge)));//isViewFieldEndBillingDate  
-
+				list.Add(new LabelValue(translation.Get("user_subscription_end_bill_date"), string.Format("{0:dd/MM/yyyy}", mSubDetail.mDateNextCharge)));  
+				 
 			if (mSubDetail.mNextPeriodPlanChange != null)
-				list.Add(new LabelValue(translation.Get("user_subscription_new_plan"), string.Format(translation.Get("user_subscription_next_period_plan_change"), mSubDetail.mNextPeriodPlanChange.name, mSubDetail.mNextPeriodPlanChange.date)));  
+				list.Add(new LabelValue(translation.Get("user_subscription_new_plan"), string.Format(prepareFormatString(translation.Get("user_subscription_next_period_plan_change")), mSubDetail.mNextPeriodPlanChange.name, mSubDetail.mNextPeriodPlanChange.date.ToString("d"))));  
 			
 			if (mSubDetail.mIsSheduledHoldExist && (mSubDetail.mSheduledHoldDates != null) || (mSubDetail.mStatus == "freeze") && (mSubDetail.mHoldDates != null))
-				list.Add(new LabelValue(translation.Get("user_subscription_hold_dates"), mSubDetail.mSheduledHoldDates.ToString(), translation.Get("cancel"), cancelHoldDates));
+			{
+
+				String lDateFrom = "", lDateTo = "";
+				if (mSubDetail.mStatus == "freeze")
+				{
+					if (mSubDetail.mHoldDates != null)
+					{
+						lDateFrom = mSubDetail.mHoldDates.dateFrom.ToString("d");
+						lDateTo = mSubDetail.mHoldDates.dateTo.ToString("d");
+					}
+				}
+				else
+				{
+					if (mSubDetail.mSheduledHoldDates != null)
+					{
+						lDateFrom = mSubDetail.mSheduledHoldDates.dateFrom.ToString("d");
+						lDateTo = mSubDetail.mSheduledHoldDates.dateTo.ToString("d");
+					}
+				}
+					
+				if (mSubDetail.mIsSheduledHoldExist)
+					list.Add(new LabelValue(translation.Get("user_subscription_hold_dates"), lDateFrom + " - " + lDateTo, translation.Get("cancel"), cancelHoldDates));
+				else
+					list.Add(new LabelValue(translation.Get("user_subscription_hold_dates"), lDateFrom + " - " + lDateTo));
+			}
 
 			return list;
+		}
+
+		private String prepareFormatString(String pInnerString)
+		{
+			String res = pInnerString;
+			int indx = 0;
+			while (res.Contains("{{"))
+			{
+				String replacedPart = res.Substring(res.IndexOf("{{", 0) + 1, res.IndexOf("}}", 0) - res.IndexOf("{{", 0));
+				res = res.Replace(replacedPart, indx.ToString());  
+				indx ++;
+			}
+			return res;
+		}
+
+		private String formattedPeriod(String pValue, String pUnit)
+		{
+			String translateKey = "period_" + pUnit + pValue;
+			String unit = mUtils.GetTranslations().Get(translateKey);
+			if (unit == "")
+				unit = mUtils.GetTranslations().Get("period_" + pUnit + "s");
+
+			return pValue + " " + unit;
 		}
 
 		private void cancelHoldDates()
