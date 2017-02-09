@@ -22,6 +22,8 @@ namespace Xsolla
 		private const String mBtnPrefab = "Prefabs/Screens/SubsManager/Simple/SubManagerBtn";
 		private const String mDetailPartPrefab = "Prefabs/Screens/SubsManager/Detail/SubDetailPart";
 		private const String mDetailPaymentPartPrefab = "Prefabs/Screens/SubsManager/Detail/SubDetailPaymentPart";
+		private const String mDetailChargePartPrefab = "Prefabs/Screens/SubsManager/Detail/SubDetailChargesPart";
+		private const String mDetailNotifyPartPrefab = "Prefabs/Screens/SubsManager/Detail/SubDetailNotifyPart";
 
 		public SubsManagerController ()
 		{
@@ -115,7 +117,9 @@ namespace Xsolla
 			// если в типе метода идет notify то нужно выдать уведомление о том что метод оплаты не привязан и дать ссылку на линку метода
 			if (false)
 			{
-				//TODO реализовать префаб с уведомлением 
+				GameObject notifyObj = Instantiate(Resources.Load(mDetailNotifyPartPrefab)) as GameObject;
+
+
 			}
 				
 			// добавить часть детализации 
@@ -133,10 +137,16 @@ namespace Xsolla
 				paymentPartController.transform.SetParent(mSubsContainer.transform);
 			}
 
+			// добавить префаб истории платежей
+			if (pSubDetail.mCharges != null)
+			{
+				GameObject detailCharges = Instantiate(Resources.Load(mDetailChargePartPrefab)) as GameObject;
+				SubManagerDetailChargesPartController chargesController = detailCharges.GetComponent<SubManagerDetailChargesPartController>() as SubManagerDetailChargesPartController;
+				chargesController.init(pSubDetail, mUtils);
+				chargesController.transform.SetParent(mSubsContainer.transform);
+			}
 
 			// после возвращения обратно, перестраивать полностью подписки?
-
-
 
 			// TODO кнопки Delete 
 

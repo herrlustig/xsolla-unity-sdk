@@ -29,11 +29,9 @@ namespace Xsolla
 			mPartTitle.text = pUtils.GetTranslations().Get("user_subscription_payment_title");
 
 			if (pSubDetail.mPaymentMethodType != "notify" && pSubDetail.mPaymentMethodName != "")
-			{
 				mUnLinkBtn.GetComponent<Text>().text = pUtils.GetTranslations().Get("user_subscription_unlink_payment_account");
-			}
 			else
-				mUnLinkBtn.SetActive(false);
+				mUnLinkBtn.SetActive(false); // TODO должна появлятся кнопка привязки аккаунта
 
 			// добавляем поля датализации 
 			List<LabelValue> listFileds = getImportDetails();
@@ -50,7 +48,12 @@ namespace Xsolla
 
 		private void onUnlinkClick()
 		{
+			// TODO onUnlink 
 			Logger.Log("Click on unlink link");
+			//https://secure.xsolla.com/paystation2/api/useraccount/unlinkpaymentaccount
+			//access_token:7g46L7ZZQoQhmhobCvH9q3Dc0w59eYN8
+			//subscription_id:9676670
+			//userInitialCurrency:USD
 		}
 			
 		public List<LabelValue> getImportDetails()
@@ -59,7 +62,8 @@ namespace Xsolla
 			XsollaTranslations translation = mUtils.GetTranslations();
 			// ПОЛЯ ДЕТАЛИЗАЦИИ
 			// имя
-			list.Add(new LabelValue(translation.Get("user_subscription_payment_method"), mSubDetail.mPaymentMethodName + " (" + mSubDetail.mPaymentMethodVisName + ")"));
+			if (mSubDetail.mPaymentMethodName != null)
+				list.Add(new LabelValue(translation.Get("user_subscription_payment_method"), mSubDetail.mPaymentMethodName + " (" + mSubDetail.mPaymentMethodVisName + ")"));
 			// сумма след списание
 			list.Add(new LabelValue(translation.Get("user_subscription_next_bill_sum"), mSubDetail.mNextCharge.ToString()));
 			// дата след списание

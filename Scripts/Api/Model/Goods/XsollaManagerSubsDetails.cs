@@ -17,7 +17,7 @@ namespace Xsolla
 		public DateTime mDateCreate;
 		public DateTime mDateNextCharge;
 		public String mDesc;
-		public String mHoldDates;
+		public XsollaSubHoldDates mHoldDates;
 		public String mId;
 		public String mIdExternal;
 		public Boolean mIsCancelPossible;
@@ -35,7 +35,7 @@ namespace Xsolla
 		public String mPaymentMethodType;
 		public String mPaymentMethodVisName;
 		public XsollaSubDetailPeriod mPeriod;
-		public XsollaSubSheduledHoldDates mSheduledHoldDates;
+		public XsollaSubHoldDates mSheduledHoldDates;
 		public String mStatus;
 
 		public IParseble Parse (SimpleJSON.JSONNode rootNode)
@@ -55,7 +55,7 @@ namespace Xsolla
 			mDateCreate = DateTime.Parse(subsNode["date_create"].Value);
 			mDateNextCharge = DateTime.Parse(subsNode["date_next_charge"].Value);
 			mDesc = subsNode["description"].Value;
-			mHoldDates = subsNode["hold_dates"].Value;
+			mHoldDates = new XsollaSubHoldDates().Parse(subsNode["hold_dates"]) as XsollaSubHoldDates;
 			mId = subsNode["id"].Value;
 			mIdExternal = subsNode["id_external"].Value;
 			mIsCancelPossible = subsNode["is_cancel_possible"].AsBool;
@@ -73,7 +73,7 @@ namespace Xsolla
 			mPaymentMethodType = subsNode["payment_type"].Value;
 			mPaymentMethodVisName = subsNode["payment_visible_name"].Value;
 			mPeriod = new XsollaSubDetailPeriod().Parse(subsNode["period"]) as XsollaSubDetailPeriod;
-			mSheduledHoldDates = new XsollaSubSheduledHoldDates().Parse(subsNode["scheduled_hold_dates"]) as XsollaSubSheduledHoldDates;
+			mSheduledHoldDates = new XsollaSubHoldDates().Parse(subsNode["scheduled_hold_dates"]) as XsollaSubHoldDates;
 			mStatus = subsNode["status"].Value;
 
 			return this;
@@ -88,6 +88,9 @@ namespace Xsolla
 
 		public IParseble Parse (SimpleJSON.JSONNode rootNode)
 		{
+			if (rootNode == "null")
+				return null;
+
 			mUnit = rootNode["unit"].Value;
 			mValue = rootNode["value"].AsInt;
 			return this;
@@ -95,6 +98,8 @@ namespace Xsolla
 
 		public override string ToString ()
 		{
+			
+
 			return string.Format ("{1} {0}", mUnit, mValue);
 		}
 		
@@ -107,6 +112,9 @@ namespace Xsolla
 
 		public IParseble Parse (SimpleJSON.JSONNode rootNode)
 		{
+			if (rootNode.Value == "null")
+				return null;
+
 			mId = rootNode["id"].AsInt;
 			mType = rootNode["type"].Value;
 			return this;
@@ -120,6 +128,9 @@ namespace Xsolla
 
 		public IParseble Parse (SimpleJSON.JSONNode rootNode)
 		{
+			if (rootNode.Value == "null")
+				return null;
+			
 			if (rootNode["name"] != null)
 				name = rootNode["name"].Value;
 			if (rootNode["date"] != null)
@@ -128,13 +139,16 @@ namespace Xsolla
 		}
 	}
 
-	public class XsollaSubSheduledHoldDates: IParseble
+	public class XsollaSubHoldDates: IParseble
 	{
 		public DateTime dateFrom;
 		public DateTime dateTo;
 
 		public IParseble Parse (SimpleJSON.JSONNode rootNode)
 		{
+			if (rootNode.Value == "null")
+				return null;
+			
 			if (rootNode["date_from"] != null)
 				dateFrom = DateTime.Parse(rootNode["date_from"].Value);
 			if (rootNode["date_to"] != null)
@@ -160,19 +174,19 @@ namespace Xsolla
 			minDays = rootNode["min_days"].AsInt;
 			return this;
 		}
-
 	}
 
 	public class XsollaSubDetailCharge: IParseble
 	{
 		public XsollaSubCharge mCharge;
-		public String mDateCreate;
+		public DateTime mDateCreate;
 		public String mPaymentMethod;
 
 		public IParseble Parse (SimpleJSON.JSONNode rootNode)
 		{
 			mCharge = new XsollaSubCharge().Parse(rootNode["charge"]) as XsollaSubCharge;
-			mDateCreate = rootNode["date_create"].Value;
+			if (rootNode["date_create"] != null)
+				mDateCreate = DateTime.Parse(rootNode["date_create"].Value);
 			mPaymentMethod = rootNode["payment_method"].Value;
 			return this;
 		}
