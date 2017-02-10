@@ -18,7 +18,7 @@ namespace Xsolla
 		public DateTime mDateNextCharge;
 		public String mDesc;
 		public XsollaSubHoldDates mHoldDates;
-		public String mId;
+		public int mId;
 		public String mIdExternal;
 		public Boolean mIsCancelPossible;
 		public Boolean mIsChangePlanAllowed;
@@ -56,7 +56,7 @@ namespace Xsolla
 			mDateNextCharge = DateTime.Parse(subsNode["date_next_charge"].Value);
 			mDesc = subsNode["description"].Value;
 			mHoldDates = new XsollaSubHoldDates().Parse(subsNode["hold_dates"]) as XsollaSubHoldDates;
-			mId = subsNode["id"].Value;
+			mId = subsNode["id"].AsInt;
 			mIdExternal = subsNode["id_external"].Value;
 			mIsCancelPossible = subsNode["is_cancel_possible"].AsBool;
 			mIsChangePlanAllowed = subsNode["is_change_plan_allowed"].AsBool;

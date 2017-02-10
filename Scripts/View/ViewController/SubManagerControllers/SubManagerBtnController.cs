@@ -39,7 +39,11 @@ namespace Xsolla
 			else
 				throw new Exception("Error DateParser");
 
-			mPaymentMethodName.text = pSub.mPaymentMethod + " " + pSub.mPaymentVisibleName;
+			if (pSub.mPaymentMethod != "null")
+				mPaymentMethodName.text = pSub.mPaymentMethod + " " + pSub.mPaymentVisibleName;
+			else
+				mPaymentMethodName.gameObject.SetActive(false);
+			
 			mDetailText.text = pTranslation.Get("user_subscription_to_details");
 		}
 

@@ -53,7 +53,8 @@ namespace Xsolla {
 			selected,
 			bonus,
 			bg_ok,
-			bg_error
+			bg_error,
+			link_on_notify
 		};
 		
 		public Dictionary<BaseColor, Color32> colorsMap;

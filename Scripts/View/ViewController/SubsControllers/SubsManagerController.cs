@@ -25,6 +25,8 @@ namespace Xsolla
 		private const String mDetailChargePartPrefab = "Prefabs/Screens/SubsManager/Detail/SubDetailChargesPart";
 		private const String mDetailNotifyPartPrefab = "Prefabs/Screens/SubsManager/Detail/SubDetailNotifyPart";
 
+		private XsollaManagerSubDetails mLocalSubDetail;
+
 		public SubsManagerController ()
 		{
 		}
@@ -36,17 +38,12 @@ namespace Xsolla
 			mContinueText.text = mUtils.GetTranslations().Get("balance_back_button");
 			mLabel.text = mUtils.GetTranslations().Get("user_subscription_list_subtitle");
 
-			mContinueLink.onClick.AddListener(OnClickBackShop);
+			mContinueLink.onClick.AddListener(OnClickBackShopAction);
 
 			foreach (XsollaManagerSubscription sub in pSubsList.GetItemsList())
 			{
 				addSubBtn(sub);
 			}
-		}
-
-		private void OnClickBackShop()
-		{
-			Logger.Log("On click back shop");
 		}
 
 		private void addSubBtn(XsollaManagerSubscription pSub)
@@ -68,33 +65,35 @@ namespace Xsolla
 		{
 			Dictionary<string, object> lParams = new Dictionary<string, object>();
 			lParams.Add(XsollaApiConst.ACCESS_TOKEN, mUtils.GetAcceessToken());
-			lParams.Add("subscription_id",pSubId);
-			lParams.Add("userInitialCurrency",pSubId);
+			lParams.Add("subscription_id", pSubId);
+			lParams.Add("userInitialCurrency", mUtils.GetUser().userBalance.currency);
 
+			getApiRequest(DOMAIN + "/paystation2/api/useraccount/subscription", lParams, callbackShowSubDetail);
+		}
+
+		private void getApiRequest(String pUrl, Dictionary<string, object> pParams, Action<JSONNode> pRecivedCallBack)
+		{
 			// send params
-			String lUrl = DOMAIN + "/paystation2/api/useraccount/subscription";
 			WWWForm lForm = new WWWForm();
 			StringBuilder sb = new StringBuilder ();
-			foreach(KeyValuePair<string, object> pair in lParams)
+			foreach(KeyValuePair<string, object> pair in pParams)
 			{
 				string argValue = pair.Value != null ? pair.Value.ToString() : "";
 				sb.Append(pair.Key).Append("=").Append(argValue).Append("&");
 				lForm.AddField(pair.Key, argValue);
 			}
-
-			WWW lwww = new WWW(lUrl, lForm);
-			StartCoroutine(getSubscriptionDetail(lwww));
+			WWW lwww = new WWW(pUrl, lForm);
+			StartCoroutine(getRequest(lwww, pRecivedCallBack));
 		}
-
-		private IEnumerator getSubscriptionDetail(WWW pWww)
+			
+		private IEnumerator getRequest(WWW pWww, Action<JSONNode> pCallback)
 		{
 			yield return pWww;
 			if (pWww.error == null)
 			{
 				JSONNode rootNode = JSON.Parse(pWww.text);
-				XsollaManagerSubDetails subDetail = new XsollaManagerSubDetails().Parse(rootNode) as XsollaManagerSubDetails;
-				showSubDetail(subDetail);
-
+				pCallback(rootNode);
+				//showSubDetail(rootNode);
 			}
 			else
 			{
@@ -102,8 +101,11 @@ namespace Xsolla
 			}
 		}
 
-		private void showSubDetail(XsollaManagerSubDetails pSubDetail)
+		private bool isLinkPaymentMethod = true;
+
+		private void callbackShowSubDetail(JSONNode pNode)
 		{
+			mLocalSubDetail = new XsollaManagerSubDetails().Parse(pNode) as XsollaManagerSubDetails;
 			// убрать то что было на панели и построить новое?
 			var children = new List<GameObject>();
 			foreach (Transform child in mSubsContainer.transform) 
@@ -115,43 +117,90 @@ namespace Xsolla
 			mTitleScreen.text = mUtils.GetTranslations().Get("user_subscription_info_page_title");
 
 			// если в типе метода идет notify то нужно выдать уведомление о том что метод оплаты не привязан и дать ссылку на линку метода
-			if (false)
+			if ((mLocalSubDetail.mStatus != "non_renewing") && (mLocalSubDetail.mPaymentMethodName == "null")) // TODO добавить условие с allow_recurrent
 			{
+				isLinkPaymentMethod = false;
 				GameObject notifyObj = Instantiate(Resources.Load(mDetailNotifyPartPrefab)) as GameObject;
-
-
+				SubManagerNotifyPartController notifyController = notifyObj.GetComponent<SubManagerNotifyPartController>() as SubManagerNotifyPartController;
+				notifyController.init(mUtils.GetTranslations().Get("user_subscription_payment_not_link_account_message"), mUtils.GetTranslations().Get("user_subscription_add"), mLocalSubDetail, OnLinkPaymentMethodAction);            
+				notifyController.transform.SetParent(mSubsContainer.transform);
 			}
 				
 			// добавить часть детализации 
 			GameObject detailPart = Instantiate(Resources.Load(mDetailPartPrefab)) as GameObject;
 			SubManagerDetailPartController controller = detailPart.GetComponent<SubManagerDetailPartController>() as SubManagerDetailPartController;
-			controller.initScreen(pSubDetail, mUtils);
+			controller.initScreen(mLocalSubDetail, mUtils);
 			detailPart.transform.SetParent(mSubsContainer.transform);
 
 			// добавить префаб платежного метода
-			if (pSubDetail.mStatus != "non_renewing")
+			if (mLocalSubDetail.mStatus != "non_renewing")
 			{
 				GameObject detailPaymentPart = Instantiate(Resources.Load(mDetailPaymentPartPrefab)) as GameObject;
 				SubManagerDetailPaymentPartController paymentPartController = detailPaymentPart.GetComponent<SubManagerDetailPaymentPartController>() as SubManagerDetailPaymentPartController;
-				paymentPartController.init(pSubDetail, mUtils);
+				if (isLinkPaymentMethod)
+					paymentPartController.init(mLocalSubDetail, mUtils, OnUnlinkPaymentMethodAction);
+				else
+					paymentPartController.init(mLocalSubDetail, mUtils, OnLinkPaymentMethodAction);
 				paymentPartController.transform.SetParent(mSubsContainer.transform);
 			}
 
 			// добавить префаб истории платежей
-			if (pSubDetail.mCharges != null)
+			if (mLocalSubDetail.mCharges != null)
 			{
 				GameObject detailCharges = Instantiate(Resources.Load(mDetailChargePartPrefab)) as GameObject;
 				SubManagerDetailChargesPartController chargesController = detailCharges.GetComponent<SubManagerDetailChargesPartController>() as SubManagerDetailChargesPartController;
-				chargesController.init(pSubDetail, mUtils);
+				chargesController.init(mLocalSubDetail, mUtils);
 				chargesController.transform.SetParent(mSubsContainer.transform);
 			}
 
-			// после возвращения обратно, перестраивать полностью подписки?
-
-			// TODO кнопки Delete 
-
+			// TODO добавить ссылку на обратно 
+			//OnClickBackShopAction();
 
 
+		}
+
+		private void callbackUnlinkMethod(JSONNode pNode)
+		{
+			if (pNode["status"].Value == "saved")
+			{
+				// перестроить детализацию и показать статус что отвязали
+				GetDetailSub(mLocalSubDetail.mId);
+			}
+		}
+
+		private void OnLinkPaymentMethodAction(XsollaManagerSubDetails pSubDetail)
+		{
+			Logger.Log("Link payment method");
+			Dictionary<string, object> reqParams = new Dictionary<string, object>();
+			reqParams.Add("change_account", "1");
+			reqParams.Add("id_recurrent_subscription", pSubDetail.mId);
+			reqParams.Add("id_payment_account", "");
+			reqParams.Add("subscription_payment_type", "charge");
+
+			XsollaPaystationController payController = GetComponentInParent<XsollaPaystationController> ();
+			payController.ChooseItem(reqParams);
+		}
+
+		private void OnUnlinkPaymentMethodAction(XsollaManagerSubDetails pSubDetail)
+		{
+			Logger.Log("Unlink payment method");
+			Dictionary<String, object> lParams = new Dictionary<string, object>();
+			lParams.Add(XsollaApiConst.ACCESS_TOKEN, mUtils.GetAcceessToken());
+			lParams.Add("subscription_id", pSubDetail.mId);
+			lParams.Add("userInitialCurrency", mUtils.GetUser().userBalance.currency);
+
+			getApiRequest(DOMAIN + "/paystation2/api/useraccount/unlinkpaymentaccount", lParams, callbackUnlinkMethod);
+
+			//https://secure.xsolla.com/paystation2/api/useraccount/unlinkpaymentaccount
+			//access_token:7g46L7ZZQoQhmhobCvH9q3Dc0w59eYN8
+			//subscription_id:9676670
+			//userInitialCurrency:USD
+		}
+
+		private void OnClickBackShopAction()
+		{
+			Logger.Log("On click back shop");
+			// TODO сделать возврат
 		}
 	}
 }
