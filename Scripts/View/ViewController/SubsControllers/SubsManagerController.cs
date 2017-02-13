@@ -16,6 +16,10 @@ namespace Xsolla
 		public Button mContinueLink;
 		public Text mLabel;
 		public GameObject mSubsContainer;
+		public GameObject mStatusPanel;
+		public Text mStatusLabel;
+		public GameObject mErrorPanel;
+		public Text mErrorLabel;
 
 		private XsollaUtils mUtils;
 		private const String DOMAIN = "https://secure.xsolla.com";
@@ -24,12 +28,10 @@ namespace Xsolla
 		private const String mDetailPaymentPartPrefab = "Prefabs/Screens/SubsManager/Detail/SubDetailPaymentPart";
 		private const String mDetailChargePartPrefab = "Prefabs/Screens/SubsManager/Detail/SubDetailChargesPart";
 		private const String mDetailNotifyPartPrefab = "Prefabs/Screens/SubsManager/Detail/SubDetailNotifyPart";
+		private const String mDetailBackLinkPartPrefab = "Prefabs/Screens/SubsManager/Detail/BackLinkPart";
+		private const String mDetailCancelLinkPartPrefab = "Prefabs/Screens/SubsManager/Detail/SubCancelChoose";
 
 		private XsollaManagerSubDetails mLocalSubDetail;
-
-		public SubsManagerController ()
-		{
-		}
 
 		public void initScreen(XsollaUtils pUtils, XsollaManagerSubscriptions pSubsList)
 		{
@@ -38,12 +40,32 @@ namespace Xsolla
 			mContinueText.text = mUtils.GetTranslations().Get("balance_back_button");
 			mLabel.text = mUtils.GetTranslations().Get("user_subscription_list_subtitle");
 
+			var children = new List<GameObject>();
+			foreach (Transform child in mSubsContainer.transform) 
+				children.Add(child.gameObject);
+			children.ForEach(child => Destroy(child));
+
+			setNotifyPanels();
+
+			// событие на кнопку возврата 
+			mContinueLink.onClick.RemoveAllListeners();
 			mContinueLink.onClick.AddListener(OnClickBackShopAction);
 
 			foreach (XsollaManagerSubscription sub in pSubsList.GetItemsList())
 			{
 				addSubBtn(sub);
 			}
+		}
+
+		private void setNotifyPanels()
+		{
+			// событие на кнопку статуса 
+			mStatusPanel.GetComponentInChildren<Button>().onClick.RemoveAllListeners();
+			mStatusPanel.GetComponentInChildren<Button>().onClick.AddListener(() => { mStatusPanel.SetActive(false);});
+
+			// событие на кнопку статуса 
+			mErrorPanel.GetComponentInChildren<Button>().onClick.RemoveAllListeners();
+			mErrorPanel.GetComponentInChildren<Button>().onClick.AddListener(() => { mErrorPanel.SetActive(false);});
 		}
 
 		private void addSubBtn(XsollaManagerSubscription pSub)
@@ -73,7 +95,6 @@ namespace Xsolla
 
 		private void getApiRequest(String pUrl, Dictionary<string, object> pParams, Action<JSONNode> pRecivedCallBack)
 		{
-			// send params
 			WWWForm lForm = new WWWForm();
 			StringBuilder sb = new StringBuilder ();
 			foreach(KeyValuePair<string, object> pair in pParams)
@@ -93,20 +114,45 @@ namespace Xsolla
 			{
 				JSONNode rootNode = JSON.Parse(pWww.text);
 				pCallback(rootNode);
-				//showSubDetail(rootNode);
 			}
 			else
 			{
-				//TODO show error 
+				JSONNode rootNode = JSON.Parse(pWww.error);
+				showError(String.Format(prepareFormatString(mUtils.GetTranslations().Get("error_code")), pWww.error));
 			}
+		}
+
+		private String prepareFormatString(String pInnerString)
+		{
+			String res = pInnerString;
+			int indx = 0;
+			while (res.Contains("{{"))
+			{
+				String replacedPart = res.Substring(res.IndexOf("{{", 0) + 1, res.IndexOf("}}", 0) - res.IndexOf("{{", 0));
+				res = res.Replace(replacedPart, indx.ToString());  
+				indx ++;
+			}
+			return res;
 		}
 
 		private bool isLinkPaymentMethod = true;
 
+		private void showStatus(String pLabel)
+		{
+			mStatusPanel.SetActive(true);
+			mStatusLabel.text = pLabel;
+		}
+
+		private void showError(String pError)
+		{
+			mErrorPanel.SetActive(true);
+			mErrorLabel.text = pError;
+		}
+
 		private void callbackShowSubDetail(JSONNode pNode)
 		{
 			mLocalSubDetail = new XsollaManagerSubDetails().Parse(pNode) as XsollaManagerSubDetails;
-			// убрать то что было на панели и построить новое?
+			// зачищаем то что было раньше
 			var children = new List<GameObject>();
 			foreach (Transform child in mSubsContainer.transform) 
 				children.Add(child.gameObject);
@@ -130,6 +176,10 @@ namespace Xsolla
 			GameObject detailPart = Instantiate(Resources.Load(mDetailPartPrefab)) as GameObject;
 			SubManagerDetailPartController controller = detailPart.GetComponent<SubManagerDetailPartController>() as SubManagerDetailPartController;
 			controller.initScreen(mLocalSubDetail, mUtils);
+			controller.getHoldCancelBtn().onClick.AddListener(OnHoldCancelLinkAction);
+			controller.getUnholdBtn().onClick.AddListener(OnUnHoldLinkAction);
+
+
 			detailPart.transform.SetParent(mSubsContainer.transform);
 
 			// добавить префаб платежного метода
@@ -153,10 +203,20 @@ namespace Xsolla
 				chargesController.transform.SetParent(mSubsContainer.transform);
 			}
 
-			// TODO добавить ссылку на обратно 
-			//OnClickBackShopAction();
+			addBackLinkPart(mUtils.GetTranslations().Get("user_subscription_back_to_subscription_list"), OnClickBackSubsListAction);
+		}
 
+		private void ShowLocalSubDetail()
+		{
+			GetDetailSub(mLocalSubDetail.mId);
+		}
 
+		private void addBackLinkPart(String pLabelLink, Action pBackAction, String pConfirmBtnLabel = "", Action pConfirmBtnAction = null)
+		{
+			GameObject linkBackPart = Instantiate(Resources.Load(mDetailBackLinkPartPrefab)) as GameObject;
+			SubBackLinkPart controller = linkBackPart.GetComponent<SubBackLinkPart>();
+			controller.init(pLabelLink, pBackAction, pConfirmBtnLabel, pConfirmBtnAction);
+			linkBackPart.transform.SetParent(mSubsContainer.transform);
 		}
 
 		private void callbackUnlinkMethod(JSONNode pNode)
@@ -165,6 +225,7 @@ namespace Xsolla
 			{
 				// перестроить детализацию и показать статус что отвязали
 				GetDetailSub(mLocalSubDetail.mId);
+				showStatus(mUtils.GetTranslations().Get("user_subscription_message_unlink_payment_account"));
 			}
 		}
 
@@ -200,8 +261,56 @@ namespace Xsolla
 		private void OnClickBackShopAction()
 		{
 			Logger.Log("On click back shop");
-			// TODO сделать возврат
+			// уничтожаем объект чтобы отобразить то что под ним
+			GameObject.FindObjectOfType<XsollaPaystation>().LoadShop();
+			Destroy(this.gameObject);
 		}
+
+		private void OnClickBackSubsListAction()
+		{
+			Logger.Log("On click back to subs");
+			GameObject.FindObjectOfType<XsollaPaystation>().LoadSubscriptionsManager();
+		}
+
+		private SubManagerCancelPartController cancelSubsCtrl;
+
+		private void OnHoldCancelLinkAction()
+		{
+			// чистим то что было на экране
+			var children = new List<GameObject>();
+			foreach (Transform child in mSubsContainer.transform) 
+				children.Add(child.gameObject);
+			children.ForEach(child => Destroy(child));
+
+			GameObject obj = Instantiate(Resources.Load(mDetailCancelLinkPartPrefab)) as GameObject;
+			cancelSubsCtrl = obj.GetComponent<SubManagerCancelPartController>();
+			cancelSubsCtrl.init(mLocalSubDetail, mUtils);
+			cancelSubsCtrl.transform.SetParent(mSubsContainer.transform);
+
+			addBackLinkPart(mUtils.GetTranslations().Get("back_to_user_subscription_info"), ShowLocalSubDetail, mUtils.GetTranslations().Get("hold_subscription_confirm"), OnConfirmCancelSub);
+		}
+
+		private void OnConfirmCancelSub()
+		{
+			Logger.Log("On confirm cancel click");
+			if (cancelSubsCtrl != null)
+			{
+				if (cancelSubsCtrl.isDeleteNow())
+					Logger.Log("Delet now");
+				else
+					Logger.Log("Don't renew");
+				ShowLocalSubDetail();
+			}
+		}
+
+		private void OnUnHoldLinkAction()
+		{
+			//https://secure.xsolla.com/paystation2/api/useraccount/unholdsubscription
+			//access_token:7g46L7ZZQoQhmhobCvH9q3Dc0w59eYN8
+			//subscription_id:9676670
+			//userInitialCurrency:USD
+		}
+	
 	}
 }
 

@@ -273,17 +273,17 @@ namespace  Xsolla
 		{
 			Logger.Log("Show Payment manager");
 			Dictionary<string, object> lParams = new Dictionary<string, object>();
-			lParams.Add("userInitialCurrency", ""); // TODO выяснить какой параметр из утилс передавать сюда
+			lParams.Add("userInitialCurrency", Utils.GetUser().userBalance.currency);
 			Payment.GetSavedPaymentsForManager(lParams);
-
 		}
 
 		public void LoadSubscriptionsManager()
 		{
 			Logger.Log("Show Subscription manager");
 			Dictionary<string, object> lParams = new Dictionary<string, object>();
-			lParams.Add("userInitialCurrency", ""); // TODO выяснить какой параметр из утилс передавать сюда
+			lParams.Add("userInitialCurrency", Utils.GetUser().userBalance.currency);
 			Payment.GetSubscriptionForManager(lParams);
+			SetLoading(true);
 		}
 
 		public void UpdateCountries(string countryIso)

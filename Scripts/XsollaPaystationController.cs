@@ -336,6 +336,11 @@ namespace Xsolla
 				obj.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, 0);
 				Resizer.ResizeToParrent(obj);
 			}
+			else
+			{
+				_SubsManagerController.initScreen(Utils, pSubsList);
+			}
+			SetLoading(false);
 		}
 
 		// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<

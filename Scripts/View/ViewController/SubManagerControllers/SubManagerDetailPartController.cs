@@ -63,31 +63,6 @@ namespace Xsolla
 				controller.init(item.label, item.value, item.actionLabel, item.action);
 				obj.transform.SetParent(mDetailsContainer.transform);
 			}
-
-			getUnholdBtn().onClick.AddListener(onUnholdLinkClick);
-			getHoldCancelBtn().onClick.AddListener(onHoldCancelLinkClick);
-			getChangePlanBtn().onClick.AddListener(onChangePlanLinkClick);
-		}
-
-		private void onUnholdLinkClick()
-		{
-			Logger.Log("UnholdLink click: " + mSubDetail.mId);
-
-			//https://secure.xsolla.com/paystation2/api/useraccount/unholdsubscription
-			//access_token:7g46L7ZZQoQhmhobCvH9q3Dc0w59eYN8
-			//subscription_id:9676670
-			//userInitialCurrency:USD
-			//TODO Unhold
-		}
-		private void onHoldCancelLinkClick()
-		{
-			Logger.Log("HoldCancelLink click: " + mSubDetail.mId);
-			//TODO HoldCancel
-		}
-		private void onChangePlanLinkClick()
-		{
-			Logger.Log("ChangePlanLink click: " + mSubDetail.mId);
-			//TODO ChangePlan
 		}
 
 		public List<LabelValue> getImportDetails()
