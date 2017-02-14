@@ -33,6 +33,10 @@ namespace Xsolla
 		{
 			return mLinkChangePlan.GetComponent<Button>();
 		}
+		public Button getRenewBtn()
+		{
+			return mBtnRenew;
+		}
 
 		public void initScreen(XsollaManagerSubDetails pSubDetail, XsollaUtils pUtils)
 		{
@@ -42,7 +46,8 @@ namespace Xsolla
 			mBtnRenewName.text = pUtils.GetTranslations().Get("user_subscription_renew");
 
 			mLinkUnhold.GetComponent<Text>().text = pUtils.GetTranslations().Get("user_subscription_unhold");
-			mLinkHoldCancel.GetComponent<Text>().text = pUtils.GetTranslations().Get("user_subscription_hold");
+			//mLinkHoldCancel.GetComponent<Text>().text = pUtils.GetTranslations().Get("user_subscription_hold");
+			mLinkHoldCancel.GetComponent<Text>().text = pUtils.GetTranslations().Get("hold_subscription_cancel_label"); // TODO вернуть обратно при реализации заморозки
 			mLinkChangePlan.GetComponent<Text>().text = pUtils.GetTranslations().Get("user_subscription_change_plan");
 
 			// кнопка обновления
@@ -51,8 +56,10 @@ namespace Xsolla
 			mLinkUnhold.SetActive(mSubDetail.mStatus == "freeze");
 			// Hold or Cancel
 			mLinkHoldCancel.SetActive((mSubDetail.mIsHoldPossible || mSubDetail.mStatus != "non_renewing") && (mSubDetail.mStatus != "freeze"));
+			// TODO реализуем в последующих итерациях
 			// Change Plan
-			mLinkChangePlan.SetActive(mSubDetail.mIsChangePlanAllowed);
+			//mLinkChangePlan.SetActive(mSubDetail.mIsChangePlanAllowed);
+			mLinkChangePlan.SetActive(false);
 
 			// добавляем поля датализации 
 			List<LabelValue> listFileds = getImportDetails();

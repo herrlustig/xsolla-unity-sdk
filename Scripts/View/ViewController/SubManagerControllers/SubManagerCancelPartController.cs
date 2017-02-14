@@ -29,8 +29,16 @@ namespace Xsolla
 		{
 			mTitle.text = pUtils.GetTranslations().Get("user_hold_subscription_title");
 
-			mDontRenewLabel.text = pUtils.GetTranslations().Get("hold_subscription_dont_renew_label");
-			mDontRenewDesc.text = pUtils.GetTranslations().Get("hold_subscription_dont_renew_label_description");
+			if (pSubDetail.mStatus != "non_renewing")
+			{
+				mDontRenewLabel.text = pUtils.GetTranslations().Get("hold_subscription_dont_renew_label");
+				mDontRenewDesc.text = pUtils.GetTranslations().Get("hold_subscription_dont_renew_label_description");
+			}
+			else
+			{
+				mDontRenew.gameObject.SetActive(false);
+				mDontRenewDesc.gameObject.SetActive(false);
+			}
 
 			mDeleteNowLabel.text = pUtils.GetTranslations().Get("hold_subscription_cancel_label");
 			mDeleteNowDesc.text = pUtils.GetTranslations().Get("hold_subscription_cancel_label_description");

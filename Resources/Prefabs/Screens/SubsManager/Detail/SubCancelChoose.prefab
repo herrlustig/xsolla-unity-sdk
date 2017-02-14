@@ -780,7 +780,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fc117f59f61de4868b1f1d085ec2e3e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemsToColor: []
+  itemsToColor:
+  - color: 15
+    whatToColor: {fileID: 114000010002903624}
+  - color: 15
+    whatToColor: {fileID: 114000011778084450}
+  - color: 14
+    whatToColor: {fileID: 114000011443971666}
+  - color: 15
+    whatToColor: {fileID: 114000013390992716}
+  - color: 14
+    whatToColor: {fileID: 114000011575449240}
+  - color: 26
+    whatToColor: {fileID: 114000011274454082}
 --- !u!222 &222000010262636404
 CanvasRenderer:
   m_ObjectHideFlags: 1

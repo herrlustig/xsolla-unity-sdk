@@ -29,9 +29,9 @@ namespace Xsolla
 	public class XsollaManagerSubscription: IXsollaObject, IParseble
 	{
 		public XsollaSubCharge mCharge;			//		charge:{amount: 0.3, currency: "USD"}
-		public String mDateNextCharge;		//		date_next_charge:"2017-02-06T12:41:40+03:00"
+		public DateTime mDateNextCharge;		//		date_next_charge:"2017-02-06T12:41:40+03:00"
 		public String mDesc;		//		description:"7 days"
-		String mHoldDates;		//		hold_dates:null
+		public XsollaSubHoldDates mHoldDates;		//		hold_dates:null
 		int mId;				//		id:9510073
 		String mIdExternal;		//		id_external:"187fc9f4"
 		public String mName;		//		name:"7 days"
@@ -40,14 +40,16 @@ namespace Xsolla
 		public String mPaymentVisibleName;		//		payment_visible_name:"qualityqontrol@xsolla.com"
 		XsollaSubPeriod mPeriod;		//		period:{value: 7, unit: "day"}
 		int mValue;		//		value:7
-		String mStatus;		//		status:"active"
+		public String mStatus;		//		status:"active"
 
 		public IParseble Parse (SimpleJSON.JSONNode rootNode)
 		{
 			mCharge = new XsollaSubCharge().Parse(rootNode["charge"]) as XsollaSubCharge;
-			mDateNextCharge = rootNode["date_next_charge"];
+			if (rootNode["date_next_charge"].Value != "")
+				mDateNextCharge = DateTime.Parse(rootNode["date_next_charge"].Value);
+
 			mDesc = rootNode["description"];
-			mHoldDates = rootNode["hold_dates"];
+			mHoldDates = new XsollaSubHoldDates().Parse(rootNode["hold_dates"]) as XsollaSubHoldDates;
 			mId = rootNode["id"].AsInt;
 			mIdExternal = rootNode["id_external"];
 			mName = rootNode["name"];
@@ -116,7 +118,6 @@ namespace Xsolla
 		{
 			return string.Format ("[XsollaSubPeriod: mValue={0}, mUnit={1}]", mValue, mUnit);
 		}
-		
 
 		public XsollaSubPeriod ()
 		{

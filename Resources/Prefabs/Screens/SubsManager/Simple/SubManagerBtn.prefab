@@ -580,7 +580,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemsToColor:
   - color: 11
-    whatToColor: {fileID: 0}
+    whatToColor: {fileID: 114000010536840814}
   - color: 34
     whatToColor: {fileID: 114000010227157058}
   - color: 15

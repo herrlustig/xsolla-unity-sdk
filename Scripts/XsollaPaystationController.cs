@@ -55,7 +55,7 @@ namespace Xsolla
 			
 		protected override void RecieveUtils (XsollaUtils utils)
 		{
-			StyleManager.Instance.ChangeTheme(/*utils.GetSettings().GetTheme()*/"default");
+			StyleManager.Instance.ChangeTheme(utils.GetSettings().GetTheme());
 			mainScreen = Instantiate (mainScreen);
 			mainScreen.transform.SetParent (container.transform);
 			mainScreen.SetActive (true);

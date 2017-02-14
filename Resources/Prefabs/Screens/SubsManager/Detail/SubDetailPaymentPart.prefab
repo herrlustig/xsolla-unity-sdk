@@ -216,6 +216,8 @@ MonoBehaviour:
     whatToColor: {fileID: 114000010325529810}
   - color: 34
     whatToColor: {fileID: 114000010774215854}
+  - color: 26
+    whatToColor: {fileID: 114000012800935832}
 --- !u!114 &114000012238477970
 MonoBehaviour:
   m_ObjectHideFlags: 1

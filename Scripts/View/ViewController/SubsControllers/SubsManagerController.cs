@@ -32,12 +32,14 @@ namespace Xsolla
 		private const String mDetailCancelLinkPartPrefab = "Prefabs/Screens/SubsManager/Detail/SubCancelChoose";
 
 		private XsollaManagerSubDetails mLocalSubDetail;
+		private SubManagerCancelPartController cancelSubsCtrl;
 
 		public void initScreen(XsollaUtils pUtils, XsollaManagerSubscriptions pSubsList)
 		{
 			mUtils = pUtils;
 			mTitleScreen.text = mUtils.GetTranslations().Get("user_menu_user_subscription");
 			mContinueText.text = mUtils.GetTranslations().Get("balance_back_button");
+			mLabel.gameObject.SetActive(true);
 			mLabel.text = mUtils.GetTranslations().Get("user_subscription_list_subtitle");
 
 			var children = new List<GameObject>();
@@ -50,6 +52,13 @@ namespace Xsolla
 			// событие на кнопку возврата 
 			mContinueLink.onClick.RemoveAllListeners();
 			mContinueLink.onClick.AddListener(OnClickBackShopAction);
+
+			if (pSubsList.GetCount() == 0)
+			{
+				Logger.Log("Empty List subs");
+				mLabel.text = mUtils.GetTranslations().Get("subscription_no_data");
+				mLabel.alignment = TextAnchor.MiddleCenter;
+			}
 
 			foreach (XsollaManagerSubscription sub in pSubsList.GetItemsList())
 			{
@@ -118,7 +127,7 @@ namespace Xsolla
 			else
 			{
 				JSONNode rootNode = JSON.Parse(pWww.error);
-				showError(String.Format(prepareFormatString(mUtils.GetTranslations().Get("error_code")), pWww.error));
+				showError(String.Format(prepareFormatString(mUtils.GetTranslations().Get("error_code")), rootNode["error"].Value));
 			}
 		}
 
@@ -178,7 +187,7 @@ namespace Xsolla
 			controller.initScreen(mLocalSubDetail, mUtils);
 			controller.getHoldCancelBtn().onClick.AddListener(OnHoldCancelLinkAction);
 			controller.getUnholdBtn().onClick.AddListener(OnUnHoldLinkAction);
-
+			controller.getRenewBtn().onClick.AddListener(OnRenewBtnAction);
 
 			detailPart.transform.SetParent(mSubsContainer.transform);
 
@@ -229,6 +238,32 @@ namespace Xsolla
 			}
 		}
 
+		private void callbackDontrenewMethod(JSONNode pNode)
+		{
+			if (pNode["status"].Value == "saved")
+			{
+				// перестроить детализацию и показать что подписка не будет продлеваться
+				GetDetailSub(mLocalSubDetail.mId);
+				showStatus(String.Format(prepareFormatString(mUtils.GetTranslations().Get("user_subscription_message_non_renewing")), mLocalSubDetail.mDateNextCharge.ToString("d")));
+			}
+		}
+
+		private void callbackDeleteSubMethod(JSONNode pNode)
+		{
+			if (pNode["status"].Value == "saved")
+			{
+				// перестроить детализацию и показать статус подписка отменена
+				OnClickBackSubsListAction();
+				showStatus(String.Format(prepareFormatString(mUtils.GetTranslations().Get("user_subscription_message_canceled")), mLocalSubDetail.mName, mUtils.GetProject().name));
+			}
+		}
+
+		private void callbackGetSubsList(JSONNode pNode)
+		{
+			XsollaManagerSubscriptions lSubsList = new XsollaManagerSubscriptions().Parse(pNode["subscriptions"]) as XsollaManagerSubscriptions;
+			initScreen(mUtils, lSubsList);
+		}
+
 		private void OnLinkPaymentMethodAction(XsollaManagerSubDetails pSubDetail)
 		{
 			Logger.Log("Link payment method");
@@ -251,11 +286,19 @@ namespace Xsolla
 			lParams.Add("userInitialCurrency", mUtils.GetUser().userBalance.currency);
 
 			getApiRequest(DOMAIN + "/paystation2/api/useraccount/unlinkpaymentaccount", lParams, callbackUnlinkMethod);
+		}
 
-			//https://secure.xsolla.com/paystation2/api/useraccount/unlinkpaymentaccount
-			//access_token:7g46L7ZZQoQhmhobCvH9q3Dc0w59eYN8
-			//subscription_id:9676670
-			//userInitialCurrency:USD
+		private void OnRenewBtnAction()
+		{
+			Logger.Log("Link payment method");
+			Dictionary<string, object> reqParams = new Dictionary<string, object>();
+			reqParams.Add("change_account", "0");
+			reqParams.Add("id_recurrent_subscription", mLocalSubDetail.mId);
+			reqParams.Add("id_payment_account", "");
+			reqParams.Add("type_payment_account", "");
+
+			XsollaPaystationController payController = GetComponentInParent<XsollaPaystationController> ();
+			payController.ChooseItem(reqParams);
 		}
 
 		private void OnClickBackShopAction()
@@ -269,11 +312,15 @@ namespace Xsolla
 		private void OnClickBackSubsListAction()
 		{
 			Logger.Log("On click back to subs");
-			GameObject.FindObjectOfType<XsollaPaystation>().LoadSubscriptionsManager();
+			//GameObject.FindObjectOfType<XsollaPaystation>().LoadSubscriptionsManager();
+
+			Dictionary<String, object> lParams = new Dictionary<string, object>();
+			lParams.Add(XsollaApiConst.ACCESS_TOKEN, mUtils.GetAcceessToken());
+			lParams.Add("userInitialCurrency", mUtils.GetUser().userBalance.currency);
+
+			getApiRequest(DOMAIN + "/paystation2/api/useraccount/subscriptions", lParams, callbackGetSubsList);
 		}
-
-		private SubManagerCancelPartController cancelSubsCtrl;
-
+			
 		private void OnHoldCancelLinkAction()
 		{
 			// чистим то что было на экране
@@ -296,10 +343,9 @@ namespace Xsolla
 			if (cancelSubsCtrl != null)
 			{
 				if (cancelSubsCtrl.isDeleteNow())
-					Logger.Log("Delet now");
+					OnDeleteSubAction();
 				else
-					Logger.Log("Don't renew");
-				ShowLocalSubDetail();
+					OnDontRenewAction();
 			}
 		}
 
@@ -311,6 +357,31 @@ namespace Xsolla
 			//userInitialCurrency:USD
 		}
 	
+		private void OnDontRenewAction()
+		{
+			Logger.Log("Don't renew");
+			Dictionary<String, object> lParams = new Dictionary<string, object>();
+			lParams.Add(XsollaApiConst.ACCESS_TOKEN, mUtils.GetAcceessToken());
+			lParams.Add("subscription_id", mLocalSubDetail.mId);
+			lParams.Add("userInitialCurrency", mUtils.GetUser().userBalance.currency);
+			lParams.Add("status", "non_renewing");
+
+			getApiRequest(DOMAIN + "/paystation2/api/useraccount/holdsubscription", lParams, callbackDontrenewMethod);
+
+			ShowLocalSubDetail();
+		}
+
+		private void OnDeleteSubAction()
+		{
+			Logger.Log("Delet now");
+			Dictionary<String, object> lParams = new Dictionary<string, object>();
+			lParams.Add(XsollaApiConst.ACCESS_TOKEN, mUtils.GetAcceessToken());
+			lParams.Add("subscription_id", mLocalSubDetail.mId);
+			lParams.Add("userInitialCurrency", mUtils.GetUser().userBalance.currency);
+			lParams.Add("status", "canceled");
+
+			getApiRequest(DOMAIN + "/paystation2/api/useraccount/holdsubscription", lParams, callbackDeleteSubMethod);
+		}
 	}
 }
 

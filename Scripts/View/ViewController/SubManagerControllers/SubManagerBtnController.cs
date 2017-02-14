@@ -32,18 +32,37 @@ namespace Xsolla
 				nextChargeFormat = nextChargeFormat.Replace(replacedPart, indx.ToString());  
 				indx ++;
 			}
-			
-			DateTime lDateNextCharge;
-			if (DateTime.TryParse(pSub.mDateNextCharge, out lDateNextCharge))
-				mNextInvoice.text = String.Format(nextChargeFormat, mSub.mCharge.ToString(), String.Format("{0:dd/MM/yyyy}", lDateNextCharge));
+
+			if (pSub.mStatus == "active")
+				mNextInvoice.text = String.Format(nextChargeFormat, mSub.mCharge.ToString(), pSub.mDateNextCharge.ToString("d"));
 			else
-				throw new Exception("Error DateParser");
+				mNextInvoice.gameObject.SetActive(false);
 
 			if (pSub.mPaymentMethod != "null")
 				mPaymentMethodName.text = pSub.mPaymentMethod + " " + pSub.mPaymentVisibleName;
 			else
-				mPaymentMethodName.gameObject.SetActive(false);
-			
+			{
+				switch (pSub.mStatus)
+				{
+					case "freeze":
+					{
+						mPaymentMethodName.text = String.Format(prepareFormatString(pTranslation.Get("user_subscription_hold_to")),pSub.mHoldDates.dateTo.ToString("d"));
+						break;
+					}
+					case "non_renewing":
+					{
+						mPaymentMethodName.text = String.Format(prepareFormatString(pTranslation.Get("user_subscription_non_renewing")), pSub.mDateNextCharge.ToString("d")) ;
+						break;
+					}
+					default:
+					{
+						mPaymentMethodName.gameObject.SetActive(false);	
+						break;
+					}
+				}
+
+			}
+
 			mDetailText.text = pTranslation.Get("user_subscription_to_details");
 		}
 
@@ -59,6 +78,18 @@ namespace Xsolla
 				});
 		}
 
+		private String prepareFormatString(String pInnerString)
+		{
+			String res = pInnerString;
+			int indx = 0;
+			while (res.Contains("{{"))
+			{
+				String replacedPart = res.Substring(res.IndexOf("{{", 0) + 1, res.IndexOf("}}", 0) - res.IndexOf("{{", 0));
+				res = res.Replace(replacedPart, indx.ToString());  
+				indx ++;
+			}
+			return res;
+		}
 	}
 }
 
