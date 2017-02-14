@@ -233,8 +233,18 @@ namespace Xsolla
 			if (pNode["status"].Value == "saved")
 			{
 				// перестроить детализацию и показать статус что отвязали
-				GetDetailSub(mLocalSubDetail.mId);
+				ShowLocalSubDetail();
 				showStatus(mUtils.GetTranslations().Get("user_subscription_message_unlink_payment_account"));
+			}
+		}
+
+		private void callbackUnholdMethod(JSONNode pNode)
+		{
+			if (pNode["status"].Value == "saved")
+			{
+				// перестроить детализацию и показать что подписка не будет продлеваться
+				ShowLocalSubDetail();
+				showStatus(String.Format(prepareFormatString(mUtils.GetTranslations().Get("user_subscription_message_non_renewing")), mLocalSubDetail.mDateNextCharge.ToString("d")));
 			}
 		}
 
@@ -242,9 +252,9 @@ namespace Xsolla
 		{
 			if (pNode["status"].Value == "saved")
 			{
-				// перестроить детализацию и показать что подписка не будет продлеваться
-				GetDetailSub(mLocalSubDetail.mId);
-				showStatus(String.Format(prepareFormatString(mUtils.GetTranslations().Get("user_subscription_message_non_renewing")), mLocalSubDetail.mDateNextCharge.ToString("d")));
+				// перестроить детализацию и показать что подписка разморожена
+				ShowLocalSubDetail();
+				showStatus(mUtils.GetTranslations().Get("user_subscription_message_unhold_no_active"));
 			}
 		}
 
@@ -351,10 +361,13 @@ namespace Xsolla
 
 		private void OnUnHoldLinkAction()
 		{
-			//https://secure.xsolla.com/paystation2/api/useraccount/unholdsubscription
-			//access_token:7g46L7ZZQoQhmhobCvH9q3Dc0w59eYN8
-			//subscription_id:9676670
-			//userInitialCurrency:USD
+			Logger.Log("Unhold click");
+			Dictionary<String, object> lParams = new Dictionary<string, object>();
+			lParams.Add(XsollaApiConst.ACCESS_TOKEN, mUtils.GetAcceessToken());
+			lParams.Add("subscription_id", mLocalSubDetail.mId);
+			lParams.Add("userInitialCurrency", mUtils.GetUser().userBalance.currency);
+
+			getApiRequest(DOMAIN + "/paystation2/api/useraccount/unholdsubscription", lParams, callbackUnholdMethod);
 		}
 	
 		private void OnDontRenewAction()
@@ -368,7 +381,6 @@ namespace Xsolla
 
 			getApiRequest(DOMAIN + "/paystation2/api/useraccount/holdsubscription", lParams, callbackDontrenewMethod);
 
-			ShowLocalSubDetail();
 		}
 
 		private void OnDeleteSubAction()
