@@ -86,10 +86,10 @@ namespace Xsolla
 			list.Add(new LabelValue(translation.Get("user_subscription_period"), formattedPeriod(mSubDetail.mPeriod.mValue.ToString(), mSubDetail.mPeriod.mUnit)));
 
 			if (mSubDetail.mStatus == "non_renewing")
-				list.Add(new LabelValue(translation.Get("user_subscription_end_bill_date"), string.Format("{0:dd/MM/yyyy}", mSubDetail.mDateNextCharge)));  
+				list.Add(new LabelValue(translation.Get("user_subscription_end_bill_date"), StringHelper.DateFormat(mSubDetail.mDateNextCharge)));  
 				 
 			if (mSubDetail.mNextPeriodPlanChange != null)
-				list.Add(new LabelValue(translation.Get("user_subscription_new_plan"), string.Format(prepareFormatString(translation.Get("user_subscription_next_period_plan_change")), mSubDetail.mNextPeriodPlanChange.name, mSubDetail.mNextPeriodPlanChange.date.ToString("d"))));  
+				list.Add(new LabelValue(translation.Get("user_subscription_new_plan"), string.Format(StringHelper.PrepareFormatString(translation.Get("user_subscription_next_period_plan_change")), mSubDetail.mNextPeriodPlanChange.name, StringHelper.DateFormat(mSubDetail.mNextPeriodPlanChange.date))));  
 			
 			if (mSubDetail.mIsSheduledHoldExist && (mSubDetail.mSheduledHoldDates != null) || (mSubDetail.mStatus == "freeze") && (mSubDetail.mHoldDates != null))
 			{
@@ -99,16 +99,16 @@ namespace Xsolla
 				{
 					if (mSubDetail.mHoldDates != null)
 					{
-						lDateFrom = mSubDetail.mHoldDates.dateFrom.ToString("d");
-						lDateTo = mSubDetail.mHoldDates.dateTo.ToString("d");
+						lDateFrom = StringHelper.DateFormat(mSubDetail.mHoldDates.dateFrom);
+						lDateTo = StringHelper.DateFormat(mSubDetail.mHoldDates.dateTo);
 					}
 				}
 				else
 				{
 					if (mSubDetail.mSheduledHoldDates != null)
 					{
-						lDateFrom = mSubDetail.mSheduledHoldDates.dateFrom.ToString("d");
-						lDateTo = mSubDetail.mSheduledHoldDates.dateTo.ToString("d");
+						lDateFrom = StringHelper.DateFormat(mSubDetail.mSheduledHoldDates.dateFrom);
+						lDateTo = StringHelper.DateFormat(mSubDetail.mSheduledHoldDates.dateTo);
 					}
 				}
 					
@@ -119,19 +119,6 @@ namespace Xsolla
 			}
 
 			return list;
-		}
-
-		private String prepareFormatString(String pInnerString)
-		{
-			String res = pInnerString;
-			int indx = 0;
-			while (res.Contains("{{"))
-			{
-				String replacedPart = res.Substring(res.IndexOf("{{", 0) + 1, res.IndexOf("}}", 0) - res.IndexOf("{{", 0));
-				res = res.Replace(replacedPart, indx.ToString());  
-				indx ++;
-			}
-			return res;
 		}
 
 		private String formattedPeriod(String pValue, String pUnit)

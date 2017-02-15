@@ -33,7 +33,7 @@ namespace Xsolla
 			}
 
 			if (pSub.mStatus == "active")
-				mNextInvoice.text = String.Format(nextChargeFormat, mSub.mCharge.ToString(), pSub.mDateNextCharge.ToString("d"));
+				mNextInvoice.text = String.Format(nextChargeFormat, mSub.mCharge.ToString(), StringHelper.DateFormat(pSub.mDateNextCharge));
 			else
 				mNextInvoice.gameObject.SetActive(false);
 
@@ -45,12 +45,12 @@ namespace Xsolla
 				{
 					case "freeze":
 					{
-						mPaymentMethodName.text = String.Format(prepareFormatString(pTranslation.Get("user_subscription_hold_to")),pSub.mHoldDates.dateTo.ToString("d"));
+						mPaymentMethodName.text = String.Format(StringHelper.PrepareFormatString(pTranslation.Get("user_subscription_hold_to")), StringHelper.DateFormat(pSub.mHoldDates.dateTo));
 						break;
 					}
 					case "non_renewing":
 					{
-						mPaymentMethodName.text = String.Format(prepareFormatString(pTranslation.Get("user_subscription_non_renewing")), pSub.mDateNextCharge.ToString("d")) ;
+						mPaymentMethodName.text = String.Format(StringHelper.PrepareFormatString(pTranslation.Get("user_subscription_non_renewing")), StringHelper.DateFormat(pSub.mDateNextCharge)) ;
 						break;
 					}
 					default:
@@ -75,19 +75,6 @@ namespace Xsolla
 				{
 					pAction(mSub);
 				});
-		}
-
-		private String prepareFormatString(String pInnerString)
-		{
-			String res = pInnerString;
-			int indx = 0;
-			while (res.Contains("{{"))
-			{
-				String replacedPart = res.Substring(res.IndexOf("{{", 0) + 1, res.IndexOf("}}", 0) - res.IndexOf("{{", 0));
-				res = res.Replace(replacedPart, indx.ToString());  
-				indx ++;
-			}
-			return res;
 		}
 	}
 }

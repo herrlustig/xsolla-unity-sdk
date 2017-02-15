@@ -157,7 +157,7 @@ namespace Xsolla
 
 		public override string ToString ()
 		{
-			return string.Format ("{0} - {1}", dateFrom.ToString("d"), dateTo.ToString("d"));
+			return string.Format ("{0} - {1}", string.Format("{0:dd.MM.yyyy}", dateFrom), string.Format("{0:dd.MM.yyyy}", dateTo) );
 		}
 		
 	}

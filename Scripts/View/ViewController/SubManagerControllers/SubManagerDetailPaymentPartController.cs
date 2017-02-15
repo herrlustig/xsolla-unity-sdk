@@ -55,7 +55,7 @@ namespace Xsolla
 			// сумма след списание
 			list.Add(new LabelValue(translation.Get("user_subscription_next_bill_sum"), mSubDetail.mNextCharge.ToString()));
 			// дата след списание
-			list.Add(new LabelValue(translation.Get("user_subscription_next_bill_date"), mSubDetail.mDateNextCharge.ToString("d")));
+			list.Add(new LabelValue(translation.Get("user_subscription_next_bill_date"), StringHelper.DateFormat(mSubDetail.mDateNextCharge)));
 			return list;
 		}
 

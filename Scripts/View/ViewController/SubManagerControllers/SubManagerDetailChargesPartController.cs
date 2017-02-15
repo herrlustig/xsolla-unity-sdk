@@ -32,7 +32,7 @@ namespace Xsolla
 			// добавляем историю
 			foreach (XsollaSubDetailCharge charge in mSubDetail.mCharges)
 			{
-				addChargeElem(charge.mDateCreate.ToString("d"), charge.mPaymentMethod, charge.mCharge.ToString());	
+				addChargeElem(StringHelper.DateFormat(charge.mDateCreate), charge.mPaymentMethod, charge.mCharge.ToString());	
 			}
 		}
 

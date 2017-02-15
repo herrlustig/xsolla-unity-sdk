@@ -126,21 +126,8 @@ namespace Xsolla
 			else
 			{
 				JSONNode rootNode = JSON.Parse(pWww.error);
-				showError(String.Format(prepareFormatString(mUtils.GetTranslations().Get("error_code")), rootNode["error"].Value));
+				showError(String.Format(StringHelper.PrepareFormatString(mUtils.GetTranslations().Get("error_code")), rootNode["error"].Value));
 			}
-		}
-
-		private String prepareFormatString(String pInnerString)
-		{
-			String res = pInnerString;
-			int indx = 0;
-			while (res.Contains("{{"))
-			{
-				String replacedPart = res.Substring(res.IndexOf("{{", 0) + 1, res.IndexOf("}}", 0) - res.IndexOf("{{", 0));
-				res = res.Replace(replacedPart, indx.ToString());  
-				indx ++;
-			}
-			return res;
 		}
 
 		private bool isLinkPaymentMethod = true;
@@ -243,7 +230,7 @@ namespace Xsolla
 			{
 				// перестроить детализацию и показать что подписка не будет продлеваться
 				ShowLocalSubDetail();
-				showStatus(String.Format(prepareFormatString(mUtils.GetTranslations().Get("user_subscription_message_non_renewing")), mLocalSubDetail.mDateNextCharge.ToString("d")));
+				showStatus(String.Format(StringHelper.PrepareFormatString(mUtils.GetTranslations().Get("user_subscription_message_non_renewing")), StringHelper.DateFormat(mLocalSubDetail.mDateNextCharge)));
 			}
 		}
 
@@ -251,9 +238,10 @@ namespace Xsolla
 		{
 			if (pNode["status"].Value == "saved")
 			{
-				// перестроить детализацию и показать что подписка разморожена
+				// перестроить детализацию и показать что подписка не будет продлеваться
 				ShowLocalSubDetail();
-				showStatus(mUtils.GetTranslations().Get("user_subscription_message_unhold_no_active"));
+				// показать статус
+				showStatus(String.Format(StringHelper.PrepareFormatString(mUtils.GetTranslations().Get("user_subscription_message_non_renewing")), StringHelper.DateFormat(mLocalSubDetail.mDateNextCharge)));
 			}
 		}
 
@@ -263,7 +251,7 @@ namespace Xsolla
 			{
 				// перестроить детализацию и показать статус подписка отменена
 				OnClickBackSubsListAction();
-				showStatus(String.Format(prepareFormatString(mUtils.GetTranslations().Get("user_subscription_message_canceled")), mLocalSubDetail.mName, mUtils.GetProject().name));
+				showStatus(String.Format(StringHelper.PrepareFormatString(mUtils.GetTranslations().Get("user_subscription_message_canceled")), mLocalSubDetail.mName, mUtils.GetProject().name));
 			}
 		}
 
