@@ -228,9 +228,9 @@ namespace Xsolla
 		{
 			if (pNode["status"].Value == "saved")
 			{
-				// перестроить детализацию и показать что подписка не будет продлеваться
+				// перестроить детализацию и показать что подписка 
 				ShowLocalSubDetail();
-				showStatus(String.Format(StringHelper.PrepareFormatString(mUtils.GetTranslations().Get("user_subscription_message_non_renewing")), StringHelper.DateFormat(mLocalSubDetail.mDateNextCharge)));
+				showStatus(String.Format(mUtils.GetTranslations().Get("user_subscription_message_unhold_no_active")));
 			}
 		}
 
@@ -309,8 +309,6 @@ namespace Xsolla
 		private void OnClickBackSubsListAction()
 		{
 			Logger.Log("On click back to subs");
-			//GameObject.FindObjectOfType<XsollaPaystation>().LoadSubscriptionsManager();
-
 			Dictionary<String, object> lParams = new Dictionary<string, object>();
 			lParams.Add(XsollaApiConst.ACCESS_TOKEN, mUtils.GetAcceessToken());
 			lParams.Add("userInitialCurrency", mUtils.GetUser().userBalance.currency);

@@ -19,6 +19,10 @@ namespace Xsolla
 			mDateLabel.text = pDate;
 			mPaymentType.text = pPaymentType;
 			mAmount.text = pAmount;
+
+			mDateLabel.fontStyle = pIsTitle ? FontStyle.Bold : FontStyle.Normal;
+			mPaymentType.fontStyle = pIsTitle ? FontStyle.Bold : FontStyle.Normal;
+			mAmount.fontStyle = pIsTitle ? FontStyle.Bold : FontStyle.Normal;
 		}
 	}
 }

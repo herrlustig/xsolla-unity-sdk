@@ -113,7 +113,7 @@ namespace Xsolla
 				}
 					
 				if (mSubDetail.mIsSheduledHoldExist)
-					list.Add(new LabelValue(translation.Get("user_subscription_hold_dates"), lDateFrom + " - " + lDateTo, translation.Get("cancel"), cancelHoldDates));
+					list.Add(new LabelValue(translation.Get("user_subscription_hold_dates"), lDateFrom + " - " + lDateTo, translation.Get(mSubDetail.mStatus == "freeze"?"user_subscription_unhold":"cancel"), cancelHoldDates));
 				else
 					list.Add(new LabelValue(translation.Get("user_subscription_hold_dates"), lDateFrom + " - " + lDateTo));
 			}
@@ -134,6 +134,7 @@ namespace Xsolla
 		private void cancelHoldDates()
 		{
 			Logger.Log("Cancel hold dates with id - " + mSubDetail.mId);
+			getUnholdBtn().onClick.Invoke();
 		}
 	}
 
