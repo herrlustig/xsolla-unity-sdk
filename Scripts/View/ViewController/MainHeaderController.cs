@@ -69,6 +69,12 @@ namespace Xsolla
 			GetComponentInParent<XsollaPaystation> ().LoadSubscriptionsManager();
 		}
 
+		public void setStateUserMenu(bool pState)
+		{
+			Logger.Log("Set user menu to state " + pState);
+			_pMenuBtnComponent.gameObject.SetActive(pState);
+		}
+
 		public MainHeaderController ()
 		{
 		}
