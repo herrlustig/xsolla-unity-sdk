@@ -42,8 +42,6 @@ namespace Xsolla {
 				}
 				SetErrorMsg(validators[0].GetErrorMsg());
 			}
-			//HACK with new  Unity 5.3
-			//_input.onValueChange.AddListener ((s) => Validate (s));
 			_input.onValueChanged.AddListener ((s) => Validate (s));
 		}
 
@@ -68,8 +66,6 @@ namespace Xsolla {
 			//TODO Problem for unity compability 500 - 510
 			delegates.Add (entryS);
 			delegates.Add (entryD);
-			//HACK with new Unity 5.3
-			//_eventTrigger.delegates = delegates;
 			_eventTrigger.triggers = delegates;
 		}
 

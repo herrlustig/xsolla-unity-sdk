@@ -1,5 +1,17 @@
 # Changelog
 
+## 1.3.6 - 2017-02-17
+
+The Subscription Management Interface was released.
+Main Features:
+  * List of active subscriptions
+  * Subscription renewal
+  * Stop subscription renewal
+  * Subscription canceling
+  * Deleting of the payment method account linked to subscription
+  * Linking of the payment method account for subscription renewal
+  * History of subscription payments
+
 ## 1.3.5 - 2017-01-24
 - [update] add functional «Payment manager»
 

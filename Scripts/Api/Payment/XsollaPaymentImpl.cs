@@ -11,7 +11,7 @@ namespace Xsolla
 
 		private string DOMAIN = "https://secure.xsolla.com";
 
-		private const string SDK_VERSION = "1.3.5";
+		private const string SDK_VERSION = "1.3.6";
 
 		private const int TRANSLATIONS 		 	= 0;
 		private const int DIRECTPAYMENT_FORM 	= 1;
@@ -35,6 +35,7 @@ namespace Xsolla
 		private const int CALCULATE_CUSTOM_AMOUNT   = 14;
 		private const int ACTIVE_SUBS				= 16;
 		private const int DELETE_SAVED_METHOD 		= 17;
+		private const int SUBSCRIPTIONS_MANAGER_LIST = 18;
 
 
 		public Action<XsollaUtils> 					UtilsRecieved;
@@ -67,6 +68,7 @@ namespace Xsolla
 		public Action<XsollaSavedPaymentMethods, bool>	PaymentManagerMethods;
 		public Action								DeleteSavedPaymentMethodRespond;
 		public Action 								WaitChangeSavedMethods;
+		public Action<XsollaManagerSubscriptions> 	SubsManagerListRecived;
 
 		//TODO CHANGE PARAMS
 		protected string _accessToken;
@@ -281,6 +283,12 @@ namespace Xsolla
 				PaymentManagerMethods(pRes, pAddState);
 		}
 
+		protected virtual void OnManageSubsListrecived(XsollaManagerSubscriptions pListSubs)
+		{
+			if (SubsManagerListRecived != null)
+				SubsManagerListRecived(pListSubs);
+		}
+
 		protected virtual void OnDeleteSavedPaymentMethod()
 		{
 			if (DeleteSavedPaymentMethodRespond != null)
@@ -420,6 +428,11 @@ namespace Xsolla
 			StartCoroutine(POST(PAYMENT_MANAGER_LIST, GetSavedPaymentListUrl(), pParams));
 		}
 
+		public void GetSubscriptionForManager(Dictionary<string, object> pParams)
+		{
+			StartCoroutine(POST(SUBSCRIPTIONS_MANAGER_LIST, GetSubscriptionsList(), pParams));
+		}
+
 		public void GetCountries(Dictionary<string, object> requestParams)
 		{
 //			Dictionary<string, object> requestParams = new Dictionary<string, object>();
@@ -515,8 +528,8 @@ namespace Xsolla
 								error.Parse(rootNode);
 								OnErrorReceived(error);
 							}
+							break;
 						}
-						break;
 						case DIRECTPAYMENT_FORM:
 						{
 							if(rootNode.Count > 8) {
@@ -566,8 +579,8 @@ namespace Xsolla
 								statusPing.Parse(rootNode);
 								OnStatusChecked(statusPing);
 							}
+							break;
 						}
-						break;
 						case DIRECTPAYMENT_STATUS:
 						{
 							XsollaForm form = new XsollaForm();
@@ -575,64 +588,64 @@ namespace Xsolla
 							XsollaStatus status = new XsollaStatus();
 							status.Parse(rootNode);
 							OnStatusReceived(status, form);
+							break;
 						}
-						break;
 						case PRICEPOINTS:
 						{
 							XsollaPricepointsManager pricepoints = new XsollaPricepointsManager();
 							pricepoints.Parse(rootNode);
 							OnPricepointsRecieved(pricepoints);
+							break;
 						}
-						break;
 						case GOODS:
 						{
 							XsollaGoodsManager goods = new XsollaGoodsManager();
 							goods.Parse(rootNode);
 							OnGoodsRecieved(goods);
+							break;
 						}
-						break;
 						case GOODS_GROUPS:
 						{
 							XsollaGroupsManager groups = new XsollaGroupsManager();
 							groups.Parse(rootNode);
 							OnGoodsGroupsRecieved(groups);
+							break;
 						}
-						break;
 						case GOODS_ITEMS:
 						{
 							XsollaGoodsManager goods = new XsollaGoodsManager();
 							goods.Parse(rootNode);
 							OnGoodsRecieved(goods);
+							break;
 						}
-						break;
 						case PAYMENT_LIST:
 						{
 							XsollaPaymentMethods paymentMethods = new XsollaPaymentMethods();
 							paymentMethods.Parse(rootNode);
 							OnPaymentMethodsRecieved(paymentMethods);
+							break;
 						}
-						break;
 						case SAVED_PAYMENT_LIST:
 						{
 							XsollaSavedPaymentMethods savedPaymentsMethods = new XsollaSavedPaymentMethods();
 							savedPaymentsMethods.Parse(rootNode);
 							OnSavedPaymentMethodsRecieved(savedPaymentsMethods);
+							break;
 						}
-						break;
 						case QUICK_PAYMENT_LIST:
 						{
 							XsollaQuickPayments quickPayments = new XsollaQuickPayments();
 							quickPayments.Parse(rootNode);
 							OnQuickPaymentMethodsRecieved(quickPayments);
+							break;
 						}
-						break;
 						case COUNTRIES:
 						{
 							XsollaCountries countries = new XsollaCountries();
 							countries.Parse(rootNode);
 							OnCountriesRecieved(countries);
+							break;
 						}
-						break;
 						case VIRTUAL_PAYMENT_SUMMARY:
 						{
 							XVirtualPaymentSummary summary = new XVirtualPaymentSummary();
@@ -646,8 +659,8 @@ namespace Xsolla
 								Logger.Log("IsSkipConfirmation false");							
 								OnVPSummaryRecieved(summary);
 							}
+							break;
 						}
-						break;
 						case VIRTUAL_PROCEED:
 						{
 							XProceed proceed = new XProceed();
@@ -662,24 +675,23 @@ namespace Xsolla
 								Logger.Log ("VIRTUAL_PROCEED 0 ");
 								OnVPProceedError(proceed.Error);
 							}
+							break;
 						}
-						break;
 						case VIRTUAL_STATUS:
 						{
 							XVPStatus vpStatus = new XVPStatus();
 							vpStatus.Parse(rootNode);
-							//{"errors":[ {"message":"Insufficient balance to complete operation"} ], "api":{"ver":"1.0.1"}, "invoice_created":"false", "operation_id":"0", "code":"0"}
 							Logger.Log ("VIRTUAL_STATUS" + vpStatus.ToString());
 							OnVPStatusRecieved(vpStatus);
+							break;
 						}
-						break;
 						case APPLY_PROMO_COUPONE:
 						{
 							XsollaForm form = new XsollaForm();
 							form.Parse(rootNode);
 							OnApplyCouponeReceived(form);
+							break;
 						}
-						break;
 						case COUPON_PROCEED:
 						{	
 							XsollaCouponProceedResult couponProceed = new XsollaCouponProceedResult();
@@ -698,47 +710,44 @@ namespace Xsolla
 
 								VPaymentStatus(post);
 							}
+							break;
 						}
-						break;
 						case HISTORY:
 						{
 							XsollaHistoryList history = new XsollaHistoryList().Parse(rootNode["operations"]) as XsollaHistoryList;
 							OnHistoryRecieved(history);
+							break;
 						}
-						break;
 						case CALCULATE_CUSTOM_AMOUNT:
 						{
 							CustomVirtCurrAmountController.CustomAmountCalcRes res = new CustomVirtCurrAmountController.CustomAmountCalcRes().Parse(rootNode["calculation"]) as CustomVirtCurrAmountController.CustomAmountCalcRes;
 							OnCustomAmountResRecieved(res);
-
+							break;
 						}
-						break;
-					case ACTIVE_SUBS:
+						case ACTIVE_SUBS:
 						{
 							XsollaSubscriptions subs = new XsollaSubscriptions();
 							subs.Parse(rootNode);
 							OnSubscriptionsReceived(subs);
+							break;
 						}
-						break;
 						case PAYMENT_MANAGER_LIST:
 						{
 							XsollaSavedPaymentMethods res = new XsollaSavedPaymentMethods().Parse(rootNode) as XsollaSavedPaymentMethods;
 							OnPaymentManagerMethod(res, false);
+							break;
 						}
-						break;
 						case DELETE_SAVED_METHOD:
 						{
-							if (rootNode["error"] != null)
-							{
-								// has error
-								Logger.Log("Respond on delete savedPaymentMethod has error");
-							}
-							else
-								OnDeleteSavedPaymentMethod();
-
-							//XsollaDeleteSavedMethodRespond res = new XsollaDeleteSavedMethodRespond().Parse(rootNode) as XsollaDeleteSavedMethodRespond;
+							OnDeleteSavedPaymentMethod();
+							break;
 						}
-						break;
+						case SUBSCRIPTIONS_MANAGER_LIST:
+						{
+							XsollaManagerSubscriptions lSubsList = new XsollaManagerSubscriptions().Parse(rootNode["subscriptions"]) as XsollaManagerSubscriptions;
+							OnManageSubsListrecived(lSubsList);	 
+							break;
+						}
 						default:
 						break;
 					}
@@ -867,6 +876,12 @@ namespace Xsolla
 		{
 			return DOMAIN + "/paystation2/api/savedmethods/delete";
 		}
+
+		private string GetSubscriptionsList()
+		{
+			return DOMAIN + "/paystation2/api/useraccount/subscriptions";
+		}
+					
 
 		//*** GA SECTION START ***
 		private string propertyID = "UA-62372273-1";

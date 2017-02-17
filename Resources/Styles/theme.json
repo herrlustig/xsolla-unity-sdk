@@ -39,7 +39,8 @@
 				"75A4C7", 
 				"57C69A", 
 				"57C69A", 
-				"FA7464"
+				"FA7464",
+				"ABABAB"
 			]
 		}, 
 		"default" : {
@@ -81,7 +82,8 @@
 				"8D7BB7",
 				"2DAE7B",
 				"2DAE7B",
-				"FA7464"
+				"FA7464",
+				"C2B6FC"
 			]
 		}
 	},
@@ -123,6 +125,7 @@
 		"selected",
 		"bonus",
 		"bg_ok",
-		"bg_error"
+		"bg_error",
+		"link_on_notify"
 	]
 }

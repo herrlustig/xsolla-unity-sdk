@@ -46,7 +46,6 @@ namespace Xsolla
 		private XsollaUtils mUtilsLink;
 		private Action 		mActionAddPayment;
 		private ArrayList 	mListBtnsObjs;
-		private XsollaPaystationController.ActiveScreen mPrevScreen;
 		private Action mOnClose;
 		public XsollaSavedPaymentMethods mListMethods { get;  set;}
 
@@ -56,11 +55,6 @@ namespace Xsolla
 
 		public PaymentManagerController ()
 		{
-		}
-
-		public void setPrevScreen(XsollaPaystationController.ActiveScreen pScreen)
-		{
-			mPrevScreen = pScreen;
 		}
 
 		public void setOnCloseMethod(Action pAction)

@@ -143,7 +143,7 @@ using System.Collections;namespace Xsolla {
 		public string Get(string key) {
 			if (translations.ContainsKey(key))
 				return translations[key];
-			return "No key " + key;
+			return "";
 		}
 
 		public IParseble Parse (JSONNode translationsNode)

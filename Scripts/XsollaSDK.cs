@@ -30,7 +30,6 @@ namespace Xsolla {
 			formController.OkHandler += (status) => {Debug.Log("OkHandler 1 " + status);};
 			formController.ErrorHandler += (error) => {Debug.Log("ErrorHandler 2 " + error);};
 
-
 			XsollaJsonGenerator generator = new XsollaJsonGenerator ("user_1", 14004);//test 15764
 			generator.user.name = "John Smith";
 			generator.user.email = "support@xsolla.com";
