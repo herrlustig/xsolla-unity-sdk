@@ -11,7 +11,7 @@ namespace Xsolla
 
 		private string DOMAIN = "https://secure.xsolla.com";
 
-		private const string SDK_VERSION = "1.3.5";
+		private const string SDK_VERSION = "1.3.6";
 
 		private const int TRANSLATIONS 		 	= 0;
 		private const int DIRECTPAYMENT_FORM 	= 1;
