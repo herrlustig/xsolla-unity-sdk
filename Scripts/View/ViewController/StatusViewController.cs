@@ -23,6 +23,9 @@ namespace Xsolla {
 		public override void InitScreen (XsollaTranslations translations, XsollaStatus xsollaStatus)
 		{
 			ResizeToParent ();
+
+			GameObject.FindObjectOfType<MainHeaderController>().setStateUserMenu(false);
+
 			string input = translations.Get (XsollaTranslations.STATUS_PURCHASED_DESCRIPTION);
 			XsollaStatusText statusText = xsollaStatus.GetStatusText ();
 			XsollaStatus.Group currentStatus = xsollaStatus.GetGroup ();
@@ -123,23 +126,6 @@ namespace Xsolla {
 			else
 				texts[2].gameObject.SetActive(false);
 
-
-//			if (pStatus != null)
-//			{
-//				if (pStatus.GetNeedCheck())
-//				{
-//					((Text)texts[0]).text = "";
-//					((Text)texts[0]).gameObject.AddComponent<MyRotation>();
-//					colorController.ChangeColor(1, StyleManager.BaseColor.selected);
-//					StartCoroutine(UpdateStatus(invoice));
-//					return;
-//				}
-//				if (pStatus.IsCancelUser())
-//				{
-//					Logger.Log("User canceled operation");
-//				}
-//			}
-
 			switch (group){
 				case XsollaStatus.Group.DONE:
 				((Text)texts[0]).text = "";
@@ -226,6 +212,12 @@ namespace Xsolla {
 				StatusHandler (group, invoice, status, pPurchase);
 			if (GetComponentInParent<XsollaPaystationController> () != null)
 				GetComponentInParent<XsollaPaystationController> ().LoadGoodsGroups();
+		}
+
+		// Событие по уничтожению статуса 
+		void OnDestroy()
+		{
+			GameObject.FindObjectOfType<MainHeaderController>().setStateUserMenu(true);
 		}
 
 	}

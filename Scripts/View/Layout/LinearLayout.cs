@@ -16,13 +16,11 @@ namespace Xsolla
 		private RectTransform parentRectTransform;
 		private RectTransform containerRectTransform;
 
-//		void Start()
-//		{
-//			for (int i = 0; i < objects.Count; i++) {
-//				objects[i] = Instantiate(objects[i]);
-//			}
-//			Invalidate ();
-//		}
+		public override string ToString ()
+		{
+			return string.Format ("[LinearLayout: objects={0}, totalHeight={1}, containerFinalHeight={2}, parentHeight={3}, parentRectTransform={4}, containerRectTransform={5}]", objects, totalHeight, containerFinalHeight, parentHeight, parentRectTransform, containerRectTransform);
+		}
+		
 
 		public void ReplaceObject(int position, GameObject gameObject)
 		{
@@ -35,33 +33,12 @@ namespace Xsolla
 		}
 
 		public void Invalidate(){
-//			parentHeight = transform.parent.gameObject.GetComponent<RectTransform> ().rect.height;
-//			containerRectTransform = GetComponent<RectTransform>();
 			containerRectTransform = GetComponent<RectTransform>();
 			parentRectTransform = transform.parent.gameObject.GetComponent<RectTransform> ();
 			parentHeight = parentRectTransform.rect.height;
-//			ResizeToParent ();
 			GetTotalHeight ();
 			DrawLayout ();
 		}
-
-//		public void ResizeToParent()
-//		{
-//
-//			float parentWidth = parentRectTransform.rect.width;
-//			float parentRatio = parentWidth/parentHeight;// > 1 horizontal
-//			float width = containerRectTransform.rect.width;
-//			if (parentRatio < 1) {
-//				containerRectTransform.offsetMin = new Vector2 (-parentWidth/2, -parentHeight/2);
-//				containerRectTransform.offsetMax = new Vector2 (parentWidth/2, parentHeight/2);
-//			} else {
-//				float newWidth = parentWidth/3;
-//				if(width < newWidth){
-//					containerRectTransform.offsetMin = new Vector2 (-newWidth/2, -parentHeight/2);
-//					containerRectTransform.offsetMax = new Vector2 (newWidth/2, parentHeight/2);
-//				}
-//			}
-//		}
 
 		float GetTotalHeight()
 		{

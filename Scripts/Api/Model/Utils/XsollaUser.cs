@@ -1,3 +1,5 @@
+using System;
+using System.Text;
 
 namespace Xsolla 
 {
@@ -10,6 +12,7 @@ namespace Xsolla
 		private int savedPaymentMethodCount;// "savedPaymentMethodCount":0,
 		private string acceptLanguage;// "acceptLanguage":"ru-RU,ru;q=0.8,en-US;q=0.6,en;q=0.4,cs;q=0.2",
 		private string acceptEncoding; // "acceptEncoding":"gzip, deflate"
+		public VirtualUserBalance userBalance; //user_balance:{amount: 0, currency: "USD"}
 		public VirtualCurrencyBalance virtualCurrencyBalance; // "virtual_currency_balance":{amount: 250}
 
 		public string GetCountryIso()
@@ -41,6 +44,7 @@ namespace Xsolla
 			savedPaymentMethodCount = userNode ["savedPaymentMethodCount"].AsInt;
 			acceptLanguage = userNode ["acceptLanguage"];
 			acceptEncoding = userNode ["acceptEncoding"];
+			userBalance = new VirtualUserBalance(userNode["user_balance"]["currency"], userNode["user_balance"]["amount"].AsDecimal);
 
 			if (userNode["virtual_currency_balance"]["amount"] != null)
 				virtualCurrencyBalance = new VirtualCurrencyBalance(userNode["virtual_currency_balance"]["amount"].AsDouble);
@@ -69,6 +73,18 @@ namespace Xsolla
 
 			public VirtualCurrencyBalance(double pAmount)
 			{
+				amount = pAmount;
+			}
+		}
+
+		public class VirtualUserBalance
+		{
+			public String currency;
+			public decimal amount;
+
+			public VirtualUserBalance(String pCurrency, decimal pAmount)
+			{
+				currency = pCurrency;
 				amount = pAmount;
 			}
 		}

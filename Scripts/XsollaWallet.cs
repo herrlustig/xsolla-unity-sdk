@@ -40,16 +40,23 @@ namespace Xsolla {
 					}
 				builder.Length--;
 				builder.Append ("}").Append(",");
-				builder.Append ("\"settings\":{")
-					.Append ("\"project_id\":").Append (settings.id).Append(",");
-					if(settings.languge != null)
-						builder.Append("\"language\":\"").Append(settings.languge).Append("\"").Append(",");
-					if(settings.currency != null)
-						builder.Append("\"currency\":\"").Append(settings.currency).Append("\"").Append(",");
-					if (settings.mode == "sandbox")
-						builder.Append ("\"mode\":\"sandbox\",");
-					if(settings.secretKey != null)
-						builder.Append("\"secretKey\":\"").Append(settings.secretKey).Append("\"").Append(",");
+				builder.Append ("\"settings\":{").Append ("\"project_id\":").Append (settings.id).Append(",");
+
+				if(settings.languge != null)
+					builder.Append("\"language\":\"").Append(settings.languge).Append("\"").Append(",");
+			
+				if(settings.currency != null)
+					builder.Append("\"currency\":\"").Append(settings.currency).Append("\"").Append(",");
+			
+				if (settings.mode == "sandbox")
+					builder.Append ("\"mode\":\"sandbox\",");
+			
+				if(settings.secretKey != null)
+					builder.Append("\"secretKey\":\"").Append(settings.secretKey).Append("\"").Append(",");
+			
+				if (settings.ui.theme != null)
+				builder.Append("\"ui\":{\"theme\":\"").Append(settings.ui.theme).Append("\"}}");
+
 				builder.Length--;
 				builder.Append("}")
 			.Append("}");
@@ -69,6 +76,12 @@ namespace Xsolla {
 			public string currency;
 			public string mode;
 			public string secretKey;
+			public Ui ui;
+		}
+
+		public struct Ui 
+		{
+			public string theme;
 		}
 
 		public static IEnumerator FreshToken(Action<string> tokenCallback){
@@ -79,6 +92,7 @@ namespace Xsolla {
 			generator.user.country = "US";
 			generator.settings.currency = "USD";
 			generator.settings.languge = "en";
+			generator.settings.ui.theme = "default";
 			string request = generator.GetPrepared ();
 			string url = "https://livedemo.xsolla.com/sdk/token/";
 			WWWForm form = new WWWForm ();

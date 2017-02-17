@@ -1,4 +1,4 @@
-# Xsolla Inc. Unity SDK VERSION 1.3.5
+# Xsolla Inc. Unity SDK VERSION 1.3.6
 
 ### GETTING STARTED
 
@@ -14,6 +14,8 @@
  - Promotions;
  - Redeem coupon;
  - User's payment history.
+ - Saved payment methods management
+ - Subscription management
 
 • Set Up Instant Payment Notification (IPN): http://developers.xsolla.com/api.html#notifications  
 • Create an Xsolla Access Token to conduct payments with maximum security. You can find documentation on creating a token here: http://developers.xsolla.com/api.html#payment-ui

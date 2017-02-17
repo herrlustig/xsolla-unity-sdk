@@ -8,7 +8,6 @@ namespace Xsolla
 	{
 
 		private XsollaSummary _summary;
-		private XsollaTranslations _translations;
 		public GameObject orderSummaryPrefab;
 		public GameObject summaryItemPrefab;
 		public GameObject financeItemPrefab;
@@ -19,7 +18,6 @@ namespace Xsolla
 
 		public void InitView(XsollaTranslations translations, XsollaSummary summary)
 		{
-			_translations = translations;
 			_summary = summary;
 
 			if (this.gameObject.GetComponent<VerticalLayoutGroup>() == null)

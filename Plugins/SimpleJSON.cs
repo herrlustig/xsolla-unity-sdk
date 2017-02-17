@@ -144,6 +144,21 @@ namespace SimpleJSON
                 Value = value.ToString();
             }
         }
+		public virtual decimal AsDecimal
+		{
+			get
+			{
+				decimal v = 0;
+				if (decimal.TryParse(Value, out v))
+					return v;
+				return 0;
+			}
+			set
+			{
+				Value = value.ToString();
+			}
+		}
+
         public virtual bool AsBool
         {
             get

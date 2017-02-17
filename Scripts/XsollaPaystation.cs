@@ -13,7 +13,6 @@ namespace  Xsolla
 		private bool IsSandbox;
 		protected XsollaUtils Utils;
 		private ActivePurchase currentPurchase;
-		private bool cancelStatusCheck = false;
 		private bool isSimple = false;
 		public string _countryCurr = "US";
 
@@ -72,6 +71,7 @@ namespace  Xsolla
 		protected abstract void PaymentManagerRecieved(XsollaSavedPaymentMethods pResult, bool pAddState);
 		protected abstract void DeleteSavedPaymentMethodRecieved();
 		protected abstract void WaitChangeSavedMethod();
+		protected abstract void SubsManagerListRecived(XsollaManagerSubscriptions pSubsList);
 
 		public void OpenPaystation (string accessToken, bool isSandbox)
 		{
@@ -142,6 +142,7 @@ namespace  Xsolla
 			Payment.PaymentManagerMethods += (savedMethods, addState) => PaymentManagerRecieved(savedMethods, addState);
 			Payment.DeleteSavedPaymentMethodRespond += () => DeleteSavedPaymentMethodRecieved();
 			Payment.WaitChangeSavedMethods += () => WaitChangeSavedMethod();
+			Payment.SubsManagerListRecived += (SubsList) => SubsManagerListRecived(SubsList);
 			
 			Payment.ErrorReceived += ShowPaymentError;
 			Payment.SetModeSandbox (isSandbox);
@@ -264,7 +265,7 @@ namespace  Xsolla
 		}
 
 		public void LoadHistory(Dictionary<string, object> pParams)
-		{
+		{	
 			Payment.GetHistory(pParams);
 		}
 
@@ -272,9 +273,17 @@ namespace  Xsolla
 		{
 			Logger.Log("Show Payment manager");
 			Dictionary<string, object> lParams = new Dictionary<string, object>();
-			lParams.Add("userInitialCurrency", "");
+			lParams.Add("userInitialCurrency", Utils.GetUser().userBalance.currency);
 			Payment.GetSavedPaymentsForManager(lParams);
-			//SetLoading(true);
+		}
+
+		public void LoadSubscriptionsManager()
+		{
+			Logger.Log("Show Subscription manager");
+			Dictionary<string, object> lParams = new Dictionary<string, object>();
+			lParams.Add("userInitialCurrency", Utils.GetUser().userBalance.currency);
+			Payment.GetSubscriptionForManager(lParams);
+			SetLoading(true);
 		}
 
 		public void UpdateCountries(string countryIso)
@@ -375,7 +384,6 @@ namespace  Xsolla
 		protected void Restart (){
 			Logger.Log ("Restart payment");
 			currentPurchase.RemoveAllExceptToken ();
-			cancelStatusCheck = true;
 		}
 
 		public void RetryPayment()
@@ -498,7 +506,6 @@ namespace  Xsolla
 				if (pStatus.isFinal()) {
 //					Payment.InitPaystation(currentPurchase.GetMergedMap());
 					LoadShopPricepoints ();
-					cancelStatusCheck = false;
 				} else {
 					StartCoroutine (Test ());
 				}
