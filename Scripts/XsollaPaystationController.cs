@@ -19,9 +19,6 @@ namespace Xsolla
 		private const string PREFAB_SCREEN_HISTORY_USER  = "Prefabs/SimpleView/_ScreenShop/HistoryView";
 		private const string PREFAB_SCREEN_SUBSCRIPTIONS = "Prefabs/SimpleView/_ScreenShop/SubscriptionsView";
 
-		private const string PREFAB_VIEW_MENU_ITEM		 = "Prefabs/SimpleView/MenuItem";
-		private const string PREFAB_VIEW_MENU_ITEM_ICON	 = "Prefabs/SimpleView/MenuItemIcon";
-		private const string PREFAB_VIEW_MENU_ITEM_EMPTY = "Prefabs/SimpleView/MenuItemEmpty";
 		private const string PREFAB_SCREEN_PAYMENT_MANAGER = "Prefabs/Screens/ScreenPaymentManager";
 		private const string PREFAB_SCREEN_SUBSCRIPTION_MANAGER = "Prefabs/Screens/SubsManager/ScreenSubsManager";
 
@@ -35,12 +32,14 @@ namespace Xsolla
 		public GameObject 					shopScreenPrefab;
 		public GameObject 					paymentListScreenPrefab;
 		public GameObject 					container;
-
+		
+		private MainNavMenuController       mNavMenuController;
+		private MainFooterController 		mFooterController;
 		private PaymentListScreenController _paymentListScreenController;
 		private ShopViewController 			_shopViewController;
 		private RedeemCouponViewController  _couponController;
 		private SubscriptionsViewController _subsController;
-		private RadioGroupController 		_radioController;
+
 		private PaymentManagerController 	_SavedPaymentController;
 		private SubsManagerController 		_SubsManagerController;
 
@@ -64,9 +63,8 @@ namespace Xsolla
 			Resizer.ResizeToParrent (mainScreen);
 			base.RecieveUtils(utils);
 			InitHeader(utils);
-			InitFooter (utils);
-			if(utils.GetPurchase() == null || !utils.GetPurchase().IsPurchase())
-				InitMenu(utils);
+			InitNavMenu(utils);
+			InitFooter(utils);
 		}
 
 		protected override void ShowPricepoints (XsollaUtils utils, XsollaPricepointsManager pricepoints)
@@ -278,8 +276,11 @@ namespace Xsolla
 				Resizer.DestroyChilds(mainScreenContainer.transform);
 				GameObject paymentManager = Instantiate(Resources.Load(PREFAB_SCREEN_PAYMENT_MANAGER)) as GameObject;
 				_SavedPaymentController = paymentManager.GetComponent<PaymentManagerController>();
-				_SavedPaymentController.setOnCloseMethod(() => {_radioController.SelectItem(RadioButton.RadioType.SCREEN_GOODS);
-																LoadGoodsGroups();});
+				_SavedPaymentController.setOnCloseMethod(() => 
+					{
+						//_radioController.SelectItem(RadioButton.RadioType.SCREEN_GOODS);
+						LoadGoodsGroups();
+					});
 				paymentManager.transform.SetParent (mainScreenContainer.transform);
 				paymentManager.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, 0);
 				Resizer.ResizeToParrent (paymentManager);
@@ -310,8 +311,11 @@ namespace Xsolla
 			{
 				GameObject paymentManager = Instantiate(Resources.Load(PREFAB_SCREEN_PAYMENT_MANAGER)) as GameObject;
 				_SavedPaymentController = paymentManager.GetComponent<PaymentManagerController>();
-				_SavedPaymentController.setOnCloseMethod(() => {_radioController.SelectItem(RadioButton.RadioType.SCREEN_GOODS);
-					LoadGoodsGroups();});
+				_SavedPaymentController.setOnCloseMethod(() => 
+					{
+						//_radioController.SelectItem(RadioButton.RadioType.SCREEN_GOODS);
+						LoadGoodsGroups();
+					});
 				paymentManager.transform.SetParent (mainScreenContainer.transform);
 				paymentManager.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, 0);
 				Resizer.ResizeToParrent (paymentManager);
@@ -382,7 +386,7 @@ namespace Xsolla
 			ShowFavorityBtn();
 			LoadGoods (groups.GetItemByPosition(0).id);
 			_shopViewController.OpenGoods(groups);
-			_radioController.SelectItem(0);
+			//_radioController.SelectItem(0);
 		}
 
 		public void DestroyShopScreen()
@@ -392,12 +396,12 @@ namespace Xsolla
 
 		private void ShowFavorityBtn()
 		{
-			_radioController.radioButtons.Find(x => x.getType() == RadioButton.RadioType.SCREEN_FAVOURITE).visibleBtn(true);
+			//_radioController.radioButtons.Find(x => x.getType() == RadioButton.RadioType.SCREEN_FAVOURITE).visibleBtn(true);
 		}
 
 		private void HideFavorityBtn()
 		{
-			_radioController.radioButtons.Find(x => x.getType() == RadioButton.RadioType.SCREEN_FAVOURITE).visibleBtn(false);
+			//_radioController.radioButtons.Find(x => x.getType() == RadioButton.RadioType.SCREEN_FAVOURITE).visibleBtn(false);
 		}
 			
 		// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -447,7 +451,7 @@ namespace Xsolla
 				{
 					CouponApplyClick(_couponController.GetCode());
 				});
-			SelectRadioItem(RadioButton.RadioType.SCREEN_REDEEMCOUPON);
+			//SelectRadioItem(RadioButton.RadioType.SCREEN_REDEEMCOUPON);
 		}
 
 		private void CouponApplyClick(string pCode)
@@ -494,7 +498,6 @@ namespace Xsolla
 				Resizer.ResizeToParrent (errorScreen);
 			}
 		}
-			
 
 		private void DrawForm(XsollaUtils utils, XsollaForm form)
 		{
@@ -507,8 +510,7 @@ namespace Xsolla
 			ScreenCheckoutController controller = checkoutScreen.GetComponent<ScreenCheckoutController> ();
 			controller.InitScreen(utils, form);
 		}
-
-
+			
 		XVirtualPaymentSummary _summary;
 		private void DrawVPSummary(XsollaUtils utils, XVirtualPaymentSummary summary)
 		{
@@ -534,8 +536,7 @@ namespace Xsolla
 			screenVpController.DrawScreen(utils, _summary);
 			screenVpController.ShowError (error);
 		}
-
-		
+					
 		private void DrawVPStatus (XsollaUtils utils, XVPStatus status) {
 			currentActive = ActiveScreen.STATUS;
 			menuTransform.gameObject.SetActive (false);
@@ -570,116 +571,62 @@ namespace Xsolla
 			MainHeaderController controller = mainScreen.GetComponentInChildren<MainHeaderController>();
 			controller.InitScreen(utils);
 		}
-			
-		private void InitMenu(XsollaUtils utils)
+
+		private void InitNavMenu(XsollaUtils pUtils)
 		{
-			_radioController = menuTransform.gameObject.AddComponent<RadioGroupController> ();
-			GameObject menuItemPrefab 		= Resources.Load (PREFAB_VIEW_MENU_ITEM) as GameObject;
-			GameObject menuItemIconPrefab 	= Resources.Load (PREFAB_VIEW_MENU_ITEM_ICON) as GameObject;
-			GameObject menuItemEmptyPrefab 	= Resources.Load (PREFAB_VIEW_MENU_ITEM_EMPTY) as GameObject;
-			Dictionary<string, XComponent> components = utils.GetProject().components;
-			if(components.ContainsKey("items") && components ["items"].IsEnabled)
-			{
-				GameObject menuItemGoods = Instantiate(menuItemPrefab) as GameObject;
-				Text[] texts = menuItemGoods.GetComponentsInChildren<Text>();
-				texts[0].text = "";
-				texts[1].text = (components ["items"].Name != "null")?components ["items"].Name:utils.GetTranslations().Get(XsollaTranslations.VIRTUALITEM_PAGE_TITLE);
-				menuItemGoods.GetComponent<RadioButton>().setType(RadioButton.RadioType.SCREEN_GOODS);
-				menuItemGoods.GetComponent<Button>().onClick.AddListener(delegate 
-					{
-						//_radioController.SelectItem(menuItemGoods.GetComponent<RadioButton>());
-						_radioController.SelectItem(RadioButton.RadioType.SCREEN_GOODS);
-						LoadGoodsGroups();
-					});
-				menuItemGoods.transform.SetParent(menuTransform);
-				_radioController.AddButton(menuItemGoods.GetComponent<RadioButton>());
-			}
+			mNavMenuController = mainScreen.GetComponentInChildren<MainNavMenuController>();
+			mNavMenuController.Init(pUtils, NavMenuClick); 
+		}
 
-			if (components.ContainsKey("virtual_currency") && components ["virtual_currency"].IsEnabled)
-			{
-				GameObject menuItemPricepoints = Instantiate(menuItemPrefab) as GameObject;
-				Text[] texts = menuItemPricepoints.GetComponentsInChildren<Text>();
-				texts[0].text = "";
-				texts[1].text = (components ["virtual_currency"].Name != "null")?components ["virtual_currency"].Name:utils.GetTranslations().Get(XsollaTranslations.PRICEPOINT_PAGE_TITLE); 
-				menuItemPricepoints.GetComponent<RadioButton>().setType(RadioButton.RadioType.SCREEN_PRICEPOINT);
-				menuItemPricepoints.GetComponent<Button>().onClick.AddListener(delegate 
-					{
-						//_radioController.SelectItem(menuItemPricepoints.GetComponent<RadioButton>());
-						_radioController.SelectItem(RadioButton.RadioType.SCREEN_PRICEPOINT);
-						LoadShopPricepoints();
-					});
-				menuItemPricepoints.transform.SetParent(menuTransform);	
-				_radioController.AddButton(menuItemPricepoints.GetComponent<RadioButton>());
-			} 
-
-			if (components.ContainsKey("subscriptions") && components["subscriptions"].IsEnabled)
-			{
-				GameObject menuItemSubs = Instantiate(menuItemPrefab) as GameObject;
-				Text[] texts = menuItemSubs.GetComponentsInChildren<Text>();
-				texts[0].text = "";
-				texts[1].text = (components["subscriptions"].Name != "null")?components["subscriptions"].Name:utils.GetTranslations().Get(XsollaTranslations.SUBSCRIPTION_PAGE_TITLE);  
-				menuItemSubs.GetComponent<RadioButton>().setType(RadioButton.RadioType.SCREEN_SUBSCRIPTION);
-				menuItemSubs.GetComponent<Button>().onClick.AddListener(delegate 
-					{
-						_radioController.SelectItem(RadioButton.RadioType.SCREEN_SUBSCRIPTION);
-						LoadSubscriptions();
-					});
-				menuItemSubs.transform.SetParent(menuTransform);	
-				_radioController.AddButton(menuItemSubs.GetComponent<RadioButton>());
-
-			}
-
-			if (components.ContainsKey("coupons") && components["coupons"].IsEnabled)
-			{
-				GameObject menuItemCoupons = Instantiate(menuItemPrefab) as GameObject;
-				Text[] texts = menuItemCoupons.GetComponentsInChildren<Text>();
-				texts[0].text = "";
-				texts[1].text = (components["coupons"].Name != "null")?components["coupons"].Name:utils.GetTranslations().Get(XsollaTranslations.COUPON_PAGE_TITLE); 
-				menuItemCoupons.GetComponent<RadioButton>().setType(RadioButton.RadioType.SCREEN_REDEEMCOUPON);
-				menuItemCoupons.GetComponent<Button>().onClick.AddListener(delegate 
-					{
-						_radioController.SelectItem(RadioButton.RadioType.SCREEN_REDEEMCOUPON);
-						ShowRedeemCoupon();
-					});
-				menuItemCoupons.transform.SetParent(menuTransform);	
-				_radioController.AddButton(menuItemCoupons.GetComponent<RadioButton>());
-			}
-
-			GameObject menuItemEmpty = Instantiate (menuItemEmptyPrefab);
-			menuItemEmpty.transform.SetParent (menuTransform);
-
-			
-			GameObject menuItemFavorite = Instantiate (menuItemIconPrefab);
-			menuItemFavorite.GetComponentInChildren<Text> ().text = "";
-			menuItemFavorite.GetComponent<RadioButton>().setType(RadioButton.RadioType.SCREEN_FAVOURITE);
-			menuItemFavorite.GetComponent<Button>().onClick.AddListener(delegate 
+		private void NavMenuClick(RadioButton.RadioType pType)
+		{
+			switch (pType) {
+			case RadioButton.RadioType.SCREEN_GOODS:
 				{
-					_shopViewController.SetTitle(utils.GetTranslations().Get(XsollaTranslations.VIRTUALITEMS_TITLE_FAVORITE));
-					_radioController.SelectItem(RadioButton.RadioType.SCREEN_FAVOURITE);
+					LoadGoodsGroups();
+					mNavMenuController.SetVisibleBtn(true, RadioButton.RadioType.SCREEN_FAVOURITE);
+					break;
+				}
+			case RadioButton.RadioType.SCREEN_PRICEPOINT:
+				{
+					LoadShopPricepoints();
+					mNavMenuController.SetVisibleBtn(false, RadioButton.RadioType.SCREEN_FAVOURITE);
+					break;
+				}
+			case RadioButton.RadioType.SCREEN_SUBSCRIPTION:
+				{
+					LoadSubscriptions();
+					mNavMenuController.SetVisibleBtn(false, RadioButton.RadioType.SCREEN_FAVOURITE);
+					break;
+				}
+			case RadioButton.RadioType.SCREEN_REDEEMCOUPON:
+				{
+					ShowRedeemCoupon();
+					mNavMenuController.SetVisibleBtn(false, RadioButton.RadioType.SCREEN_FAVOURITE);
+					break;
+				}
+			case RadioButton.RadioType.SCREEN_FAVOURITE:
+				{
+					// Меняем заголовок
+					_shopViewController.SetTitle(Utils.GetTranslations().Get(XsollaTranslations.VIRTUALITEMS_TITLE_FAVORITE));
 					LoadFavorites();
-				});
-			menuItemFavorite.transform.SetParent (menuTransform);
-			_radioController.AddButton(menuItemFavorite.GetComponent<RadioButton>());
-
-		}
-
-		public void SelectRadioItem(RadioButton.RadioType pType)
-		{
-			if (_radioController != null)
-				_radioController.SelectItem(pType);
-		}
-
-		private void InitFooter(XsollaUtils utils)
-		{
-			if (utils != null) {
-				Text[] texts = mainScreen.GetComponentsInChildren<Text> ();
-				XsollaTranslations translatrions = utils.GetTranslations ();
-				texts [4].text = translatrions.Get (XsollaTranslations.SUPPORT_CUSTOMER_SUPPORT);
-				texts [5].text = translatrions.Get (XsollaTranslations.SUPPORT_CONTACT_US);
-				texts [6].text = translatrions.Get (XsollaTranslations.XSOLLA_COPYRIGHT);
-				texts [7].text = translatrions.Get (XsollaTranslations.FOOTER_SECURED_CONNECTION);
-				texts [8].text = translatrions.Get (XsollaTranslations.FOOTER_AGREEMENT);
+					break;
+				}
+			default:
+				break;
 			}
+		}
+
+//		public void SelectRadioItem(RadioButton.RadioType pType)
+//		{
+//			if (_radioController != null)
+//				_radioController.SelectItem(pType);
+//		}
+
+		private void InitFooter(XsollaUtils pUtils)
+		{
+			mFooterController = mainScreen.GetComponentInChildren<MainFooterController>();
+			mFooterController.Init(pUtils);
 		}
 
 		private void OnUserStatusExit(XsollaStatus.Group group, string invoice, Xsolla.XsollaStatusData.Status status, Dictionary<string, object> pPurchase = null)

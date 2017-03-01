@@ -12,7 +12,8 @@ namespace Xsolla
 		public GameObject _btnDropDownObj;
 		public Text _userName;
 		public Button _pMenuBtnComponent;
-		private const string PREFAB_VIEW_MENU_ITEM_EMPTY = "Prefabs/SimpleView/ProfileBtn";
+
+		private const string PREFAB_USER_MENU_BTN = "Prefabs/SimpleView/ProfileBtn";
 
 		public void InitScreen(XsollaUtils pUtils)
 		{
@@ -24,29 +25,28 @@ namespace Xsolla
 		
 			if (pUtils.GetUser().virtualCurrencyBalance != null)
 			{
-				GameObject obj = Instantiate(Resources.Load(PREFAB_VIEW_MENU_ITEM_EMPTY)) as GameObject;
-				UserProfileBtnController controller = obj.GetComponentInChildren<UserProfileBtnController>();
-				controller.InitScreen(pUtils.GetTranslations().Get("user_menu_balance"), ShowHistory);
-				obj.transform.SetParent(_btnDropDownObj.transform);
+				AddUserMenuBtn(pUtils.GetTranslations().Get("user_menu_balance"), ShowHistory);
 				_pMenuBtnComponent.enabled = true;
 			}
 
 			if (!pUtils.GetUser().IdAllowModify())
 			{
-				GameObject obj = Instantiate(Resources.Load(PREFAB_VIEW_MENU_ITEM_EMPTY)) as GameObject;
-				UserProfileBtnController controller = obj.GetComponentInChildren<UserProfileBtnController>();
-				controller.InitScreen(pUtils.GetTranslations().Get("user_menu_payment_accounts"), ShowPaymentManager);
-				obj.transform.SetParent(_btnDropDownObj.transform);
-
-				GameObject objSubs = Instantiate(Resources.Load(PREFAB_VIEW_MENU_ITEM_EMPTY)) as GameObject;
-				UserProfileBtnController controllerSubs = objSubs.GetComponentInChildren<UserProfileBtnController>();
-				controllerSubs.InitScreen(pUtils.GetTranslations().Get("user_menu_user_subscription"), ShowSubscriptionManager);
-				objSubs.transform.SetParent(_btnDropDownObj.transform);
+				AddUserMenuBtn(pUtils.GetTranslations().Get("user_menu_payment_accounts"), ShowPaymentManager);
+				AddUserMenuBtn(pUtils.GetTranslations().Get("user_menu_user_subscription"), ShowSubscriptionManager);
 			}
 			else
 				_pMenuBtnComponent.enabled = false;
 		}
 
+		private void AddUserMenuBtn(String pTitle, Action pAction)
+		{
+			GameObject objSubs = Instantiate(Resources.Load(PREFAB_USER_MENU_BTN)) as GameObject;
+			UserProfileBtnController controllerSubs = objSubs.GetComponentInChildren<UserProfileBtnController>();
+			controllerSubs.InitScreen(pTitle, pAction);
+			objSubs.transform.SetParent(_btnDropDownObj.transform);
+		}
+
+		// TODO переделать на метод вызова в верхний класс по типу
 		private void ShowPaymentManager()
 		{
 			GetComponentInParent<XsollaPaystation> ().LoadPaymentManager();
@@ -73,10 +73,6 @@ namespace Xsolla
 		{
 			Logger.Log("Set user menu to state " + pState);
 			_pMenuBtnComponent.gameObject.SetActive(pState);
-		}
-
-		public MainHeaderController ()
-		{
 		}
 	}
 }
