@@ -525,6 +525,7 @@ GameObject:
   - 222: {fileID: 22246972}
   - 114: {fileID: 11488482}
   - 114: {fileID: 11446248}
+  - 114: {fileID: 114000012819044674}
   m_Layer: 5
   m_Name: MenuContainer
   m_TagString: Untagged
@@ -2936,3 +2937,16 @@ Prefab:
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 100982}
   m_IsPrefabParent: 1
+--- !u!114 &114000012819044674
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 185656}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 583f3331d911e4ab1858a66bbd636188, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mImage: {fileID: 11488482}
+  mType: 6

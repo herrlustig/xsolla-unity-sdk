@@ -23,6 +23,9 @@ namespace Xsolla
 			{
 				InitMenu(pUtils);
 			}
+
+			// Выбираем первый элемент из всего меню
+			mRadioGroupController.radioButtons[0].Select();
 		}
 
 		private void InitMenu(XsollaUtils pUtils)
@@ -117,6 +120,12 @@ namespace Xsolla
 		public void SetVisibleBtn(bool pVisible, RadioButton.RadioType pType)
 		{
 			mRadioGroupController.radioButtons.Find(x => x.getType() == pType).visibleBtn(pVisible);
+		}
+
+		public void SelectRadioItem(RadioButton.RadioType pType)
+		{
+			if (mRadioGroupController != null)
+				mRadioGroupController.SelectItem(pType);
 		}
 	}
 }

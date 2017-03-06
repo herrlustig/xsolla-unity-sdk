@@ -86,6 +86,7 @@ GameObject:
   - 114: {fileID: 11474596}
   - 114: {fileID: 11431048}
   - 114: {fileID: 11464264}
+  - 114: {fileID: 114000010019282232}
   m_Layer: 5
   m_Name: ShopHeader
   m_TagString: Untagged
@@ -157,7 +158,7 @@ GameObject:
   - 114: {fileID: 11462292}
   - 114: {fileID: 11469670}
   - 114: {fileID: 114000012820492210}
-  - 114: {fileID: 114000010151201560}
+  - 114: {fileID: 114000010839674266}
   m_Layer: 5
   m_Name: userName
   m_TagString: Untagged
@@ -176,7 +177,7 @@ GameObject:
   - 222: {fileID: 22255702}
   - 114: {fileID: 11420998}
   - 114: {fileID: 114000011945393334}
-  - 114: {fileID: 114000010680664590}
+  - 114: {fileID: 114000014184450844}
   m_Layer: 5
   m_Name: btnDown
   m_TagString: Untagged
@@ -212,6 +213,7 @@ GameObject:
   - 222: {fileID: 22299394}
   - 114: {fileID: 11469998}
   - 114: {fileID: 11485030}
+  - 114: {fileID: 114000013274069310}
   m_Layer: 5
   m_Name: ButtonContactUs
   m_TagString: Untagged
@@ -267,6 +269,7 @@ GameObject:
   - 114: {fileID: 11474406}
   - 114: {fileID: 11474932}
   - 114: {fileID: 114000014116255858}
+  - 114: {fileID: 114000013228669370}
   m_Layer: 5
   m_Name: ShopFooter
   m_TagString: Untagged
@@ -406,6 +409,8 @@ GameObject:
   - 114: {fileID: 11411648}
   - 114: {fileID: 11479952}
   - 114: {fileID: 114000014112189018}
+  - 114: {fileID: 114000012056598472}
+  - 114: {fileID: 114000013430655566}
   m_Layer: 5
   m_Name: NavigationMenu
   m_TagString: Untagged
@@ -2400,7 +2405,7 @@ GameObject:
   - 114: {fileID: 114000014114896574}
   - 114: {fileID: 114000011919145898}
   - 114: {fileID: 114000013036579834}
-  - 114: {fileID: 114000013159866976}
+  - 114: {fileID: 114000014118468004}
   m_Layer: 5
   m_Name: clsBtn
   m_TagString: Untagged
@@ -2408,7 +2413,20 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &114000010151201560
+--- !u!114 &114000010019282232
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 119404}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 583f3331d911e4ab1858a66bbd636188, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mImage: {fileID: 11449822}
+  mType: 3
+--- !u!114 &114000010839674266
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -2416,22 +2434,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 127704}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 34639f65e00734782bb755f9d2d49703, type: 3}
+  m_Script: {fileID: 11500000, guid: 77657845527ea4ec79a91b133479a7d4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   mButton: {fileID: 114000012820492210}
---- !u!114 &114000010680664590
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 132750}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 34639f65e00734782bb755f9d2d49703, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  mButton: {fileID: 114000011945393334}
 --- !u!114 &114000011740029698
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2569,6 +2575,19 @@ MonoBehaviour:
         m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
+--- !u!114 &114000012056598472
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 192116}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 583f3331d911e4ab1858a66bbd636188, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mImage: {fileID: 11453308}
+  mType: 4
 --- !u!114 &114000012820492210
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2632,18 +2651,44 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 237c183e2b7d746b39ac17d76311cc3e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &114000013159866976
+--- !u!114 &114000013228669370
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000012706778036}
+  m_GameObject: {fileID: 163608}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 583f3331d911e4ab1858a66bbd636188, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mImage: {fileID: 11448136}
+  mType: 5
+--- !u!114 &114000013274069310
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 138690}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 34639f65e00734782bb755f9d2d49703, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mButton: {fileID: 114000011919145898}
+  pType: 2
+  mButton: {fileID: 11485030}
+--- !u!114 &114000013430655566
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 192116}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1184210157, guid: f5f67c52d1564df4a8936ccd202a3bd8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_AllowSwitchOff: 0
 --- !u!114 &114000014112189018
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2690,6 +2735,30 @@ MonoBehaviour:
   mCopyRight: {fileID: 11474196}
   mSecuredConnection: {fileID: 11421916}
   mAgreement: {fileID: 11494762}
+--- !u!114 &114000014118468004
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000012706778036}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 77657845527ea4ec79a91b133479a7d4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mButton: {fileID: 114000011919145898}
+--- !u!114 &114000014184450844
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 132750}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 77657845527ea4ec79a91b133479a7d4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mButton: {fileID: 114000011945393334}
 --- !u!222 &222000013910369894
 CanvasRenderer:
   m_ObjectHideFlags: 1

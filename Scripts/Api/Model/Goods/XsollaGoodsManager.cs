@@ -43,8 +43,11 @@ namespace Xsolla
 
 	public class XsollaGoodsGroup : IXsollaObject, IParseble
 	{
-		public long id {get; private set;}// "id":"119",
-		public string name {get; private set;}// "name":"Top Items",
+		public long id; // "id":"119",
+		public string name; // "name":"Top Items",
+		public int mLevel;
+		public string mExternalId;
+		public string mChildren;
 
 		public string GetKey()
 		{
@@ -60,6 +63,9 @@ namespace Xsolla
 		{
 			id = goodsGroupNode ["id"].AsInt;
 			name = goodsGroupNode ["name"];
+			mLevel = goodsGroupNode ["level"].AsInt;
+			mExternalId = goodsGroupNode ["external_id"].Value;
+			mChildren = goodsGroupNode ["children"].Value;
 			return this;
 		}
 	}

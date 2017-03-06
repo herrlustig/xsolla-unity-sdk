@@ -173,7 +173,7 @@ namespace  Xsolla
 
 		private void SelectRadioItem(RadioButton.RadioType pType)
 		{
-			//GetComponentInParent<XsollaPaystationController> ().SelectRadioItem(pType);
+			FindObjectOfType<MainNavMenuController>().SelectRadioItem(pType);
 		}
 
 		public void LoadShopPricepoints()

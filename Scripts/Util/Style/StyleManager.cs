@@ -58,6 +58,18 @@ namespace Xsolla {
 			link_hover,
 			link_normal
 		};
+
+		public enum BaseSprite
+		{
+			bckg_btn_buy,
+			bckg_payment_btn,
+			bckg_contact_us,
+
+			bckg_header,
+			bckg_navMenu,
+			bckg_footer,
+			bckg_menu_goods
+		}
 		
 		public Dictionary<BaseColor, Color32> colorsMap;
 		public Themes CurrentTheme;  // this public var should appear as a drop down
@@ -101,6 +113,12 @@ namespace Xsolla {
 			byte G = (byte)((HexVal >> 8) & 0xFF);
 			byte B = (byte)((HexVal) & 0xFF);
 			return new Color32(R, G, B, 255);
+		}
+
+		public Sprite GetSprite(BaseSprite pType, String pAddType = "")
+		{
+			String theme = CurrentTheme == Themes.Black ? "dark" : "default";
+			return Resources.Load<Sprite>("Sprites/" + theme + "/" + pType.ToString() + pAddType);
 		}
 
 		public void ChangeTheme(string newTheme){

@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
+using System;
 
 namespace Xsolla {
 	public class RadioButton : MonoBehaviour, IRadioButton {
@@ -11,6 +12,7 @@ namespace Xsolla {
 		public StyleManager.BaseColor normalImage;
 		public StyleManager.BaseColor activeText;
 		public StyleManager.BaseColor normalText;
+		public Action mClickAction;
 
 		private bool isSelected = false;
 		private bool isStarted = false;
@@ -18,7 +20,11 @@ namespace Xsolla {
 
 		public enum RadioType
 		{
-			SCREEN_GOODS, SCREEN_PRICEPOINT, SCREEN_SUBSCRIPTION, SCREEN_REDEEMCOUPON, SCREEN_FAVOURITE
+			SCREEN_GOODS, 
+			SCREEN_PRICEPOINT, 
+			SCREEN_SUBSCRIPTION, 
+			SCREEN_REDEEMCOUPON, 
+			SCREEN_FAVOURITE
 		};
 
 		public void setType(RadioType pType)
@@ -45,7 +51,10 @@ namespace Xsolla {
 				if(isStarted)
 					isSelected = true;
 				else
+				{
 					Invoke("Select", 1);
+					mClickAction();
+				}
 			}
 		}
 

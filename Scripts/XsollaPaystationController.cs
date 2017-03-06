@@ -58,13 +58,14 @@ namespace Xsolla
 			mainScreen = Instantiate (mainScreen);
 			mainScreen.transform.SetParent (container.transform);
 			mainScreen.SetActive (true);
+			// TODO новая реализация магазина
 			mainScreenContainer = mainScreen.GetComponentsInChildren<ScrollRect> ()[0].gameObject;
 			menuTransform = mainScreen.GetComponentsInChildren<RectTransform> ()[8].transform;
 			Resizer.ResizeToParrent (mainScreen);
 			base.RecieveUtils(utils);
 			InitHeader(utils);
-			InitNavMenu(utils);
 			InitFooter(utils);
+			InitNavMenu(utils);
 		}
 
 		protected override void ShowPricepoints (XsollaUtils utils, XsollaPricepointsManager pricepoints)
@@ -278,7 +279,6 @@ namespace Xsolla
 				_SavedPaymentController = paymentManager.GetComponent<PaymentManagerController>();
 				_SavedPaymentController.setOnCloseMethod(() => 
 					{
-						//_radioController.SelectItem(RadioButton.RadioType.SCREEN_GOODS);
 						LoadGoodsGroups();
 					});
 				paymentManager.transform.SetParent (mainScreenContainer.transform);
@@ -313,7 +313,6 @@ namespace Xsolla
 				_SavedPaymentController = paymentManager.GetComponent<PaymentManagerController>();
 				_SavedPaymentController.setOnCloseMethod(() => 
 					{
-						//_radioController.SelectItem(RadioButton.RadioType.SCREEN_GOODS);
 						LoadGoodsGroups();
 					});
 				paymentManager.transform.SetParent (mainScreenContainer.transform);
@@ -359,7 +358,6 @@ namespace Xsolla
 			if (_shopViewController == null) {
 				GameObject paymentListScreen = Instantiate (shopScreenPrefab);
 				_shopViewController = paymentListScreen.GetComponent<ShopViewController> ();
-				_shopViewController.DestroyAfter = DestroyShopScreen;
 				_shopViewController.transform.SetParent (mainScreenContainer.transform);
 				_shopViewController.GetComponent<RectTransform> ().anchoredPosition = new Vector2 (0, 0);
 				mainScreenContainer.GetComponentInParent<ScrollRect> ().content = _shopViewController.GetComponent<RectTransform> ();
@@ -382,28 +380,10 @@ namespace Xsolla
 		public void OpenGoods(XsollaGroupsManager groups)
 		{
 			DrawShopScreen ();
-			// Show favority Btn
-			ShowFavorityBtn();
 			LoadGoods (groups.GetItemByPosition(0).id);
 			_shopViewController.OpenGoods(groups);
-			//_radioController.SelectItem(0);
 		}
 
-		public void DestroyShopScreen()
-		{
-			HideFavorityBtn();
-		}
-
-		private void ShowFavorityBtn()
-		{
-			//_radioController.radioButtons.Find(x => x.getType() == RadioButton.RadioType.SCREEN_FAVOURITE).visibleBtn(true);
-		}
-
-		private void HideFavorityBtn()
-		{
-			//_radioController.radioButtons.Find(x => x.getType() == RadioButton.RadioType.SCREEN_FAVOURITE).visibleBtn(false);
-		}
-			
 		// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 		// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< SHOP <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 		// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -616,12 +596,6 @@ namespace Xsolla
 				break;
 			}
 		}
-
-//		public void SelectRadioItem(RadioButton.RadioType pType)
-//		{
-//			if (_radioController != null)
-//				_radioController.SelectItem(pType);
-//		}
 
 		private void InitFooter(XsollaUtils pUtils)
 		{

@@ -6,17 +6,23 @@ namespace Xsolla
 {
 	public class ColorBtnController: MonoBehaviour
 	{
-		public Button mButton; 
+		public StyleManager.BaseSprite pType;
+		public Button mButton;
 
 		void Start()
 		{
-			ColorBlock block = new ColorBlock();
-			block.normalColor = StyleManager.Instance.GetColor(StyleManager.BaseColor.link_normal);
-			block.highlightedColor = StyleManager.Instance.GetColor(StyleManager.BaseColor.link_hover);
-			block.pressedColor = StyleManager.Instance.GetColor(StyleManager.BaseColor.link_hover);
-			block.fadeDuration = 0.1f;
-			block.colorMultiplier = 1;
-			mButton.colors = block;
+			mButton.transition = Selectable.Transition.SpriteSwap;
+			SpriteState lSpriteState = new SpriteState();
+			lSpriteState.highlightedSprite = StyleManager.Instance.GetSprite(pType, "_hover");
+			lSpriteState.pressedSprite = StyleManager.Instance.GetSprite(pType, "_hover");
+
+			if (mButton.targetGraphic is Image)
+			{
+				(mButton.targetGraphic as Image).sprite = StyleManager.Instance.GetSprite(pType, "_normal");
+				(mButton.targetGraphic as Image).color = StyleManager.Instance.GetColor(StyleManager.BaseColor.txt_white);
+			}
+				
+			mButton.spriteState = lSpriteState;
 		}
 	}
 }

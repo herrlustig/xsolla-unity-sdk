@@ -14,7 +14,7 @@ GameObject:
   - 114: {fileID: 11447020}
   - 114: {fileID: 11443094}
   - 114: {fileID: 11415262}
-  - 114: {fileID: 114000013868663984}
+  - 114: {fileID: 114000012716238666}
   m_Layer: 5
   m_Name: ProfileBtn
   m_TagString: Untagged
@@ -187,7 +187,7 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: Text
---- !u!114 &114000013868663984
+--- !u!114 &114000012716238666
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -195,7 +195,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 133742}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 34639f65e00734782bb755f9d2d49703, type: 3}
+  m_Script: {fileID: 11500000, guid: 77657845527ea4ec79a91b133479a7d4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   mButton: {fileID: 11439040}
