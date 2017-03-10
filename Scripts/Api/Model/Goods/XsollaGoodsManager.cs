@@ -43,7 +43,7 @@ namespace Xsolla
 
 	public class XsollaGoodsGroup : IXsollaObject, IParseble
 	{
-		public long id; // "id":"119",
+		public int id; // "id":"119",
 		public string name; // "name":"Top Items",
 		public int mLevel;
 		public string mExternalId;
@@ -83,10 +83,10 @@ namespace Xsolla
 		private string 	currency;							//	currency: "USD",
 		private string  virtCurrency = "Coins";				//  item virtual currency. Today not allowed different currency for each item.
 
-		private float 	amount;								//	amount: 0.39,
-		private float 	amountWithoutDiscount;				//	amount_without_discount: 0.39,
-		private float 	vcAmount;							//	vc_amount: 0,
-		private float 	vcAmountWithoutDiscount;			//	vc_amount_without_discount: 0,
+		private decimal 	amount;								//	amount: 0.39,
+		private decimal 	amountWithoutDiscount;				//	amount_without_discount: 0.39,
+		private decimal 	vcAmount;							//	vc_amount: 0,
+		private decimal 	vcAmountWithoutDiscount;			//	vc_amount_without_discount: 0,
 
 		private int 	quantityLimit;						//	quantity_limit: 1,
 		private int 	isFavorite;							//	is_favorite: 0,
@@ -199,10 +199,10 @@ namespace Xsolla
 			description 			= shopItemNode ["description"].Value;
 			descriptionLong 		= shopItemNode ["long_description"].Value;
 			imageUrl 				= shopItemNode ["image_url"].Value;//image_url <- NEW | OLD -> image
-			amount 					= shopItemNode ["amount"].AsFloat;
-			amountWithoutDiscount 	= shopItemNode ["amount_without_discount"].AsFloat;//amount_without_discount <- NEW | OLD -> amountWithoutDiscount
-			vcAmount 				= shopItemNode ["vc_amount"].AsFloat;
-			vcAmountWithoutDiscount = shopItemNode ["vc_amount_without_discount"].AsFloat;//amount_without_discount <- NEW | OLD -> amountWithoutDiscount
+			amount 					= shopItemNode ["amount"].AsDecimal;
+			amountWithoutDiscount 	= shopItemNode ["amount_without_discount"].AsDecimal;//amount_without_discount <- NEW | OLD -> amountWithoutDiscount
+			vcAmount 				= shopItemNode ["vc_amount"].AsDecimal;
+			vcAmountWithoutDiscount = shopItemNode ["vc_amount_without_discount"].AsDecimal;//amount_without_discount <- NEW | OLD -> amountWithoutDiscount
 			currency 				= shopItemNode ["currency"].Value;
 			bonusVirtualItems 		= XsollaBonusItem.ParseMany (shopItemNode ["bonus_virtual_items"]);
 			var bvc 				= new XsollaBonusItem ();

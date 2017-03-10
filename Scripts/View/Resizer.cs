@@ -36,6 +36,19 @@ namespace Xsolla
 			foreach (Transform child in parentTransform) children.Add(child.gameObject);
 			children.ForEach(child => Object.Destroy(child));
 		}
+
+		public static void SetParentToFullScreen(GameObject pObj, GameObject pParent)
+		{
+			pObj.transform.SetParent(pParent.transform);
+			RectTransform objRect = pObj.GetComponent<RectTransform>();
+
+			objRect.anchorMin = new Vector2(0, 0);
+			objRect.anchorMax = new Vector2(1, 1);
+			objRect.localScale = new Vector3(1, 1, 1);
+			objRect.localPosition = new Vector3(0, 0, 0);
+			objRect.offsetMin = new Vector2(0, 0);
+			objRect.offsetMax = new Vector2(0, 0);
+		}
 	}
 
 }

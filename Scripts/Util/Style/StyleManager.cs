@@ -68,7 +68,13 @@ namespace Xsolla {
 			bckg_header,
 			bckg_navMenu,
 			bckg_footer,
-			bckg_menu_goods
+			bckg_menu_goods,
+
+			bckg_item,
+			bckg_item_ad,
+			bckg_item_bd,
+			bckg_ad_panel,
+			bckg_bd_panel
 		}
 		
 		public Dictionary<BaseColor, Color32> colorsMap;

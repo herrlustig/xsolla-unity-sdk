@@ -6,16 +6,17 @@ using System;
 namespace Xsolla {
 	public class RadioButton : MonoBehaviour, IRadioButton {
 
-		public Graphic image;
-		public Graphic text;
-		public StyleManager.BaseColor activeImage;
-		public StyleManager.BaseColor normalImage;
+		public Text mIcon;
+		public Text mName;
+		public Button mBtn;
+		public Image mDevider;
+
 		public StyleManager.BaseColor activeText;
 		public StyleManager.BaseColor normalText;
-		public Action mClickAction;
+
+		private Action mClickAction;
 
 		private bool isSelected = false;
-		private bool isStarted = false;
 		private RadioType _typeRadioBtn;
 
 		public enum RadioType
@@ -24,10 +25,36 @@ namespace Xsolla {
 			SCREEN_PRICEPOINT, 
 			SCREEN_SUBSCRIPTION, 
 			SCREEN_REDEEMCOUPON, 
-			SCREEN_FAVOURITE
+			SCREEN_FAVOURITE,
+			GOODS_ITEM
 		};
 
-		public void setType(RadioType pType)
+		public void init(string pIcon, string pName, RadioType pType, Action pActionClick)
+		{
+			if (mIcon != null)
+				mIcon.text = pIcon;
+			if (mName != null)
+				mName.text = pName;
+			
+			setType(pType);
+			mClickAction = pActionClick;
+
+			if (mBtn != null)
+			{
+				mBtn.onClick.AddListener(delegate 
+					{
+						mClickAction();
+						Select();
+					});
+			}
+		}
+
+		public void stateDevider(bool pState)
+		{
+			mDevider.gameObject.SetActive(pState);
+		}
+
+		private void setType(RadioType pType)
 		{
 			_typeRadioBtn = pType;
 		}
@@ -37,49 +64,35 @@ namespace Xsolla {
 			return _typeRadioBtn;
 		}
 
-		void Start() {
-			isStarted = true;
-		}
-
 		public void Select()
 		{
-			if (!isSelected) {
-				if(image != null)
-					image.color = StyleManager.Instance.GetColor (activeImage);
-				if(text != null)
-					text.color = StyleManager.Instance.GetColor (activeText);
-				if(isStarted)
-					isSelected = true;
-				else
-				{
-					Invoke("Select", 1);
-					mClickAction();
-				}
-			}
+			if (!isSelected) 				
+				isSelected = true;
 		}
 
 		public void Deselect()
 		{
-			if (isSelected) {
-				if(image != null)	
-					image.color = StyleManager.Instance.GetColor (normalImage);
-				if(text != null)	
-					text.color = StyleManager.Instance.GetColor (normalText);
+			if (isSelected) 
 				isSelected = false;
-			}
 		}
 
 		void Update() {
-			if (isSelected) {
-				if(image != null)
-					image.color = StyleManager.Instance.GetColor (activeImage);
-				if(text != null)
-					text.color = StyleManager.Instance.GetColor (activeText);
-			} else {
-				if(image != null)
-					image.color = StyleManager.Instance.GetColor (normalImage);
-				if(text != null)
-					text.color = StyleManager.Instance.GetColor (normalText);
+			if (mIcon != null)
+				mIcon.color = isSelected ? StyleManager.Instance.GetColor (activeText) : StyleManager.Instance.GetColor (normalText);
+			if (mName != null)
+				mName.color = isSelected ? StyleManager.Instance.GetColor (activeText) : StyleManager.Instance.GetColor (normalText);
+			if (mDevider != null)
+				mDevider.color = isSelected ? StyleManager.Instance.GetColor (StyleManager.BaseColor.selected) : StyleManager.Instance.GetColor (StyleManager.BaseColor.divider_1);
+
+			if (getType() == RadioType.GOODS_ITEM)
+			{
+				ColorBlock lBlock = new ColorBlock();
+				lBlock.normalColor = isSelected ? StyleManager.Instance.GetColor (StyleManager.BaseColor.selected) : StyleManager.Instance.GetColor (StyleManager.BaseColor.bg_main);
+				lBlock.highlightedColor = isSelected ? StyleManager.Instance.GetColor (StyleManager.BaseColor.selected) : StyleManager.Instance.GetColor (StyleManager.BaseColor.divider_1);
+				lBlock.pressedColor = isSelected ? StyleManager.Instance.GetColor (StyleManager.BaseColor.selected) : StyleManager.Instance.GetColor (StyleManager.BaseColor.divider_1);
+				lBlock.fadeDuration = 0.1f;
+				lBlock.colorMultiplier = 1;
+				mBtn.colors = lBlock;
 			}
 		}
 
