@@ -74,7 +74,10 @@ namespace Xsolla {
 			bckg_item_ad,
 			bckg_item_bd,
 			bckg_ad_panel,
-			bckg_bd_panel
+			bckg_bd_panel,
+			bckg_long_desc,
+			bckg_item_sales,
+			bckg_sales_panel
 		}
 		
 		public Dictionary<BaseColor, Color32> colorsMap;

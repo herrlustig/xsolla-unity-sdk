@@ -80,13 +80,13 @@ namespace Xsolla
 		private string 	imageUrl;							//	image_url: "https://xsolla.cachefly.net/img/3906561d617cb3.png",
 		private string 	description;						//	description: "Кролики — это маленькие млекопитающие семейства зайцевых.",
 		private string 	descriptionLong;					//	long_description: "There are eight different genera in the family classified as rabbits...",
-		private string 	currency;							//	currency: "USD",
+		public string 	currency;							//	currency: "USD",
 		private string  virtCurrency = "Coins";				//  item virtual currency. Today not allowed different currency for each item.
 
-		private decimal 	amount;								//	amount: 0.39,
-		private decimal 	amountWithoutDiscount;				//	amount_without_discount: 0.39,
-		private decimal 	vcAmount;							//	vc_amount: 0,
-		private decimal 	vcAmountWithoutDiscount;			//	vc_amount_without_discount: 0,
+		public decimal 	amount;								//	amount: 0.39,
+		public decimal 	amountWithoutDiscount;				//	amount_without_discount: 0.39,
+		public decimal 	vcAmount;							//	vc_amount: 0,
+		public decimal 	vcAmountWithoutDiscount;			//	vc_amount_without_discount: 0,
 
 		private int 	quantityLimit;						//	quantity_limit: 1,
 		private int 	isFavorite;							//	is_favorite: 0,

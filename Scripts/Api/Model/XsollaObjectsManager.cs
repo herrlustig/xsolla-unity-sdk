@@ -24,6 +24,15 @@ namespace Xsolla
 			}
 		}
 
+		public void InsertItem(int pIdx, T pItem)
+		{
+			if (!itemsMap.ContainsKey (pItem.GetKey())) {
+				itemsList.Insert(pIdx, pItem);
+				itemsMap.Add(pItem.GetKey(), pItem);
+				Count++;
+			}
+		}
+
 		public List<T> GetItemsList()
 		{
 			return itemsList;

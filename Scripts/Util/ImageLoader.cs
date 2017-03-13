@@ -26,6 +26,7 @@ namespace Xsolla {
 		}
 
 		public void LoadImage (Image imageView, string url) {
+			imageView.enabled = false;
 			//Call the actual loading method
 			StartCoroutine(RealLoadImage(url, imageView));
 		}
@@ -73,6 +74,7 @@ namespace Xsolla {
 				imageURLWWW.Dispose ();
 				imageURLWWW = null;
 			}
+			imageView.enabled = true;
 			yield return null;
 		}
 	}

@@ -12,6 +12,7 @@ namespace Xsolla
 		private XsollaSettings 		settings;// "settings":{},
 		private XsollaTranslations 	translations;// "translations":{},
 		private XsollaApi 			api;// "api":{}
+		public XsollaBonus			mBonus;
 
 		public string GetAcceessToken() {
 			return accessToken;
@@ -47,8 +48,7 @@ namespace Xsolla
 		{
 			accessToken = pToken;
 		}
-
-
+			
 		public IParseble Parse (JSONNode utilsNode)
 		{
 			//accessToken 	= utilsNode [XsollaApiConst.ACCESS_TOKEN].Value;
@@ -58,11 +58,11 @@ namespace Xsolla
 			settings 		= new XsollaSettings ().Parse (utilsNode [XsollaApiConst.R_SETTINGS]) as XsollaSettings;
 			translations 	= new XsollaTranslations ().Parse (utilsNode [XsollaApiConst.R_TRANSLATIONS]) as XsollaTranslations;
 			api 			= new XsollaApi ().Parse (utilsNode [XsollaApiConst.R_API]) as XsollaApi;
+			mBonus = new XsollaBonus().Parse(utilsNode["bonus"]) as XsollaBonus;
 
 			return this;
 		}
-
-
+			
 		public override string ToString ()
 		{
 			return string.Format ("[XsollaUtils] " 
