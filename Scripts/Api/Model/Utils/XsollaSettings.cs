@@ -55,6 +55,10 @@ namespace Xsolla
 		public bool mButtonWithPrice;
 		public string pLayout;
 
+		public bool isListLayout()
+		{
+			return pLayout == "list";
+		}
 
 		public IParseble Parse(JSONNode pRootNode)
 		{

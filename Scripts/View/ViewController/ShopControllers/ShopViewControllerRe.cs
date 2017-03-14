@@ -11,22 +11,46 @@ namespace Xsolla
 	{
 		public Text mShopTitle;
 		public GameObject mShopContent;
-		public GameObject mItemsContent;
+		public GameObject mItemsContentGrid;
+		public GameObject mItemsContentList;
 
 		private const String mGroupsUrl = "paystation2/api/virtualitems/groups";
 		private const String mGoodsUrl = "paystation2/api/virtualitems/items";
 		private const String mSalesUrl = "paystation2/api/virtualitems/sales";
 
-		private const String PREFAB_SHOP_ITEM = "Prefabs/SimpleView/_ScreenShop/ShopSimple/ShopItemGoodRe";
+		private const String PREFAB_SHOP_ITEM_GRID = "Prefabs/SimpleView/_ScreenShop/ShopSimple/ShopItemGoodRe";
+		private const String PREFAB_SHOP_ITEM_LIST = "Prefabs/SimpleView/_ScreenShop/ShopSimple/ShopItemGoodListRe";
+		private bool mIsListLayout = false;
 
 		private GoodsGroupMenuController mGoodsGroupController;
 		private XsollaUtils mUtils;
 		private List<ShopItemController> mListItems;
 
+		public GameObject GetItemContainer
+		{
+			get
+			{
+				return (mUtils.GetSettings().mDesktop.pVirtItems.isListLayout()) ? mItemsContentList : mItemsContentGrid;
+			}
+		}
+
 		public void init(XsollaUtils pUtils)
 		{
 			mUtils = pUtils;
 			mListItems = new List<ShopItemController>();
+			// Задаем настройки на лэндинг
+			mIsListLayout = pUtils.GetSettings().mDesktop.pVirtItems.isListLayout();
+			if (mIsListLayout)
+			{
+				mItemsContentGrid.SetActive(false);
+				mItemsContentList.SetActive(true);
+			}
+			else
+			{
+				mItemsContentGrid.SetActive(true);
+				mItemsContentList.SetActive(false);
+			}
+
 			// строим навигационное меню магазина 
 			// получить список групп
 			Dictionary<String, object> lParams = new Dictionary<string, object>();
@@ -60,7 +84,7 @@ namespace Xsolla
 
 		private void SelectGoodsGroup(XsollaGoodsGroup pGroup)
 		{
-			// Скрыть панель с товарами mShopContent
+			// Зачищаем панель с товарами
 			ClearItemsContent();
 
 			// выбор товаров по группе
@@ -88,7 +112,7 @@ namespace Xsolla
 			
 		private void AddShopItem(XsollaShopItem pItem)
 		{
-			GameObject lBaseObj = Resources.Load(PREFAB_SHOP_ITEM) as GameObject;
+			GameObject lBaseObj = Resources.Load(mIsListLayout ? PREFAB_SHOP_ITEM_LIST : PREFAB_SHOP_ITEM_GRID) as GameObject;
 			// создаем экземпляр объекта товара
 			GameObject lItemObj = Instantiate(lBaseObj);
 			// получаем контроллер
@@ -97,7 +121,7 @@ namespace Xsolla
 			itemController.init(pItem, mUtils);
 			itemController.mCollapseAnotherDesc = CollapseAllDesc;
 			// добавляем на панель
-			lItemObj.transform.SetParent(mItemsContent.transform);
+			lItemObj.transform.SetParent(GetItemContainer.transform);
 			// Добавляем в лист кэша магазина
 			mListItems.Add(itemController);
 		}
@@ -114,8 +138,8 @@ namespace Xsolla
 		private void ClearItemsContent()
 		{
 			List<Transform> lListChilds = new List<Transform>();
-			for(int i=0; i <= mItemsContent.transform.transform.childCount - 1; i++)
-				lListChilds.Add(mItemsContent.transform.GetChild(i));
+			for(int i=0; i <= GetItemContainer.transform.transform.childCount - 1; i++)
+				lListChilds.Add(GetItemContainer.transform.GetChild(i));
 
 			lListChilds.ForEach((childs) => { Destroy(childs.gameObject); });
 			mListItems.Clear();

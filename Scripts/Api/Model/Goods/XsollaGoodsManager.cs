@@ -103,6 +103,11 @@ namespace Xsolla
 			return id;
 		}
 
+		public int GetQuantityLimit()
+		{
+			return quantityLimit;
+		}
+
 		public string GetBounusString()
 		{
 			if (bonusVirtualItems.Count > 0) {
