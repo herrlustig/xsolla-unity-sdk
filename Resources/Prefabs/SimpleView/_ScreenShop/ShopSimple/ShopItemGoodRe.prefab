@@ -841,9 +841,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
   m_MinWidth: -1
-  m_MinHeight: 25
+  m_MinHeight: 26
   m_PreferredWidth: -1
-  m_PreferredHeight: 25
+  m_PreferredHeight: 26
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
 --- !u!114 &114000011723496304
@@ -1068,7 +1068,13 @@ MonoBehaviour:
   mOldAmount: {fileID: 114000011889695640}
   mCurrency: {fileID: 114000012314481610}
   mImgLoader: {fileID: 114000013675093710}
-  mBuyBtn: {fileID: 1000010823382138}
+  mListImagePanel: {fileID: 0}
+  mQuantityLabel: {fileID: 0}
+  mQuantityMinus: {fileID: 0}
+  mQuantityPlus: {fileID: 0}
+  mQuantityCount: {fileID: 0}
+  mOldAmountStrange: {fileID: 0}
+  mBuyBtn: {fileID: 1000012533107560}
 --- !u!114 &114000012314481610
 MonoBehaviour:
   m_ObjectHideFlags: 1

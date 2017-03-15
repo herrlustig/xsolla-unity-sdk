@@ -1,6 +1,8 @@
 ﻿using System;
 using UnityEngine;
 using UnityEngine.UI;
+using SimpleJSON;
+using System.Collections.Generic;
 
 namespace Xsolla
 {
@@ -34,6 +36,7 @@ namespace Xsolla
 
 		public GameObject mBuyBtn;
 
+		private const String mSummaryUrl = "paystation2/api/cart/summary";
 		private XsollaShopItem mItem;
 		private XsollaUtils mUtils;
 		private int mCount = 1;
@@ -63,10 +66,13 @@ namespace Xsolla
 				{
 					mCount = value;
 					mQuantityCount.text = mCount.ToString();
+					// Запрос на пересчет 
+					// Отмена возможного запрос
+					CancelInvoke();
+					Invoke("GetSummaryRequest", 1);
 				}
 			}
 		}
-
 		public Action mCollapseAnotherDesc;
 		private bool mLongDescState = false; 
 		public bool LongDescState 
@@ -110,7 +116,7 @@ namespace Xsolla
 			// Рекламный блок
 			SetAdBlock(pItem);
 			// Ценовой блок
-			SetAmountBlock(pItem);
+			SetAmountBlock(pItem.vcAmount,pItem.vcAmountWithoutDiscount,pItem.amount,pItem.amountWithoutDiscount,pItem.currency);
 		}
 
 		private void SetListLandingItem(XsollaShopItem pItem)
@@ -182,6 +188,54 @@ namespace Xsolla
 				mListImagePanel.sprite = StyleManager.Instance.GetSprite(pSprite);	
 		}
 
+		private void SetAmountBlock(Decimal pVcAmount, Decimal pVcAmountWithoutDiscount, Decimal pAmount, Decimal pAmountWithoutDiscount, String pCurrency)
+		{
+			if (mItem.IsVirtualPayment())
+			{
+				if (pVcAmount == pVcAmountWithoutDiscount)
+					mAmount.text = pVcAmount.ToString("##.##");
+				else
+					mAmount.text = pVcAmountWithoutDiscount.ToString("##.00") + " " + pVcAmount.ToString("##.00");
+
+				if (mUtils.GetProject().virtualCurrencyIconUrl != "null")
+					mImgLoader.LoadImage(mVcIcon, mUtils.GetProject().virtualCurrencyIconUrl);
+				else
+				{
+					mAmount.text = mAmount.text + " " + mUtils.GetProject().virtualCurrencyName;
+					mVcIcon.gameObject.SetActive(false);
+				}
+			}
+			else
+			{
+				mVcIcon.gameObject.SetActive(false);
+				if (pAmount == pAmountWithoutDiscount)
+				{
+					mAmount.text = CurrencyFormatter.FormatPrice(pCurrency , pAmount.ToString("##.00"));
+					if (pCurrency == "RUB")
+						mCurrency.enabled = true;
+				}
+				else
+				{
+					mOldAmount.enabled = true;
+					mOldAmount.text = CurrencyFormatter.FormatPrice(pCurrency, pAmountWithoutDiscount.ToString("##.00"));
+					mAmount.text = CurrencyFormatter.FormatPrice(pCurrency, pAmount.ToString("##.00"));
+					if (pCurrency == "RUB")
+						mCurrency.enabled = true;
+				}
+			}
+
+			if (mUtils.GetSettings().mDesktop.pVirtItems.mButtonWithPrice)
+				mBuyBtn.GetComponentInChildren<Text>().text = "";
+			else
+				mBuyBtn.GetComponentInChildren<Text>().text = mUtils.GetTranslations().Get("virtual_item_option_button");
+
+			mBuyBtn.GetComponent<Button>().onClick.AddListener(delegate
+				{
+					BuyClick(mItem);
+				});
+			
+		}
+
 		private void SetAmountBlock(XsollaShopItem pItem)
 		{	 
 			if (pItem.IsVirtualPayment())
@@ -189,7 +243,7 @@ namespace Xsolla
 				if (pItem.vcAmount == pItem.vcAmountWithoutDiscount)
 					mAmount.text = pItem.vcAmount.ToString("##.##");
 				else
-					mAmount.text = "<s>" + pItem.vcAmountWithoutDiscount.ToString("##.00") + "</s>" + " " + pItem.vcAmount.ToString("##.00");
+					mAmount.text = pItem.vcAmountWithoutDiscount.ToString("##.00") + " " + pItem.vcAmount.ToString("##.00");
 
 				if (mUtils.GetProject().virtualCurrencyIconUrl != "null")
 					mImgLoader.LoadImage(mVcIcon, mUtils.GetProject().virtualCurrencyIconUrl);
@@ -217,12 +271,139 @@ namespace Xsolla
 						mCurrency.enabled = true;
 				}
 			}
+
+			if (mUtils.GetSettings().mDesktop.pVirtItems.mButtonWithPrice)
+				mBuyBtn.GetComponentInChildren<Text>().text = "";
+			else
+				mBuyBtn.GetComponentInChildren<Text>().text = mUtils.GetTranslations().Get("virtual_item_option_button");
+
+			mBuyBtn.GetComponent<Button>().onClick.AddListener(delegate
+				{
+					BuyClick(pItem);
+				});
+
 		}
 
 		private void SetStateLongState(bool pState)
 		{
 			LongDescState = pState;
 		}
+
+		private void GetSummaryRequest()
+		{
+			Logger.Log("Get summary");
+			Dictionary<String, object> lParams = new Dictionary<string, object>();
+			lParams.Add(XsollaApiConst.ACCESS_TOKEN, mUtils.GetAcceessToken());
+			lParams.Add("is_virtual_payment", mItem.IsVirtualPayment() ? 1 : 0);	
+			lParams.Add(String.Format("sku[{0}]", mItem.GetSku()), ItemQuantity);	
+			ApiRequest.Instance.getApiRequest(new XsollaRequestPckg(mSummaryUrl, lParams), SummaryRecived, ErrorRecived);
+		}
+
+		private void SummaryRecived(JSONNode pNode)
+		{
+			Logger.Log("Summary recived");
+			XsollaSummaryRecived lSummary = new XsollaSummaryRecived().Parse(pNode) as XsollaSummaryRecived;
+			// Заполнить новые цены
+			SetAmountBlock(lSummary.mFinance.mTotal.vcAmount, 
+						   lSummary.mFinance.mTotalWithOutDiscont.vcAmount, 
+						   lSummary.mFinance.mTotal.amount,
+						   lSummary.mFinance.mTotalWithOutDiscont.amount,
+				lSummary.mFinance.mTotal.currency);
+		}
+
+		private void ErrorRecived(JSONNode pErrorNode)
+		{
+			
+		}
+
+		private void BuyClick(XsollaShopItem pItem)
+		{
+			Logger.Log("Click buy btn " + pItem.GetId());
+		}
+	}
+
+	public class XsollaSummaryRecived: IParseble
+	{
+		public XsollaApi mApi;
+		public XsollaItemFinance mFinance;
+		public XsollaItemPurchase mPurchase;
+		public bool mSkipConfirmation;
+
+		public IParseble Parse (JSONNode rootNode)
+		{
+			mFinance = new XsollaItemFinance().Parse(rootNode["finance"]) as XsollaItemFinance;
+			mPurchase = new XsollaItemPurchase().Parse(rootNode["purchase"]) as XsollaItemPurchase;
+			mSkipConfirmation = rootNode["skip_confirmation"].AsBool;
+			mApi = new XsollaApi().Parse(rootNode["api"]) as XsollaApi;
+			return this;
+		}
+	}
+
+	public class XsollaItemFinance: IParseble
+	{
+		public SummaryTotal mTotal;
+		public SummaryTotal mTotalWithOutDiscont;
+
+		public IParseble Parse (JSONNode rootNode)
+		{
+			mTotal = new SummaryTotal().Parse(rootNode["total"]) as SummaryTotal;
+			mTotalWithOutDiscont = new SummaryTotal().Parse(rootNode["total_without_discount"]) as SummaryTotal;
+			return this;
+		}
+	}
+
+	public class SummaryTotal: IParseble
+	{
+		public Decimal amount;
+		public Decimal vcAmount;
+		public String currency;
+
+		public IParseble Parse (JSONNode rootNode)
+		{
+			if (rootNode["amount"] != "null")
+				amount = rootNode["amount"].AsDecimal;
+
+			if (rootNode["vc_amount"] != "null")
+				vcAmount = rootNode["vc_amount"].AsDecimal;
+
+			if (rootNode["currency"] != "null")
+				currency = rootNode["currency"];
+
+			return this;
+		}
+	}
+
+	public class XsollaItemPurchase: IParseble
+	{
+		List<XsollaSummaryVirtualItem> mListItems;
+
+		public IParseble Parse (JSONNode rootNode)
+		{
+			mListItems = new List<XsollaSummaryVirtualItem>();
+			JSONNode VirtItemsNode = rootNode["virtual_items"];
+			IEnumerator<JSONNode> goodsGroupsEnumerator = VirtItemsNode.Childs.GetEnumerator();
+			while(goodsGroupsEnumerator.MoveNext()){
+				mListItems.Add(new XsollaSummaryVirtualItem().Parse(goodsGroupsEnumerator.Current) as XsollaSummaryVirtualItem);
+			}
+			return this;
+		}
+	}
+
+	public class XsollaSummaryVirtualItem: IParseble
+	{
+		public String mImgUrl;
+		public String mName;
+		public int mQuantity;
+
+		public IParseble Parse (JSONNode rootNode)
+		{
+			mImgUrl = rootNode["image_url"];
+			mName = rootNode["name"];
+			mQuantity = rootNode["quantity"].AsInt;
+
+			return this;
+		}
+
 	}
 }
 

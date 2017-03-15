@@ -209,6 +209,7 @@ namespace Xsolla
 			vcAmount 				= shopItemNode ["vc_amount"].AsDecimal;
 			vcAmountWithoutDiscount = shopItemNode ["vc_amount_without_discount"].AsDecimal;//amount_without_discount <- NEW | OLD -> amountWithoutDiscount
 			currency 				= shopItemNode ["currency"].Value;
+			quantityLimit			= shopItemNode ["quantity_limit"].AsInt;
 			bonusVirtualItems 		= XsollaBonusItem.ParseMany (shopItemNode ["bonus_virtual_items"]);
 			var bvc 				= new XsollaBonusItem ();
 			bvc.Parse (shopItemNode ["bonus_virtual_currency"]);
