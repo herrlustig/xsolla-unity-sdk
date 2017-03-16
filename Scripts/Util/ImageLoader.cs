@@ -71,6 +71,12 @@ namespace Xsolla {
 						}
 					}
 				}
+				else
+				{
+					Logger.Log("Error to load img!");
+					// делаем image прозрачным 
+					imageView.color = new Color(255,255,255,0);
+				}
 				imageURLWWW.Dispose ();
 				imageURLWWW = null;
 			}

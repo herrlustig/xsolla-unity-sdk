@@ -290,6 +290,7 @@ namespace Xsolla
 				_SavedPaymentController = paymentManager.GetComponent<PaymentManagerController>();
 				_SavedPaymentController.setOnCloseMethod(() => 
 					{
+						//ShowGoodsShop();
 						LoadGoodsGroups();
 					});
 				paymentManager.transform.SetParent (mainScreenContainer.transform);
@@ -506,7 +507,7 @@ namespace Xsolla
 		{
 			_summary = summary;
 			currentActive = ActiveScreen.VP_PAYMENT;
-			menuTransform.gameObject.SetActive (true);
+			//menuTransform.gameObject.SetActive (true);
 			GameObject statusScreen = Instantiate (Resources.Load(PREFAB_SCREEN_VP_SUMMARY)) as GameObject;
 			statusScreen.transform.SetParent(mainScreenContainer.transform);
 			statusScreen.GetComponent<RectTransform> ().anchoredPosition = new Vector2 (0, 0);

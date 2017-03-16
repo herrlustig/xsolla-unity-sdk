@@ -38,6 +38,7 @@ namespace Xsolla
 			nameEn = projectNode ["nameEn"];
 			virtualCurrencyName = projectNode ["virtualCurrencyName"];
 			virtualCurrencyIconUrl = projectNode ["virtualCurrencyImage"];
+			virtualCurrencyIconUrl = virtualCurrencyIconUrl.Replace("//","");
 			merchantId = projectNode ["merchantId"].AsInt;
 			isDiscrete = projectNode ["isDiscrete"].AsBool;
 			projectUrl = projectNode ["projectUrl"];

@@ -95,18 +95,28 @@ namespace Xsolla
 		{
 			mItem = pItem;
 			mUtils = pUtils;
+
 			// Загружаем картинку
 			mImgLoader.LoadImage(mItemImg, pItem.GetImageUrl());
+
 			// Задаем название 
 			mItemName.text = pItem.GetName();
+
 			// Задаем короткое описание 
 			mShortDesc.text = pItem.GetDescription();
+
 			// Задаем полное описание 
 			if (mLongCanvas != null)
 				Resizer.ResizeToParrentRe(mLongCanvas.gameObject);
-			mLongDesc.text = pItem.GetLongDescription();
+			// Если полное описание пустое, то скрываем ссылку
+			if (pItem.GetLongDescription() != "")
+				mLongDesc.text = pItem.GetLongDescription();
+			else
+				mLongDescLink.gameObject.SetActive(false);
+
 			// Задаем иконку любимого товара
 			mFav.text = pItem.IsFavorite() ? "" : "";
+
 			// Задаем состояние длинного описания
 			LongDescState = false;
 			mLongDescLink.GetComponent<Button>().onClick.AddListener(delegate {SetStateLongState(!mLongDescState);});
@@ -198,6 +208,7 @@ namespace Xsolla
 					mAmount.text = pVcAmountWithoutDiscount.ToString("##.00") + " " + pVcAmount.ToString("##.00");
 
 				if (mUtils.GetProject().virtualCurrencyIconUrl != "null")
+					// если тут придется ошибка с загрузкой, нужно залить альфа канал
 					mImgLoader.LoadImage(mVcIcon, mUtils.GetProject().virtualCurrencyIconUrl);
 				else
 				{
@@ -233,7 +244,6 @@ namespace Xsolla
 				{
 					BuyClick(mItem);
 				});
-			
 		}
 
 		private void SetAmountBlock(XsollaShopItem pItem)
@@ -319,6 +329,9 @@ namespace Xsolla
 		private void BuyClick(XsollaShopItem pItem)
 		{
 			Logger.Log("Click buy btn " + pItem.GetId());
+			Dictionary<string, object> map = new Dictionary<string, object>();
+			map.Add ("sku[" + pItem.GetKey() + "]", mCount);
+			gameObject.GetComponentInParent<XsollaPaystationController> ().ChooseItem (map, pItem.IsVirtualPayment());
 		}
 	}
 
