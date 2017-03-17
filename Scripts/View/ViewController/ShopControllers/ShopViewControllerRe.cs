@@ -59,6 +59,16 @@ namespace Xsolla
 			ApiRequest.Instance.getApiRequest(new XsollaRequestPckg(mGroupsUrl, lParams), GoodsGroupRecived, ErrorRecived);
 		}
 
+		public void initPricePoint(XsollaUtils pUtils)
+		{
+			mUtils = pUtils;
+			mListItems = new List<ShopItemController>();
+
+			mItemsContentGrid.SetActive(true);
+			mItemsContentList.SetActive(false);
+
+		}
+
 		public void init(XsollaUtils pUtils, GameObject pContent)
 		{
 		}

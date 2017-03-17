@@ -518,7 +518,7 @@ namespace Xsolla
 
 		private void DrawVPError(XsollaUtils utils, string error) {
 			currentActive = ActiveScreen.VP_PAYMENT;
-			menuTransform.gameObject.SetActive (true);
+			//menuTransform.gameObject.SetActive (true);
 			GameObject statusScreen = Instantiate (Resources.Load(PREFAB_SCREEN_VP_SUMMARY)) as GameObject;
 			statusScreen.transform.SetParent(mainScreenContainer.transform);
 			statusScreen.GetComponent<RectTransform> ().anchoredPosition = new Vector2 (0, 0);
@@ -530,7 +530,7 @@ namespace Xsolla
 					
 		private void DrawVPStatus (XsollaUtils utils, XVPStatus status) {
 			currentActive = ActiveScreen.STATUS;
-			menuTransform.gameObject.SetActive (false);
+			//menuTransform.gameObject.SetActive (false);
 			GameObject statusScreen = Instantiate (Resources.Load(PREFAB_SCREEN_STATUS)) as GameObject;
 			statusScreen.transform.SetParent(mainScreenContainer.transform);
 			statusScreen.GetComponent<RectTransform> ().anchoredPosition = new Vector2 (0, 0);
