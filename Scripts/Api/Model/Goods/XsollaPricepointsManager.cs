@@ -9,15 +9,19 @@ namespace Xsolla
 {
 	public class XsollaPricepointsManager : XsollaObjectsManager<XsollaPricepoint>, IParseble 
 	{
-
-//		private List<XsollaPricepoint> list;// 			"list":[],
 		private Dictionary<string, object> formParams;//"formParams":[],
 		private string projectCurrency;// 				"projectCurrency":"Coins",
-//		private XsollaApi api;// 						"api":{}
+		private XsollaApi api;// 						"api":{}
 
 		public string GetProjectCurrency(){
 			return projectCurrency;
 		}
+
+		public override string ToString ()
+		{
+			return string.Format ("[XsollaPricepointsManager: formParams={0}, projectCurrency={1}, api={2}]", formParams, projectCurrency, api);
+		}
+		
 
 		public IParseble Parse (JSONNode pricepointsNode)
 		{
@@ -39,7 +43,7 @@ namespace Xsolla
 
 			projectCurrency = pricepointsNode ["projectCurrency"];
 
-//			api = new XsollaApi ().Parse (pricepointsNode [XsollaApiConst.R_API]) as XsollaApi;
+			api = new XsollaApi ().Parse (pricepointsNode [XsollaApiConst.R_API]) as XsollaApi;
 
 			return this;
 		}
@@ -59,16 +63,15 @@ namespace Xsolla
 
 	public class XsollaPricepoint : AXsollaShopItem, IParseble
 	{
-		public float outAmount { get; private set;}// 					"out":100,
-		public float outWithoutDiscount { get; private set;}// 			"outWithoutDiscount":100,
-		public float bonusOut { get; private set;}// 						"bonusOut":0,
-		public float sum { get; private set;}// 						"sum":0.99,
-		public float sumWithoutDiscount { get; private set;}// 			"sumWithoutDiscount":0.99,
+		public decimal outAmount { get; private set;}// 					"out":100,
+		public decimal outWithoutDiscount { get; private set;}// 			"outWithoutDiscount":100,
+		public decimal bonusOut { get; private set;}// 						"bonusOut":0,
+		public decimal sum { get; private set;}// 						"sum":0.99,
+		public decimal sumWithoutDiscount { get; private set;}// 			"sumWithoutDiscount":0.99,
 		public string currency { get; private set;}// 					"currency":"USD",
 		public string image { get; private set;}// 						"image":"\/\/livedemo.xsolla.com\/paystation\/img\/1.png",
 		public string desc { get; private set;}// 						"desc":"",
 		public List<XsollaBonusItem> bonusItems { get; private set;}//	"bonusItems":[],
-		public bool selected { get; private set;}// 					"selected":true
 
 		public string GetImageUrl()
 		{
@@ -115,33 +118,38 @@ namespace Xsolla
 		{
 			return outAmount.ToString ();
 		}
-
-
+			
 
 		public IParseble Parse (JSONNode pricepointNode)
 		{
-			outAmount = pricepointNode["out"].AsFloat;
-			outWithoutDiscount = pricepointNode["outWithoutDiscount"].AsFloat;
-			bonusOut = pricepointNode["bonusOut"].AsFloat;
-			sum = pricepointNode["sum"].AsFloat;
-			sumWithoutDiscount = pricepointNode["sumWithoutDiscount"].AsFloat;
+			outAmount = pricepointNode["out"].AsDecimal;
+			outWithoutDiscount = pricepointNode["outWithoutDiscount"].AsDecimal;
+			bonusOut = pricepointNode["bonusOut"].AsDecimal;
+			sum = pricepointNode["sum"].AsDecimal;
+			sumWithoutDiscount = pricepointNode["sumWithoutDiscount"].AsDecimal;
 			currency = pricepointNode["currency"].Value;
 			image = pricepointNode["image"].Value;
 			desc = pricepointNode["description"].Value;
 			bonusItems = XsollaBonusItem.ParseMany (pricepointNode ["bonusItems"]);
 			label = pricepointNode["label"].Value;
 			offerLabel = pricepointNode["offerLabel"].Value;
-			selected = pricepointNode["selected"].AsBool;
 
 			string advertisementTypeString = pricepointNode ["advertisementType"].Value;
 			advertisementType = AdType.NONE;
 			if (sum != sumWithoutDiscount || outAmount != outWithoutDiscount || bonusItems.Count > 0 || bonusOut > 0) {
 				advertisementType = AdType.SPECIAL_OFFER;
 			} else {
-				if("best_deal".Equals(advertisementTypeString)) {
+				if("best_deal".Equals(advertisementTypeString)) 
+				{
 					advertisementType = AdType.BEST_DEAL;
-				} else if("recommended".Equals(advertisementTypeString)) {
+				} 
+				else if("recommended".Equals(advertisementTypeString)) 
+				{
 					advertisementType = AdType.RECCOMENDED;
+				} 
+				else if("special_offer".Equals(advertisementTypeString)) 
+				{
+					advertisementType = AdType.SPECIAL_OFFER;
 				}
 			}
 			return this;

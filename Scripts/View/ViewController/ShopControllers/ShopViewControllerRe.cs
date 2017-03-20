@@ -44,6 +44,9 @@ namespace Xsolla
 			{
 				mItemsContentGrid.SetActive(false);
 				mItemsContentList.SetActive(true);
+
+				// Задаем новый компонент на скролл
+				mItemsContentList.transform.parent.gameObject.GetComponent<ScrollRect>().content = mItemsContentList.GetComponent<RectTransform>();
 			}
 			else
 			{
@@ -57,16 +60,6 @@ namespace Xsolla
 			lParams.Add(XsollaApiConst.ACCESS_TOKEN, mUtils.GetAcceessToken());
 			lParams.Add(XsollaApiConst.USER_INITIAL_CURRENCY, mUtils.GetUser().userBalance.currency);
 			ApiRequest.Instance.getApiRequest(new XsollaRequestPckg(mGroupsUrl, lParams), GoodsGroupRecived, ErrorRecived);
-		}
-
-		public void initPricePoint(XsollaUtils pUtils)
-		{
-			mUtils = pUtils;
-			mListItems = new List<ShopItemController>();
-
-			mItemsContentGrid.SetActive(true);
-			mItemsContentList.SetActive(false);
-
 		}
 
 		public void init(XsollaUtils pUtils, GameObject pContent)

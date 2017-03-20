@@ -277,6 +277,7 @@ GameObject:
   - 222: {fileID: 222000011833345166}
   - 114: {fileID: 114000013766327312}
   - 114: {fileID: 114000013179405294}
+  - 114: {fileID: 114000012628621898}
   m_Layer: 5
   m_Name: FullDesc
   m_TagString: Untagged
@@ -480,6 +481,7 @@ GameObject:
   - 224: {fileID: 224000010654176550}
   - 222: {fileID: 222000012395246112}
   - 114: {fileID: 114000011669259700}
+  - 114: {fileID: 114000012335194898}
   m_Layer: 5
   m_Name: VcIcon
   m_TagString: Untagged
@@ -1000,7 +1002,7 @@ MonoBehaviour:
   m_IgnoreLayout: 0
   m_MinWidth: -1
   m_MinHeight: -1
-  m_PreferredWidth: -1
+  m_PreferredWidth: 468
   m_PreferredHeight: -1
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
@@ -1064,7 +1066,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Padding:
     m_Left: 0
-    m_Right: 10
+    m_Right: 0
     m_Top: 0
     m_Bottom: 0
   m_ChildAlignment: 5
@@ -1592,6 +1594,24 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
+--- !u!114 &114000012335194898
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000013745491798}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1679637790, guid: f5f67c52d1564df4a8936ccd202a3bd8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_IgnoreLayout: 0
+  m_MinWidth: -1
+  m_MinHeight: -1
+  m_PreferredWidth: 20
+  m_PreferredHeight: -1
+  m_FlexibleWidth: -1
+  m_FlexibleHeight: -1
 --- !u!114 &114000012352655382
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1651,6 +1671,20 @@ MonoBehaviour:
   m_PreferredHeight: 110
   m_FlexibleWidth: 0
   m_FlexibleHeight: 0
+--- !u!114 &114000012628621898
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000011874831786}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fc117f59f61de4868b1f1d085ec2e3e1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemsToColor:
+  - color: 18
+    whatToColor: {fileID: 114000013766327312}
 --- !u!114 &114000012665375068
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1983,7 +2017,7 @@ MonoBehaviour:
     m_Top: 0
     m_Bottom: 0
   m_ChildAlignment: 0
-  m_Spacing: 0
+  m_Spacing: 5
   m_ChildForceExpandWidth: 1
   m_ChildForceExpandHeight: 1
 --- !u!114 &114000013336926970
@@ -2076,10 +2110,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Padding:
-    m_Left: 2
+    m_Left: 1
     m_Right: 2
-    m_Top: 2
-    m_Bottom: 2
+    m_Top: 1
+    m_Bottom: 1
   m_ChildAlignment: 0
   m_Spacing: 0
   m_ChildForceExpandWidth: 1

@@ -98,6 +98,7 @@ GameObject:
   - 224: {fileID: 224000010185328506}
   - 222: {fileID: 222000012456767460}
   - 114: {fileID: 114000012648415582}
+  - 114: {fileID: 114000011995373642}
   m_Layer: 5
   m_Name: ItemsContainerList
   m_TagString: Untagged
@@ -1361,6 +1362,19 @@ MonoBehaviour:
   m_PreferredHeight: -1
   m_FlexibleWidth: 0
   m_FlexibleHeight: 0
+--- !u!114 &114000011995373642
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000011009872606}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1741964061, guid: f5f67c52d1564df4a8936ccd202a3bd8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_HorizontalFit: 0
+  m_VerticalFit: 2
 --- !u!114 &114000012059497584
 MonoBehaviour:
   m_ObjectHideFlags: 1

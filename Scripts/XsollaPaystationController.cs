@@ -20,6 +20,7 @@ namespace Xsolla
 		private const string PREFAB_SCREEN_SUBSCRIPTIONS = "Prefabs/SimpleView/_ScreenShop/SubscriptionsView";
 
 		private const string PREFAB_SCREEN_GOODS_SHOP = "Prefabs/SimpleView/_ScreenShop/GoodsViewRe";
+		private const string PREFAB_SCREEN_PRICEPOINT_SHOP = "Prefabs/SimpleView/_ScreenShop/PricePointViewRe";
 
 
 		private const string PREFAB_SCREEN_PAYMENT_MANAGER = "Prefabs/Screens/ScreenPaymentManager";
@@ -587,6 +588,18 @@ namespace Xsolla
 			SetLoading(false);
 		}
 
+		private void ShowPricePointShop()
+		{
+			SetLoading(true);
+			GameObject pricePointShop = Instantiate(Resources.Load(PREFAB_SCREEN_PRICEPOINT_SHOP)) as GameObject;
+			PricePointShopControllerRe controller = pricePointShop.GetComponent<PricePointShopControllerRe>();
+			controller.init(Utils);
+
+			// задаем родителя и заполняем 
+			Resizer.SetParentToFullScreen(pricePointShop, mainScreenContainer);
+			SetLoading(false);
+		}
+
 		private void NavMenuClick(RadioButton.RadioType pType)
 		{
 			switch (pType) {
@@ -599,7 +612,8 @@ namespace Xsolla
 				}
 			case RadioButton.RadioType.SCREEN_PRICEPOINT:
 				{
-					LoadShopPricepoints();
+					//LoadShopPricepoints();
+					ShowPricePointShop();
 					mNavMenuController.SetVisibleBtn(false, RadioButton.RadioType.SCREEN_FAVOURITE);
 					break;
 				}

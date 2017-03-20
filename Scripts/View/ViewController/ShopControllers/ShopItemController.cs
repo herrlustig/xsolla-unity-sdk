@@ -203,9 +203,9 @@ namespace Xsolla
 			if (mItem.IsVirtualPayment())
 			{
 				if (pVcAmount == pVcAmountWithoutDiscount)
-					mAmount.text = pVcAmount.ToString("##.##");
+					mAmount.text = pVcAmount.ToString("0.00");
 				else
-					mAmount.text = pVcAmountWithoutDiscount.ToString("##.00") + " " + pVcAmount.ToString("##.00");
+					mAmount.text = pVcAmountWithoutDiscount.ToString("0.00") + " " + pVcAmount.ToString("0.00");
 
 				if (mUtils.GetProject().virtualCurrencyIconUrl != "null")
 					// если тут придется ошибка с загрузкой, нужно залить альфа канал
@@ -215,15 +215,18 @@ namespace Xsolla
 					mAmount.text = mAmount.text + " " + mUtils.GetProject().virtualCurrencyName;
 					mVcIcon.gameObject.SetActive(false);
 				}
+				mCurrency.gameObject.SetActive(false);
 			}
 			else
 			{
 				mVcIcon.gameObject.SetActive(false);
 				if (pAmount == pAmountWithoutDiscount)
 				{
-					mAmount.text = CurrencyFormatter.FormatPrice(pCurrency , pAmount.ToString("##.00"));
+					mAmount.text = CurrencyFormatter.FormatPrice(pCurrency , pAmount.ToString("0.00"));
 					if (pCurrency == "RUB")
 						mCurrency.enabled = true;
+					else
+						mCurrency.gameObject.SetActive(false);
 				}
 				else
 				{
@@ -232,13 +235,16 @@ namespace Xsolla
 					mAmount.text = CurrencyFormatter.FormatPrice(pCurrency, pAmount.ToString("##.00"));
 					if (pCurrency == "RUB")
 						mCurrency.enabled = true;
+					else
+						mCurrency.gameObject.SetActive(false);
 				}
 			}
 
-			if (mUtils.GetSettings().mDesktop.pVirtItems.mButtonWithPrice)
-				mBuyBtn.GetComponentInChildren<Text>().text = "";
-			else
-				mBuyBtn.GetComponentInChildren<Text>().text = mUtils.GetTranslations().Get("virtual_item_option_button");
+			mBuyBtn.GetComponentInChildren<Text>().text = mUtils.GetTranslations().Get("virtual_item_option_button");
+//			if (mUtils.GetSettings().mDesktop.pVirtItems.mButtonWithPrice)
+//				mBuyBtn.GetComponentInChildren<Text>().text = "";
+//			else
+//				mBuyBtn.GetComponentInChildren<Text>().text = mUtils.GetTranslations().Get("virtual_item_option_button");
 
 			mBuyBtn.GetComponent<Button>().onClick.AddListener(delegate
 				{
@@ -282,10 +288,11 @@ namespace Xsolla
 				}
 			}
 
-			if (mUtils.GetSettings().mDesktop.pVirtItems.mButtonWithPrice)
-				mBuyBtn.GetComponentInChildren<Text>().text = "";
-			else
-				mBuyBtn.GetComponentInChildren<Text>().text = mUtils.GetTranslations().Get("virtual_item_option_button");
+			mBuyBtn.GetComponentInChildren<Text>().text = mUtils.GetTranslations().Get("virtual_item_option_button");
+//			if (mUtils.GetSettings().mDesktop.pVirtItems.mButtonWithPrice)
+//				mBuyBtn.GetComponentInChildren<Text>().text = "";
+//			else
+//				mBuyBtn.GetComponentInChildren<Text>().text = mUtils.GetTranslations().Get("virtual_item_option_button");
 
 			mBuyBtn.GetComponent<Button>().onClick.AddListener(delegate
 				{

@@ -56,7 +56,7 @@ namespace Xsolla
 			itemAdapter.SetSpecial (pricepoint.GetDescription());
 			itemAdapter.SetPrice (pricepoint.GetPriceString());
 			itemAdapter.SetLabel (pricepoint.GetAdvertisementType(), pricepoint.GetLabel());
-			itemAdapter.SetOnClickListener(() => OnClickBuy(pricepoint.outAmount));
+			itemAdapter.SetOnClickListener(() => OnClickBuy((float)pricepoint.outAmount));
 			return shopItemInstance;
 		}
 
