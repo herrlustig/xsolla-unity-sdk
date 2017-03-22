@@ -29,6 +29,7 @@ namespace Xsolla
 
 		public Image mListImagePanel;
 		public Text mQuantityLabel;
+		public GameObject mQuantityPanel;
 		public Button mQuantityMinus;
 		public Button mQuantityPlus;
 		public Text mQuantityCount;
@@ -37,8 +38,11 @@ namespace Xsolla
 		public GameObject mBuyBtn;
 
 		private const String mSummaryUrl = "paystation2/api/cart/summary";
+		private const String mFavoriteUrl = "paystation2/api/virtualitems/setfavorite";
 		private XsollaShopItem mItem;
 		private XsollaUtils mUtils;
+		private int mGroupId;
+		private Action<int, bool> mActionResetCacheGroup;
 		private int mCount = 1;
 		public int ItemQuantity
 		{
@@ -91,10 +95,12 @@ namespace Xsolla
 			}
 		}
 			
-		public void init(XsollaShopItem pItem, XsollaUtils pUtils)
+		public void init(XsollaShopItem pItem, XsollaUtils pUtils, int pGroupId, Action<int, bool> pActionResetCacheGroup)
 		{
 			mItem = pItem;
 			mUtils = pUtils;
+			mGroupId = pGroupId;
+			mActionResetCacheGroup = pActionResetCacheGroup;
 
 			// Загружаем картинку
 			mImgLoader.LoadImage(mItemImg, pItem.GetImageUrl());
@@ -115,7 +121,8 @@ namespace Xsolla
 				mLongDescLink.gameObject.SetActive(false);
 
 			// Задаем иконку любимого товара
-			mFav.text = pItem.IsFavorite() ? "" : "";
+			SetFavoriteState();
+			mFav.gameObject.GetComponent<Button>().onClick.AddListener(delegate {ChangeFavState();});
 
 			// Задаем состояние длинного описания
 			LongDescState = false;
@@ -129,19 +136,54 @@ namespace Xsolla
 			SetAmountBlock(pItem.vcAmount,pItem.vcAmountWithoutDiscount,pItem.amount,pItem.amountWithoutDiscount,pItem.currency);
 		}
 
+		private void SetFavoriteState()
+		{
+			mFav.text = mItem.IsFavorite() ? "" : "";
+		}
+
+		private void ChangeFavState()
+		{
+			Logger.Log("Get summary");
+			Dictionary<String, object> lParams = new Dictionary<string, object>();
+			lParams.Add(XsollaApiConst.ACCESS_TOKEN, mUtils.GetAcceessToken());
+			lParams.Add(XsollaApiConst.USER_INITIAL_CURRENCY, mUtils.GetUser().userBalance.currency);
+			lParams.Add("virtual_item_id", mItem.GetId());
+			lParams.Add("is_favorite", mItem.IsFavorite()? "0" : "1");
+			ApiRequest.Instance.getApiRequest(new XsollaRequestPckg(mFavoriteUrl, lParams), FavoriteRecived, ErrorRecived, false);
+		}
+
+		private void FavoriteRecived(JSONNode pNode)
+		{
+			int lFavState = pNode["is_favorite"].AsInt;
+			mItem.isFavorite = lFavState;
+			SetFavoriteState();
+			// Сбросим статус кэша для группы в которой находится этот товар
+			Logger.Log("Next respond on groupID - " + mGroupId + " without Cache");
+			mActionResetCacheGroup(mGroupId, false);
+		}
+
 		private void SetListLandingItem(XsollaShopItem pItem)
 		{
-			// Блок кол-ва
-			if (mQuantityLabel != null && mQuantityCount != null)
+			if (pItem.GetQuantityLimit() > 1)
 			{
-				mQuantityLabel.text = mUtils.GetTranslations().Get("quantity_label");
-				mQuantityCount.text = mCount.ToString();
+				// Блок кол-ва
+				if (mQuantityLabel != null && mQuantityCount != null)
+				{
+					mQuantityLabel.text = mUtils.GetTranslations().Get("quantity_label");
+					mQuantityCount.text = mCount.ToString();
+				}
+				// События для кнопок изменения кол-ва товара	
+				if (mQuantityMinus != null && mQuantityPlus != null)
+				{
+					mQuantityMinus.onClick.AddListener(MinusQuantity);
+					mQuantityPlus.onClick.AddListener(AddQuantity);
+				}
 			}
-			// События для кнопок изменения кол-ва товара	
-			if (mQuantityMinus != null && mQuantityPlus != null)
+			else 
 			{
-				mQuantityMinus.onClick.AddListener(MinusQuantity);
-				mQuantityPlus.onClick.AddListener(AddQuantity);
+				// убираем панель с кол-вом 
+				mQuantityLabel.gameObject.SetActive(false);
+				mQuantityPanel.SetActive(false);
 			}
 		}
 
@@ -313,7 +355,7 @@ namespace Xsolla
 			lParams.Add(XsollaApiConst.ACCESS_TOKEN, mUtils.GetAcceessToken());
 			lParams.Add("is_virtual_payment", mItem.IsVirtualPayment() ? 1 : 0);	
 			lParams.Add(String.Format("sku[{0}]", mItem.GetSku()), ItemQuantity);	
-			ApiRequest.Instance.getApiRequest(new XsollaRequestPckg(mSummaryUrl, lParams), SummaryRecived, ErrorRecived);
+			ApiRequest.Instance.getApiRequest(new XsollaRequestPckg(mSummaryUrl, lParams), SummaryRecived, ErrorRecived, false);
 		}
 
 		private void SummaryRecived(JSONNode pNode)

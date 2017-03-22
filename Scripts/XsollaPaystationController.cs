@@ -274,12 +274,12 @@ namespace Xsolla
 
 		protected override void UpdateCustomAmount (CustomVirtCurrAmountController.CustomAmountCalcRes pRes)
 		{
-			// find custom amount controller 
-			CustomVirtCurrAmountController controller = FindObjectOfType<CustomVirtCurrAmountController>();
-			if (controller != null)
-				controller.setValues(pRes);
-			else
-				Logger.Log("Custom amount controller not found");	
+			//			 find custom amount controller 
+//			CustomVirtCurrAmountController controller = FindObjectOfType<CustomVirtCurrAmountController>();
+//			if (controller != null)
+//				//controller.setValues(pRes);
+//			else
+//				Logger.Log("Custom amount controller not found");	
 		}
 
 		protected override void PaymentManagerRecieved (XsollaSavedPaymentMethods pResult, bool pAddState)

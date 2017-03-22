@@ -7,7 +7,7 @@ namespace Xsolla
 	{
 
 		public static string Format(string amountString, string currency){
-			var amount = float.Parse(amountString);
+			var amount = float.Parse(amountString, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture);
 			switch (currency) {
 			case "USD":
 				amountString = string.Format("${0:0.00}", amount);

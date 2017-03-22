@@ -19,10 +19,10 @@ namespace Xsolla
 			mGlobalCache = new Dictionary<XsollaRequestPckg, JSONNode>();
 		}
 			
-		public void getApiRequest(XsollaRequestPckg pPckg, Action<JSONNode> pRecivedCallBack, Action<JSONNode> pReciverdError)
+		public void getApiRequest(XsollaRequestPckg pPckg, Action<JSONNode> pRecivedCallBack, Action<JSONNode> pReciverdError, bool pUseCached = true)
 		{
 
-			if (ChacheExist(pPckg, pRecivedCallBack))
+			if (pUseCached && ChacheExist(pPckg, pRecivedCallBack))
 				return;
 			
 			WWWForm lForm = new WWWForm();
@@ -65,7 +65,22 @@ namespace Xsolla
 			else
 			{
 				// логируем запрос
-				mGlobalCache.Add(pPckg, jsonRespond);
+				bool lContaint = false;
+				IEnumerator lEnum = mGlobalCache.Keys.GetEnumerator();
+				while(lEnum.MoveNext())
+				{
+					if (lEnum.Current.Equals(pPckg))
+					{
+						mGlobalCache[lEnum.Current as XsollaRequestPckg] = jsonRespond;
+						lContaint = true;
+						break;
+					}
+				}
+
+				if (!lContaint)
+				{	
+					mGlobalCache.Add(pPckg, jsonRespond);
+				}
 
 				// отдаем запрос
 				if (!pPckg.isOnlyCache())

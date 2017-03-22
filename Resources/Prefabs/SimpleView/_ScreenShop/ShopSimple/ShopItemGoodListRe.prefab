@@ -1041,7 +1041,7 @@ MonoBehaviour:
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_FontData:
     m_Font: {fileID: 12800000, guid: cdaf3a9afc38b41628e487252ed161e0, type: 3}
-    m_FontSize: 14
+    m_FontSize: 20
     m_FontStyle: 0
     m_BestFit: 1
     m_MinSize: 1
@@ -1236,7 +1236,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mImage: {fileID: 114000010079997766}
-  mType: 15
+  mType: 7
 --- !u!114 &114000011669259700
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2062,7 +2062,7 @@ MonoBehaviour:
   m_MinWidth: -1
   m_MinHeight: 20
   m_PreferredWidth: -1
-  m_PreferredHeight: 20
+  m_PreferredHeight: -1
   m_FlexibleWidth: -1
   m_FlexibleHeight: 0
 --- !u!114 &114000013646831714
@@ -2188,6 +2188,7 @@ MonoBehaviour:
   mImgLoader: {fileID: 114000012293859914}
   mListImagePanel: {fileID: 114000013320549322}
   mQuantityLabel: {fileID: 114000011934959012}
+  mQuantityPanel: {fileID: 1000010181480312}
   mQuantityMinus: {fileID: 114000014149377926}
   mQuantityPlus: {fileID: 114000014221697222}
   mQuantityCount: {fileID: 114000010878437724}

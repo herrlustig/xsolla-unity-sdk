@@ -89,7 +89,7 @@ namespace Xsolla
 		public decimal 	vcAmountWithoutDiscount;			//	vc_amount_without_discount: 0,
 
 		private int 	quantityLimit;						//	quantity_limit: 1,
-		private int 	isFavorite;							//	is_favorite: 0,
+		public int 	isFavorite;							//	is_favorite: 0,
 
 		private string[] 				unsatisfiedUserAttributes;	//	unsatisfied_user_attributes: []
 		private XsollaBonusItem 		bonusVirtualCurrency;		//	bonus_virtual_currency: {},

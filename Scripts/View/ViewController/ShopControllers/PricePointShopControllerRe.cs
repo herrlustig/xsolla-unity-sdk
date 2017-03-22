@@ -16,7 +16,7 @@ namespace Xsolla
 		public GameObject mShopScreen;
 		public GameObject mCustomAmountScreen;
 
-		private const String mPricePoints = "paystation2/api/pricepoints";
+		private const String mPricePointsUrl = "paystation2/api/pricepoints";
 
 		private const String PREFAB_SHOP_PRICEPOINT_GRID = "Prefabs/SimpleView/_ScreenShop/ShopSimple/ShopPricePointItemRe";
 
@@ -56,7 +56,7 @@ namespace Xsolla
 
 				// Инициализируем саму панель
 				CustomVirtCurrAmountController customController = mCustomAmountScreen.GetComponent<CustomVirtCurrAmountController>();
-				//customController.initScreen();
+				customController.init(mUtils, 100);
 
 				mCustomAmountLink.GetComponent<Button>().onClick.AddListener(ChangeStateCusomAmount);
 				StateCustomAmount = false;
@@ -68,7 +68,7 @@ namespace Xsolla
 			Dictionary<String, object> lParams = new Dictionary<string, object>();
 			lParams.Add(XsollaApiConst.ACCESS_TOKEN, mUtils.GetAcceessToken());
 			lParams.Add(XsollaApiConst.USER_INITIAL_CURRENCY, mUtils.GetUser().userBalance.currency);
-			ApiRequest.Instance.getApiRequest(new XsollaRequestPckg(mPricePoints, lParams), PricePointsRecived, ErrorRecived);
+			ApiRequest.Instance.getApiRequest(new XsollaRequestPckg(mPricePointsUrl, lParams), PricePointsRecived, ErrorRecived);
 		}
 
 		private void PricePointsRecived(JSONNode pNode)

@@ -25,6 +25,8 @@ namespace Xsolla
 		private GoodsGroupMenuController mGoodsGroupController;
 		private XsollaUtils mUtils;
 		private List<ShopItemController> mListItems;
+		private int mCurrGroupId;
+		private Dictionary<int, bool> mGroupUseCached;
 
 		public GameObject GetItemContainer
 		{
@@ -38,6 +40,7 @@ namespace Xsolla
 		{
 			mUtils = pUtils;
 			mListItems = new List<ShopItemController>();
+			mGroupUseCached = new Dictionary<int, bool>();
 			// Задаем настройки на лэндинг
 			mIsListLayout = pUtils.GetSettings().mDesktop.pVirtItems.isListLayout();
 			if (mIsListLayout)
@@ -93,6 +96,7 @@ namespace Xsolla
 			// выбор товаров по группе
 			// Меняем заголовок
 			mShopTitle.text = pGroup.GetName();
+			mCurrGroupId = pGroup.id;
 
 			// запрос на данные 
 			Logger.Log("Load goods from groupId:" + pGroup.id.ToString());
@@ -101,7 +105,9 @@ namespace Xsolla
 			lParams.Add(XsollaApiConst.USER_INITIAL_CURRENCY, mUtils.GetUser().userBalance.currency);
 			lParams.Add("group_id", pGroup.id);
 			// Если id = -1 то это распродажа и делаем запрос по другому адресу
-			ApiRequest.Instance.getApiRequest(new XsollaRequestPckg((pGroup.id == -1) ? mSalesUrl : mGoodsUrl, lParams), GoodsRecived, ErrorRecived);
+			ApiRequest.Instance.getApiRequest(new XsollaRequestPckg((pGroup.id == -1) ? mSalesUrl : mGoodsUrl, lParams), GoodsRecived, ErrorRecived, mGroupUseCached.ContainsKey(mCurrGroupId) ? mGroupUseCached[mCurrGroupId] : true);
+
+			SetCachedStateOnGroupId(mCurrGroupId, true);
 		}
 
 		private void GoodsRecived(JSONNode pNode)
@@ -121,12 +127,20 @@ namespace Xsolla
 			// получаем контроллер
 			ShopItemController itemController = lItemObj.GetComponent<ShopItemController>();
 			// инициализируем контроллер
-			itemController.init(pItem, mUtils);
+			itemController.init(pItem, mUtils, mCurrGroupId, SetCachedStateOnGroupId);
 			itemController.mCollapseAnotherDesc = CollapseAllDesc;
 			// добавляем на панель
 			lItemObj.transform.SetParent(GetItemContainer.transform);
 			// Добавляем в лист кэша магазина
 			mListItems.Add(itemController);
+		}
+
+		private void SetCachedStateOnGroupId(int pGroupid, bool pState)
+		{
+			if (!mGroupUseCached.ContainsKey(pGroupid))
+				mGroupUseCached.Add(pGroupid, pState);
+			else
+				mGroupUseCached[pGroupid] = pState;
 		}
 
 		public void CollapseAllDesc()
