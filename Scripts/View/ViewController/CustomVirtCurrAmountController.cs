@@ -72,7 +72,7 @@ namespace Xsolla
 		private void BuyBtn()
 		{
 			decimal lVcAmount;
-			if (decimal.TryParse(virtCurrAmount.text, out lVcAmount))
+			if (decimal.TryParse(virtCurrAmount.text, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out lVcAmount))
 			{
 				// Покупаем
 				Dictionary<string, object> map = new Dictionary<string, object> (1);
@@ -145,12 +145,12 @@ namespace Xsolla
 			
 		}
 
-		private float GetOutAmount()
+		private decimal GetOutAmount()
 		{
-			float res = 0;
+			decimal res = 0;
 			string value = virtCurrAmount.text;
 
-			float.TryParse(value, out res);
+			decimal.TryParse(value, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out res);
 			return res;
 		}
 

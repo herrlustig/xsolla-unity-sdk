@@ -22,6 +22,7 @@ namespace Xsolla
 
 		private XsollaUtils mUtils;
 		private List<PricePointItemController> mListItems;
+		private CustomVirtCurrAmountController mCustomController;
 		private bool mStateCustomAmount;
 
 		public bool StateCustomAmount
@@ -53,11 +54,7 @@ namespace Xsolla
 			if (mUtils.GetSettings().components.virtualCurreny.customAmount)
 			{
 				mCustomAmountLink.SetActive(true);
-
-				// Инициализируем саму панель
-				CustomVirtCurrAmountController customController = mCustomAmountScreen.GetComponent<CustomVirtCurrAmountController>();
-				customController.init(mUtils, 100);
-
+				mCustomController = mCustomAmountScreen.GetComponent<CustomVirtCurrAmountController>();
 				mCustomAmountLink.GetComponent<Button>().onClick.AddListener(ChangeStateCusomAmount);
 				StateCustomAmount = false;
 			}
@@ -80,6 +77,15 @@ namespace Xsolla
 				{ 
 					AddPricePointItem(item); 
 				});
+
+			// Инициализируем панель кастомного пополнения
+			// Получим дефолтное кол-во 
+			if (mCustomAmountLink.activeSelf)
+			{
+				int lCountItems = lGoods.GetItemsList().Count;
+				int lAvgIdx = lCountItems / 2 + ((lCountItems % 2) > 0 ? 1 : 0);
+				mCustomController.init(mUtils, lGoods.GetItemsList()[lAvgIdx - 1].outAmount);
+			}
 		}
 
 		private void AddPricePointItem(XsollaPricepoint pItem)
