@@ -58,22 +58,23 @@ namespace Xsolla
 			GameObject menuItemEmpty = Instantiate (menuItemEmptyPrefab);
 			menuItemEmpty.transform.SetParent (mNavMenuPanel.transform);
 
-			addMenuBtn("", "", RadioButton.RadioType.SCREEN_FAVOURITE);
+			addMenuBtn("", "", RadioButton.RadioType.SCREEN_FAVOURITE, true);
 		}
 
-		private void addMenuBtn(string pIcon, string pName, RadioButton.RadioType pType)
+		private void addMenuBtn(string pIcon, string pName, RadioButton.RadioType pType, bool pOnlyAction = false)
 		{
 			GameObject menuItemPrefab = Instantiate(Resources.Load (PREFAB_VIEW_MENU_ITEM)) as GameObject;
 			RadioButton controller = menuItemPrefab.GetComponent<RadioButton>();
-			controller.init(pIcon, pName, pType, delegate { onNavMenuItemClick(pType); });
+			controller.init(pIcon, pName, pType, delegate { onNavMenuItemClick(pType, pOnlyAction); }, pOnlyAction);
 
 			menuItemPrefab.transform.SetParent(mNavMenuPanel.transform);
 			mRadioGroupController.AddButton(menuItemPrefab.GetComponent<RadioButton>());
 		}
 
-		public void onNavMenuItemClick(RadioButton.RadioType pType)
+		public void onNavMenuItemClick(RadioButton.RadioType pType, bool pOnlyAction = false)
 		{
-			mRadioGroupController.UnselectAll();
+			if (!pOnlyAction)
+				mRadioGroupController.UnselectAll();
 			mActionNavClick(pType);
 		}
 

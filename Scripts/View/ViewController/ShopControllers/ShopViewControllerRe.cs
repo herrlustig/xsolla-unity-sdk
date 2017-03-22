@@ -17,6 +17,7 @@ namespace Xsolla
 		private const String mGroupsUrl = "paystation2/api/virtualitems/groups";
 		private const String mGoodsUrl = "paystation2/api/virtualitems/items";
 		private const String mSalesUrl = "paystation2/api/virtualitems/sales";
+		private const String mFavItemsUrl = "paystation2/api/virtualitems/favorite";
 
 		private const String PREFAB_SHOP_ITEM_GRID = "Prefabs/SimpleView/_ScreenShop/ShopSimple/ShopItemGoodRe";
 		private const String PREFAB_SHOP_ITEM_LIST = "Prefabs/SimpleView/_ScreenShop/ShopSimple/ShopItemGoodListRe";
@@ -90,9 +91,6 @@ namespace Xsolla
 
 		private void SelectGoodsGroup(XsollaGoodsGroup pGroup)
 		{
-			// Зачищаем панель с товарами
-			ClearItemsContent();
-
 			// выбор товаров по группе
 			// Меняем заголовок
 			mShopTitle.text = pGroup.GetName();
@@ -112,6 +110,8 @@ namespace Xsolla
 
 		private void GoodsRecived(JSONNode pNode)
 		{
+			// Зачищаем панель с товарами
+			ClearItemsContent();
 			XsollaGoodsManager lGoods = new XsollaGoodsManager().Parse(pNode) as XsollaGoodsManager;
 			lGoods.GetItemsList().ForEach((item) => 
 				{ 
@@ -141,6 +141,24 @@ namespace Xsolla
 				mGroupUseCached.Add(pGroupid, pState);
 			else
 				mGroupUseCached[pGroupid] = pState;
+		}
+
+		public void ShowFavItems()
+		{
+			Logger.Log("Get request on favorite items");
+			Dictionary<String, object> lParams = new Dictionary<string, object>();
+			lParams.Add(XsollaApiConst.ACCESS_TOKEN, mUtils.GetAcceessToken());
+			lParams.Add(XsollaApiConst.USER_INITIAL_CURRENCY, mUtils.GetUser().userBalance.currency);
+			ApiRequest.Instance.getApiRequest(new XsollaRequestPckg(mFavItemsUrl, lParams), FavItemsRecived, ErrorRecived, false);
+		}
+
+		private void FavItemsRecived(JSONNode pNode)
+		{
+			// Задем заголовок
+			mShopTitle.text = mUtils.GetTranslations().Get(XsollaTranslations.VIRTUALITEMS_TITLE_FAVORITE);
+			// Снимаем отметку с бокового меню
+			mGoodsGroupController.unselectAll();
+			GoodsRecived(pNode);
 		}
 
 		public void CollapseAllDesc()

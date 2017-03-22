@@ -38,6 +38,11 @@ namespace Xsolla
 		{
 			mRadioGroupController.radioButtons[pIndx].mBtn.onClick.Invoke();
 		}
+
+		public void unselectAll()
+		{
+			mRadioGroupController.UnselectAll();
+		}
 			
 	}
 }

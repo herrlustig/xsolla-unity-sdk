@@ -29,7 +29,7 @@ namespace Xsolla {
 			GOODS_ITEM
 		};
 
-		public void init(string pIcon, string pName, RadioType pType, Action pActionClick)
+		public void init(string pIcon, string pName, RadioType pType, Action pActionClick, bool pOnlyAction = false)
 		{
 			if (mIcon != null)
 				mIcon.text = pIcon;
@@ -44,7 +44,8 @@ namespace Xsolla {
 				mBtn.onClick.AddListener(delegate 
 					{
 						mClickAction();
-						Select();
+						if (!pOnlyAction)
+							Select();
 					});
 			}
 		}

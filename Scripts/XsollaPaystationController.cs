@@ -588,6 +588,15 @@ namespace Xsolla
 			SetLoading(false);
 		}
 
+		private void ShowFavGoodsShop()
+		{
+			ShopViewControllerRe shopController = GameObject.FindObjectOfType<ShopViewControllerRe>();
+			if (shopController != null)
+				shopController.ShowFavItems();
+		}
+
+
+
 		private void ShowPricePointShop()
 		{
 			SetLoading(true);
@@ -631,9 +640,8 @@ namespace Xsolla
 				}
 			case RadioButton.RadioType.SCREEN_FAVOURITE:
 				{
-					// Меняем заголовок
-					_shopViewController.SetTitle(Utils.GetTranslations().Get(XsollaTranslations.VIRTUALITEMS_TITLE_FAVORITE));
-					LoadFavorites();
+					//LoadFavorites();
+					ShowFavGoodsShop();
 					break;
 				}
 			default:
