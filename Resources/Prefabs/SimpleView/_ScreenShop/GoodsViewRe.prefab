@@ -696,6 +696,7 @@ MonoBehaviour:
   mShopContent: {fileID: 1000011072426020}
   mItemsContentGrid: {fileID: 1000012589790224}
   mItemsContentList: {fileID: 1000011009872606}
+  mScrollRectItemsContainer: {fileID: 114000011486964796}
 --- !u!114 &114000013848661220
 MonoBehaviour:
   m_ObjectHideFlags: 1

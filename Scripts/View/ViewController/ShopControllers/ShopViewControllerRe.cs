@@ -13,6 +13,8 @@ namespace Xsolla
 		public GameObject mShopContent;
 		public GameObject mItemsContentGrid;
 		public GameObject mItemsContentList;
+		public ScrollRect mScrollRectItemsContainer;
+
 
 		private const String mGroupsUrl = "paystation2/api/virtualitems/groups";
 		private const String mGoodsUrl = "paystation2/api/virtualitems/items";
@@ -112,6 +114,9 @@ namespace Xsolla
 		{
 			// Зачищаем панель с товарами
 			ClearItemsContent();
+			// Позиция для скролла
+			mScrollRectItemsContainer.verticalNormalizedPosition = 1;
+
 			XsollaGoodsManager lGoods = new XsollaGoodsManager().Parse(pNode) as XsollaGoodsManager;
 			lGoods.GetItemsList().ForEach((item) => 
 				{ 
