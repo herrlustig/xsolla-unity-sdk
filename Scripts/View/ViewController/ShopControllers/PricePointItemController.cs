@@ -38,7 +38,10 @@ namespace Xsolla
 			if (pItem.image != "null")
 				mImgLoader.LoadImage(mItemImg, pItem.GetImageUrl());
 			else
-				mItemImg.gameObject.transform.parent.gameObject.SetActive(false);
+				if (pUtils.GetProject().virtualCurrencyIconUrl != "null")
+					mImgLoader.LoadImage(mItemImg, pUtils.GetProject().virtualCurrencyIconUrl);
+				else
+					mItemImg.gameObject.transform.parent.gameObject.SetActive(false);
 
 			// Задаем короткое описание 
 			mShortDesc.text = pItem.GetDescription();
@@ -55,45 +58,8 @@ namespace Xsolla
 
 		private void SetAdBlock(XsollaPricepoint pItem)
 		{
-			switch (pItem.advertisementType) {
-			case AXsollaShopItem.AdType.BEST_DEAL:
-				{
-					mAdPanel.GetComponentInChildren<Text>().text = pItem.label;
-					mAdPanel.GetComponent<Image>().sprite = StyleManager.Instance.GetSprite(StyleManager.BaseSprite.bckg_bd_panel);
-					SetSpecialAdBkcg(StyleManager.BaseSprite.bckg_item_bd);
-					break;
-				}
-			case AXsollaShopItem.AdType.RECCOMENDED:
-				{
-					mAdPanel.GetComponentInChildren<Text>().text = pItem.label;
-					mAdPanel.GetComponent<Image>().sprite = StyleManager.Instance.GetSprite(StyleManager.BaseSprite.bckg_ad_panel);
-					SetSpecialAdBkcg(StyleManager.BaseSprite.bckg_item_ad);
-					break;
-				}
-			case AXsollaShopItem.AdType.SPECIAL_OFFER:
-				{
-					mAdPanel.GetComponentInChildren<Text>().text = pItem.label;
-					mAdPanel.GetComponent<Image>().sprite = StyleManager.Instance.GetSprite(StyleManager.BaseSprite.bckg_sales_panel);
-					SetSpecialAdBkcg(StyleManager.BaseSprite.bckg_item_sales);
-					break;
-				}
-			default:
-				{
-					if (pItem.offerLabel != "")
-					{
-						mAdPanel.GetComponentInChildren<Text>().text = pItem.offerLabel;
-						mAdPanel.GetComponent<Image>().sprite = StyleManager.Instance.GetSprite(StyleManager.BaseSprite.bckg_sales_panel);
-						SetSpecialAdBkcg(StyleManager.BaseSprite.bckg_item_sales);
-					}
-					else
-					{
-						mAdPanel.GetComponent<Image>().enabled = false;
-						mAdPanel.GetComponentInChildren<Text>().enabled = false;
-						SetSpecialAdBkcg(StyleManager.BaseSprite.bckg_item);
-					}
-					break;
-				}
-			}
+			StyleManager.BaseSprite lItemBckg = ShopItemHelper.SetAdBlockItem(pItem, mUtils, mAdPanel.GetComponentInChildren<Text>(), mAdPanel.GetComponent<Image>());
+			SetSpecialAdBkcg(lItemBckg);
 		}
 
 		private void SetSpecialAdBkcg(StyleManager.BaseSprite pSprite)
@@ -105,7 +71,6 @@ namespace Xsolla
 
 		private void SetAmountBlock(Decimal pAmount, Decimal pAmountWithoutDiscount, String pCurrency)
 		{
-			
 			if (pAmount == pAmountWithoutDiscount)
 			{
 				mAmount.text = CurrencyFormatter.FormatPrice(pCurrency , pAmount.ToString("0.00"));
@@ -120,8 +85,7 @@ namespace Xsolla
 				if (pCurrency == "RUB")
 					mCurrency.enabled = true;
 			}
-
-
+				
 			mBuyBtn.GetComponentInChildren<Text>().text = mUtils.GetTranslations().Get("virtual_item_option_button");
 //			if (mUtils.GetSettings().mDesktop.pVirtItems.mButtonWithPrice)
 //				mBuyBtn.GetComponentInChildren<Text>().text = "";

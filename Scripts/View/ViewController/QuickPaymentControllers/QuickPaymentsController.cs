@@ -140,7 +140,7 @@ namespace Xsolla{
 				GetComponentInParent<PaymentListScreenController>().OpenAllPayments();
 			});
 			back.GetComponent<Button>().onClick.AddListener (() => { 
-				GetComponentInParent<XsollaPaystationController>().LoadShopPricepoints();
+				GetComponentInParent<XsollaPaystationController>().NavMenuClick(RadioButton.RadioType.SCREEN_GOODS);
 			});
 		}
 

@@ -75,7 +75,7 @@ namespace Xsolla
 
 		public string GetImageUrl()
 		{
-			if(image.StartsWith("https:"))
+			if(image.Contains("http"))
 				return image;
 			else 
 				return "https:" + image;
@@ -150,6 +150,10 @@ namespace Xsolla
 				else if("special_offer".Equals(advertisementTypeString)) 
 				{
 					advertisementType = AdType.SPECIAL_OFFER;
+				}
+				else if("custom".Equals(advertisementTypeString)) 
+				{
+					advertisementType = AdType.CUSTOM;
 				}
 			}
 			return this;

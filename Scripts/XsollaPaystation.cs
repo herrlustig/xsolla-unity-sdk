@@ -506,6 +506,7 @@ namespace  Xsolla
 				if (pStatus.isFinal()) {
 //					Payment.InitPaystation(currentPurchase.GetMergedMap());
 					LoadShopPricepoints ();
+
 				} else {
 					StartCoroutine (Test ());
 				}

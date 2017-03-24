@@ -75,7 +75,7 @@ namespace Xsolla
 		private void GoodsGroupRecived(JSONNode pNode)
 		{
 			// получили список групп товаров. 
-			XsollaGroupsManager lGoodsGroups = new XsollaGroupsManager().Parse(pNode) as XsollaGroupsManager;
+			XsollaGroupsManager lGoodsGroups = new XsollaGroupsManager().Parse(pNode["groups"]) as XsollaGroupsManager;
 			// Строим меню 
 			mGoodsGroupController = this.gameObject.GetComponentInChildren<GoodsGroupMenuController>();
 			if (mUtils.mBonus.mHasSales)
@@ -87,8 +87,9 @@ namespace Xsolla
 			}
 				
 			mGoodsGroupController.init(lGoodsGroups, SelectGoodsGroup);
-			// Выделяем первый элемент
-			mGoodsGroupController.clickItem(0);
+			// Выделяем первый активный элемент
+			mGoodsGroupController.clickFirstActiveItem();
+			//mGoodsGroupController.clickItem(0);
 		}
 
 		private void SelectGoodsGroup(XsollaGoodsGroup pGroup)

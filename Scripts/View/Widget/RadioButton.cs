@@ -10,6 +10,9 @@ namespace Xsolla {
 		public Text mName;
 		public Button mBtn;
 		public Image mDevider;
+		public Text mExpandState;
+		public GameObject mChildrenContainer;
+		public VerticalLayoutGroup mGroupOnLevel;
 
 		public StyleManager.BaseColor activeText;
 		public StyleManager.BaseColor normalText;
@@ -18,6 +21,27 @@ namespace Xsolla {
 
 		private bool isSelected = false;
 		private RadioType _typeRadioBtn;
+		private bool mExpand = false;
+
+		public bool Expand 
+		{
+			get 
+			{
+				return mExpand;
+			}
+			set 
+			{
+				Logger.Log("Expand is " + (value).ToString());
+				mExpandState.text = value ? "" : "";
+				mChildrenContainer.SetActive(value);
+				mExpand = value;
+			}
+		}
+
+		public bool hasChildren()
+		{
+			return mExpandState.enabled;
+		}
 
 		public enum RadioType
 		{
@@ -29,7 +53,7 @@ namespace Xsolla {
 			GOODS_ITEM
 		};
 
-		public void init(string pIcon, string pName, RadioType pType, Action pActionClick, bool pOnlyAction = false)
+		public void init(string pIcon, string pName, RadioType pType, Action pActionClick, int pLevel, bool pOnlyAction = false)
 		{
 			if (mIcon != null)
 				mIcon.text = pIcon;
@@ -37,6 +61,7 @@ namespace Xsolla {
 				mName.text = pName;
 			
 			setType(pType);
+
 			mClickAction = pActionClick;
 
 			if (mBtn != null)
@@ -47,6 +72,17 @@ namespace Xsolla {
 						if (!pOnlyAction)
 							Select();
 					});
+			}
+
+			// Задаем смещение для уровня
+			if (mGroupOnLevel != null)
+			{
+				mGroupOnLevel.padding.left = mGroupOnLevel.padding.left + (pLevel * 20);
+				if (pLevel != 0)
+				{
+					mName.fontSize = 12;
+					stateDevider(false);
+				}
 			}
 		}
 
@@ -100,6 +136,28 @@ namespace Xsolla {
 		public void visibleBtn(bool pState)
 		{
 			this.gameObject.SetActive(pState);
+		}
+
+		public void setParentState(bool pState)
+		{
+			mExpandState.enabled = pState;
+			// если есть дети
+			if (pState)
+			{
+				if (mBtn != null)
+				{
+					mBtn.onClick.RemoveAllListeners();
+					mBtn.onClick.AddListener(delegate 
+						{
+							ChangeExpand();
+						});
+				}
+			}
+		}
+
+		private void ChangeExpand()
+		{
+			Expand = !Expand;
 		}
 	}
 }

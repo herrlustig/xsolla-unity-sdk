@@ -18,25 +18,58 @@ namespace Xsolla
 		{
 			Logger.Log("Create goods menu");
 			mRadioGroupController = this.gameObject.AddComponent<RadioGroupController>();
-			GameObject baseMenuItem = Resources.Load(PREFAB_MENU_ITEM) as GameObject;
 			pGoodsManager.GetItemsList().ForEach((item) =>
 				{
-					GameObject lMenuItem = Instantiate(baseMenuItem);
-					RadioButton lController = lMenuItem.GetComponent<RadioButton>();
-					lController.init("", item.GetName(), RadioButton.RadioType.GOODS_ITEM, delegate 
-						{ 
-							mRadioGroupController.UnselectAll();
-							pSelectItem(item); 
-						});
-					mRadioGroupController.AddButton(lController);
-					lMenuItem.transform.SetParent(mMenuContainer.transform);
+					addMenuItem(item, pSelectItem, mMenuContainer);
 				});
 			mRadioGroupController.radioButtons[0].stateDevider(false);
 		}
 
+		private void addMenuItem(XsollaGoodsGroup pGoodsGroup, Action<XsollaGoodsGroup> pSelectItem, GameObject pParent)
+		{
+			GameObject baseMenuItem = Resources.Load(PREFAB_MENU_ITEM) as GameObject;
+			GameObject lMenuItem = Instantiate(baseMenuItem);
+			RadioButton lController = lMenuItem.GetComponent<RadioButton>();
+			lController.init("", pGoodsGroup.GetName(), RadioButton.RadioType.GOODS_ITEM, delegate 
+				{ 
+					mRadioGroupController.UnselectAll();
+					pSelectItem(pGoodsGroup); 
+				}, pGoodsGroup.mLevel);
+
+			mRadioGroupController.AddButton(lController);
+
+			// Задаем является ли родителем
+			lController.setParentState(pGoodsGroup.mChildren.Count > 0);
+
+			//  Заносим детей
+			if (pGoodsGroup.mChildren.Count > 0)
+			{
+				pGoodsGroup.mChildren.GetItemsList().ForEach((item) => 
+					{
+						addMenuItem(item, pSelectItem, lController.mChildrenContainer);
+					});
+			}
+				
+			lMenuItem.transform.SetParent(pParent.transform);
+		}
+			
 		public void clickItem(int pIndx)
 		{
 			mRadioGroupController.radioButtons[pIndx].mBtn.onClick.Invoke();
+		}
+
+		public void clickFirstActiveItem()
+		{
+			foreach(RadioButton item in mRadioGroupController.radioButtons)
+			{
+				if (item.hasChildren())
+					item.Expand = true;
+				else
+				{
+					item.mBtn.onClick.Invoke();
+					return;
+				}
+			}
 		}
 
 		public void unselectAll()

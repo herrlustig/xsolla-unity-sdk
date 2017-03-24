@@ -32,8 +32,8 @@ namespace Xsolla
 	{
 		public IParseble Parse (JSONNode groupsNode)
 		{
-			JSONNode goodsGroupsNode = groupsNode["groups"];//["goodsgroups"];
-			IEnumerator<JSONNode> goodsGroupsEnumerator = goodsGroupsNode.Childs.GetEnumerator ();
+			//JSONNode goodsGroupsNode = groupsNode["groups"];
+			IEnumerator<JSONNode> goodsGroupsEnumerator = groupsNode.Childs.GetEnumerator ();
 			while(goodsGroupsEnumerator.MoveNext()){
 				AddItem(new XsollaGoodsGroup().Parse(goodsGroupsEnumerator.Current) as XsollaGoodsGroup);
 			}
@@ -47,7 +47,7 @@ namespace Xsolla
 		public string name; // "name":"Top Items",
 		public int mLevel;
 		public string mExternalId;
-		public string mChildren;
+		public XsollaGroupsManager mChildren;
 
 		public string GetKey()
 		{
@@ -65,7 +65,7 @@ namespace Xsolla
 			name = goodsGroupNode ["name"];
 			mLevel = goodsGroupNode ["level"].AsInt;
 			mExternalId = goodsGroupNode ["external_id"].Value;
-			mChildren = goodsGroupNode ["children"].Value;
+			mChildren = new XsollaGroupsManager().Parse(goodsGroupNode ["children"]) as XsollaGroupsManager;
 			return this;
 		}
 	}
@@ -92,8 +92,8 @@ namespace Xsolla
 		public int 	isFavorite;							//	is_favorite: 0,
 
 		private string[] 				unsatisfiedUserAttributes;	//	unsatisfied_user_attributes: []
-		private XsollaBonusItem 		bonusVirtualCurrency;		//	bonus_virtual_currency: {},
-		private List<XsollaBonusItem> 	bonusVirtualItems;			//	bonus_virtual_items: [],
+		public XsollaBonusItem 		bonusVirtualCurrency;		//	bonus_virtual_currency: {},
+		public List<XsollaBonusItem> 	bonusVirtualItems;			//	bonus_virtual_items: [],
 
 		public void SetVirtCurrName(string pName){
 			virtCurrency = pName;
@@ -119,7 +119,7 @@ namespace Xsolla
 				}
 				stringBuilder.Append ("</color>");
 				return stringBuilder.ToString ();
-			} else if (bonusVirtualCurrency != null && bonusVirtualCurrency.quantity != null && !"".Equals(bonusVirtualCurrency.quantity)) {
+			} else if (bonusVirtualCurrency != null && bonusVirtualCurrency.quantity > 0 && !"".Equals(bonusVirtualCurrency.quantity)) {
 				StringBuilder stringBuilder = new StringBuilder ();
 				stringBuilder.Append ("<color=#2DAE7B>");
 				stringBuilder.Append ("+ ");
@@ -223,10 +223,21 @@ namespace Xsolla
 			if (amount != amountWithoutDiscount || bonusVirtualItems.Count > 0) {
 				advertisementType = AdType.SPECIAL_OFFER;
 			} else {
-				if("best_deal".Equals(advertisementTypeString)) {
+				if("best_deal".Equals(advertisementTypeString)) 
+				{
 					advertisementType = AdType.BEST_DEAL;
-				} else if("recommended".Equals(advertisementTypeString)) {
+				} 
+				else if("recommended".Equals(advertisementTypeString)) 
+				{
 					advertisementType = AdType.RECCOMENDED;
+				} 
+				else if("special_offer".Equals(advertisementTypeString)) 
+				{
+					advertisementType = AdType.SPECIAL_OFFER;
+				}
+				else if("custom".Equals(advertisementTypeString)) 
+				{
+					advertisementType = AdType.CUSTOM;
 				}
 			}
 			return this;

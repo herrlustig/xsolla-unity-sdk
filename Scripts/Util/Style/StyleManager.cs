@@ -56,7 +56,9 @@ namespace Xsolla {
 			bg_error,
 			link_on_notify,
 			link_hover,
-			link_normal
+			link_normal,
+			title_screen,
+			expand_icon
 		};
 
 		public enum BaseSprite

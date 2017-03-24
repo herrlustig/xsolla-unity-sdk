@@ -42,6 +42,8 @@
 				"FA7464",
 				"ABABAB",
 				"518CB8",
+				"75A4C7",
+				"FFFFFF",
 				"75A4C7"
 			]
 		},
@@ -87,7 +89,9 @@
 				"FA7464",
 				"C2B6FC",
 				"715AA5",
-				"8D7BB7"
+				"8D7BB7",
+				"868686",
+				"C2B3E5"
 			]
 		}
 	},
@@ -130,8 +134,10 @@
 		"bonus",
 		"bg_ok",
 		"bg_error",
-		"link_on_notify"
-		"link_hover"
-		"link_normal"
+		"link_on_notify",
+		"link_hover",
+		"link_normal",
+		"title_screen",
+		"expand_icon"
 	]
 }

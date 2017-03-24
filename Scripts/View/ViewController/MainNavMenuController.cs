@@ -33,13 +33,13 @@ namespace Xsolla
 			Dictionary<string, XComponent> components = pUtils.GetProject().components;
 			if(components.ContainsKey("items") && components ["items"].IsEnabled)
 			{
-				string lName = (components ["items"].Name != "null") ? components ["items"].Name : pUtils.GetTranslations().Get(XsollaTranslations.VIRTUALITEM_PAGE_TITLE);
+				string lName = (components ["items"].Name != "") ? components ["items"].Name : pUtils.GetTranslations().Get(XsollaTranslations.VIRTUALITEM_PAGE_TITLE);
 				addMenuBtn("", lName, RadioButton.RadioType.SCREEN_GOODS);
 			}
 
 			if (components.ContainsKey("virtual_currency") && components ["virtual_currency"].IsEnabled)
 			{
-				string lName = (components ["virtual_currency"].Name != "null") ? components["virtual_currency"].Name : pUtils.GetTranslations().Get(XsollaTranslations.PRICEPOINT_PAGE_TITLE); 
+				string lName = (components ["virtual_currency"].Name != "") ? components["virtual_currency"].Name : pUtils.GetTranslations().Get(XsollaTranslations.PRICEPOINT_PAGE_TITLE); 
 				addMenuBtn("", lName, RadioButton.RadioType.SCREEN_PRICEPOINT);
 			} 
 
@@ -51,7 +51,7 @@ namespace Xsolla
 
 			if (components.ContainsKey("coupons") && components["coupons"].IsEnabled)
 			{
-				string lName = (components["coupons"].Name != "null") ? components["coupons"].Name : pUtils.GetTranslations().Get(XsollaTranslations.COUPON_PAGE_TITLE); 
+				string lName = (components["coupons"].Name != "") ? components["coupons"].Name : pUtils.GetTranslations().Get(XsollaTranslations.COUPON_PAGE_TITLE); 
 				addMenuBtn("", lName, RadioButton.RadioType.SCREEN_REDEEMCOUPON);
 			}
 
@@ -65,7 +65,7 @@ namespace Xsolla
 		{
 			GameObject menuItemPrefab = Instantiate(Resources.Load (PREFAB_VIEW_MENU_ITEM)) as GameObject;
 			RadioButton controller = menuItemPrefab.GetComponent<RadioButton>();
-			controller.init(pIcon, pName, pType, delegate { onNavMenuItemClick(pType, pOnlyAction); }, pOnlyAction);
+			controller.init(pIcon, pName, pType, delegate { onNavMenuItemClick(pType, pOnlyAction); }, 0, pOnlyAction);
 
 			menuItemPrefab.transform.SetParent(mNavMenuPanel.transform);
 			mRadioGroupController.AddButton(menuItemPrefab.GetComponent<RadioButton>());

@@ -60,20 +60,21 @@ namespace Xsolla {
 						//Create a new sprite using the Texture2D from the url. 
 						//Note that the 400 parameter is the width and height. 
 						//Adjust accordingly
-						sprite = Sprite.Create (imageURLWWW.texture, new Rect (0, 0, imageURLWWW.texture.width, imageURLWWW.texture.height), Vector2.zero);
+						sprite = Sprite.Create(imageURLWWW.texture, new Rect (0, 0, imageURLWWW.texture.width, imageURLWWW.texture.height), new Vector2(0,0));
 						if(!imageCashe.ContainsKey(url))
 						{
 							imageCashe.Add (url, sprite);
 						}
 						//Assign the sprite to the Image Component
-						if (imageView != null) {
+						if (imageView != null) 
+						{
 							imageView.sprite = sprite; 
 						}
 					}
 				}
 				else
 				{
-					Logger.Log("Error to load img!");
+					Logger.LogError("Error to load img with url - " + url);
 					// делаем image прозрачным 
 					imageView.color = new Color(255,255,255,0);
 				}

@@ -211,7 +211,7 @@ namespace Xsolla {
 			if (StatusHandler != null)
 				StatusHandler (group, invoice, status, pPurchase);
 			if (GetComponentInParent<XsollaPaystationController> () != null)
-				GetComponentInParent<XsollaPaystationController> ().LoadGoodsGroups();
+				GetComponentInParent<XsollaPaystationController> ().NavMenuClick(RadioButton.RadioType.SCREEN_GOODS);
 		}
 
 		// Событие по уничтожению статуса 

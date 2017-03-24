@@ -66,7 +66,6 @@ namespace Xsolla
 			mainScreen.SetActive (true);
 			mMainScreenController = mainScreen.GetComponent<MainScreenController>();
 			mainScreenContainer = mMainScreenController.mMainContainer;
-			// TODO новая реализация магазина
 			//mainScreenContainer = mainScreen.GetComponentsInChildren<ScrollRect> ()[0].gameObject;
 			//menuTransform = mainScreen.GetComponentsInChildren<RectTransform> ()[8].transform;
 			Resizer.ResizeToParrent (mainScreen);
@@ -292,7 +291,8 @@ namespace Xsolla
 				_SavedPaymentController.setOnCloseMethod(() => 
 					{
 						//ShowGoodsShop();
-						LoadGoodsGroups();
+						//LoadGoodsGroups();
+						NavMenuClick(RadioButton.RadioType.SCREEN_GOODS);
 					});
 				paymentManager.transform.SetParent (mainScreenContainer.transform);
 				paymentManager.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, 0);
@@ -326,7 +326,8 @@ namespace Xsolla
 				_SavedPaymentController = paymentManager.GetComponent<PaymentManagerController>();
 				_SavedPaymentController.setOnCloseMethod(() => 
 					{
-						LoadGoodsGroups();
+						//LoadGoodsGroups();
+						NavMenuClick(RadioButton.RadioType.SCREEN_GOODS);
 					});
 				paymentManager.transform.SetParent (mainScreenContainer.transform);
 				paymentManager.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, 0);
@@ -557,37 +558,54 @@ namespace Xsolla
 			}
 			progressBar.SetLoading (isLoading);
 		}
-
+			
+		// Новая инициализация
+		/// <summary>
+		/// Inits the header.
+		/// </summary>
+		/// <param name="utils">Utils.</param>
 		private void InitHeader(XsollaUtils utils)
 		{
 			MainHeaderController controller = mainScreen.GetComponentInChildren<MainHeaderController>();
 			controller.InitScreen(utils);
 		}
-
+			
+		/// <summary>
+		/// Inits the nav menu.
+		/// </summary>
+		/// <param name="pUtils">Utils.</param>
 		private void InitNavMenu(XsollaUtils pUtils)
 		{
 			mNavMenuController = mainScreen.GetComponentInChildren<MainNavMenuController>();
 			mNavMenuController.Init(pUtils, NavMenuClick); 
 		}
 
+		/// <summary>
+		/// Inits the footer.
+		/// </summary>
+		/// <param name="pUtils">Utils.</param>
 		private void InitFooter(XsollaUtils pUtils)
 		{
 			mFooterController = mainScreen.GetComponentInChildren<MainFooterController>();
 			mFooterController.Init(pUtils);
 		}
 
+		/// <summary>
+		/// Shows the goods shop.
+		/// </summary>
 		private void ShowGoodsShop()
 		{
-			SetLoading(true);
 			GameObject goodsShop = Instantiate(Resources.Load(PREFAB_SCREEN_GOODS_SHOP)) as GameObject;
 			ShopViewControllerRe controller = goodsShop.GetComponent<ShopViewControllerRe>();
 			controller.init(Utils);
 
 			// задаем родителя и заполняем 
 			Resizer.SetParentToFullScreen(goodsShop, mainScreenContainer);
-			SetLoading(false);
 		}
 
+		/// <summary>
+		/// Shows the fav goods shop.
+		/// </summary>
 		private void ShowFavGoodsShop()
 		{
 			ShopViewControllerRe shopController = GameObject.FindObjectOfType<ShopViewControllerRe>();
@@ -595,8 +613,9 @@ namespace Xsolla
 				shopController.ShowFavItems();
 		}
 
-
-
+		/// <summary>
+		/// Shows the price point shop.
+		/// </summary>
 		private void ShowPricePointShop()
 		{
 			SetLoading(true);
@@ -609,7 +628,11 @@ namespace Xsolla
 			SetLoading(false);
 		}
 
-		private void NavMenuClick(RadioButton.RadioType pType)
+		/// <summary>
+		/// Click on nav menu items by type.
+		/// </summary>
+		/// <param name="pType">Type menu item.</param>
+		public void NavMenuClick(RadioButton.RadioType pType)
 		{
 			switch (pType) {
 			case RadioButton.RadioType.SCREEN_GOODS:

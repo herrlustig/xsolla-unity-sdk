@@ -164,6 +164,9 @@ namespace Xsolla
 
 		private void SetListLandingItem(XsollaShopItem pItem)
 		{
+			if (mQuantityLabel == null)
+				return;
+
 			if (pItem.GetQuantityLimit() > 1)
 			{
 				// Блок кол-ва
@@ -199,38 +202,8 @@ namespace Xsolla
 
 		private void SetAdBlock(XsollaShopItem pItem)
 		{
-			switch (pItem.advertisementType) {
-			case AXsollaShopItem.AdType.BEST_DEAL:
-				{
-					mAdPanel.GetComponentInChildren<Text>().text = pItem.label;
-					mAdPanel.GetComponent<Image>().sprite = StyleManager.Instance.GetSprite(StyleManager.BaseSprite.bckg_bd_panel);
-					SetSpecialAdBkcg(StyleManager.BaseSprite.bckg_item_bd);
-					break;
-				}
-			case AXsollaShopItem.AdType.RECCOMENDED:
-				{
-					mAdPanel.GetComponentInChildren<Text>().text = pItem.label;
-					mAdPanel.GetComponent<Image>().sprite = StyleManager.Instance.GetSprite(StyleManager.BaseSprite.bckg_ad_panel);
-					SetSpecialAdBkcg(StyleManager.BaseSprite.bckg_item_ad);
-					break;
-				}
-			default:
-				{
-					if (pItem.offerLabel != "")
-					{
-						mAdPanel.GetComponentInChildren<Text>().text = pItem.offerLabel;
-						mAdPanel.GetComponent<Image>().sprite = StyleManager.Instance.GetSprite(StyleManager.BaseSprite.bckg_sales_panel);
-						SetSpecialAdBkcg(StyleManager.BaseSprite.bckg_item_sales);
-					}
-					else
-					{
-						mAdPanel.GetComponent<Image>().enabled = false;
-						mAdPanel.GetComponentInChildren<Text>().enabled = false;
-						SetSpecialAdBkcg(StyleManager.BaseSprite.bckg_item);
-					}
-					break;
-				}
-			}
+			StyleManager.BaseSprite lItemBckg = ShopItemHelper.SetAdBlockItem(pItem, mUtils, mAdPanel.GetComponentInChildren<Text>(), mAdPanel.GetComponent<Image>());
+			SetSpecialAdBkcg(lItemBckg);
 		}
 
 		private void SetSpecialAdBkcg(StyleManager.BaseSprite pSprite)

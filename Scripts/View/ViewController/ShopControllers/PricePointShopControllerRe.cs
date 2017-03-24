@@ -115,16 +115,15 @@ namespace Xsolla
 		void Update()
 		{
 			// Подгоняем размер ячейки 
-			float lMaxCellHeight = 0;
-			mListItems.ForEach((item) => 
-				{
-					if (item.mMainBckg.gameObject.GetComponent<RectTransform>().rect.height > lMaxCellHeight)
-						lMaxCellHeight = item.mMainBckg.gameObject.GetComponent<RectTransform>().rect.height;
-				});
-
-			Vector2 lCellSize = mItemsContentGrid.GetComponent<GridLayoutGroup>().cellSize;
-			mItemsContentGrid.GetComponent<GridLayoutGroup>().cellSize = new Vector2(lCellSize.x, lMaxCellHeight);
-			//Logger.Log("Max cell size - " + lMaxCellHeight.ToString());
+//			float lMaxCellHeight = 0;
+//			mListItems.ForEach((item) => 
+//				{
+//					if (item.gameObject.GetComponent<RectTransform>().rect.height > lMaxCellHeight)
+//						lMaxCellHeight = item.gameObject.GetComponent<RectTransform>().rect.height;
+//				});
+//
+//			Vector2 lCellSize = mItemsContentGrid.GetComponent<GridLayoutGroup>().cellSize;
+//			mItemsContentGrid.GetComponent<GridLayoutGroup>().cellSize = new Vector2(lCellSize.x, lMaxCellHeight);
 		}
 	}
 }

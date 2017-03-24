@@ -1041,7 +1041,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: New Text
+  m_Text: 
 --- !u!114 &114000012004579430
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1089,6 +1089,7 @@ MonoBehaviour:
   mImgLoader: {fileID: 114000013675093710}
   mListImagePanel: {fileID: 0}
   mQuantityLabel: {fileID: 0}
+  mQuantityPanel: {fileID: 0}
   mQuantityMinus: {fileID: 0}
   mQuantityPlus: {fileID: 0}
   mQuantityCount: {fileID: 0}
@@ -1225,7 +1226,7 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1000010397039626}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: -765806418, guid: f5f67c52d1564df4a8936ccd202a3bd8, type: 3}
   m_Name: 
