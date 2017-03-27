@@ -349,9 +349,9 @@ MonoBehaviour:
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_FontData:
     m_Font: {fileID: 12800000, guid: cdaf3a9afc38b41628e487252ed161e0, type: 3}
-    m_FontSize: 15
+    m_FontSize: 16
     m_FontStyle: 0
-    m_BestFit: 1
+    m_BestFit: 0
     m_MinSize: 0
     m_MaxSize: 300
     m_Alignment: 4
@@ -394,11 +394,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
   m_MinWidth: -1
-  m_MinHeight: 35
+  m_MinHeight: -1
   m_PreferredWidth: -1
   m_PreferredHeight: -1
   m_FlexibleWidth: -1
-  m_FlexibleHeight: 1
+  m_FlexibleHeight: -1
 --- !u!114 &114000012828584486
 MonoBehaviour:
   m_ObjectHideFlags: 1

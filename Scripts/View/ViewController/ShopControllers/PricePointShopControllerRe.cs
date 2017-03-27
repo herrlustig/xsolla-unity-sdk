@@ -72,6 +72,18 @@ namespace Xsolla
 		{
 			Logger.Log("PricePoints recived");
 			XsollaPricepointsManager lGoods = new XsollaPricepointsManager().Parse(pNode) as XsollaPricepointsManager;
+
+			// расчитываем кол-во столбцов
+			if ((lGoods.GetCount() % 4) == 0) 
+			{
+				mItemsContentGrid.GetComponent<GridLayoutGroup>().constraintCount = 4;	
+			}
+			if ((lGoods.GetCount() % 5) == 0) 
+			{
+				mItemsContentGrid.GetComponent<GridLayoutGroup>().cellSize = new Vector2(120, mItemsContentGrid.GetComponent<GridLayoutGroup>().cellSize.y);
+				mItemsContentGrid.GetComponent<GridLayoutGroup>().constraintCount = 5;	
+			}
+				
 			// Добавляем кнопки 
 			lGoods.GetItemsList().ForEach((item) => 
 				{ 
@@ -115,15 +127,26 @@ namespace Xsolla
 		void Update()
 		{
 			// Подгоняем размер ячейки 
-//			float lMaxCellHeight = 0;
-//			mListItems.ForEach((item) => 
-//				{
-//					if (item.gameObject.GetComponent<RectTransform>().rect.height > lMaxCellHeight)
-//						lMaxCellHeight = item.gameObject.GetComponent<RectTransform>().rect.height;
-//				});
-//
-//			Vector2 lCellSize = mItemsContentGrid.GetComponent<GridLayoutGroup>().cellSize;
-//			mItemsContentGrid.GetComponent<GridLayoutGroup>().cellSize = new Vector2(lCellSize.x, lMaxCellHeight);
+			float lMaxCellHeight = 0;
+			mListItems.ForEach((item) => 
+				{
+					if (item.mMainBckg.gameObject.GetComponent<ContentSizeFitter>().enabled)
+						if (item.mMainBckg.gameObject.GetComponent<RectTransform>().rect.height > lMaxCellHeight)
+							lMaxCellHeight = item.mMainBckg.gameObject.GetComponent<RectTransform>().rect.height;
+				});
+
+			if (lMaxCellHeight != 0)
+			{
+				Vector2 lCellSize = mItemsContentGrid.GetComponent<GridLayoutGroup>().cellSize;
+				mItemsContentGrid.GetComponent<GridLayoutGroup>().cellSize = new Vector2(lCellSize.x, lMaxCellHeight);
+			}
+
+			mListItems.ForEach((item) => 
+				{
+					item.mMainBckg.gameObject.GetComponent<ContentSizeFitter>().enabled = false;
+					item.mMainBckg.gameObject.GetComponent<RectTransform>().offsetMin = new Vector2(item.mMainBckg.gameObject.GetComponent<RectTransform>().offsetMin.x, 0);
+				});
+
 		}
 	}
 }

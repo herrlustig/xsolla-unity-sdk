@@ -82,6 +82,7 @@ namespace Xsolla
 			{
 				XsollaGoodsGroup salesGroup = new XsollaGoodsGroup();
 				salesGroup.id = -1;
+				salesGroup.mChildren = new XsollaGroupsManager();
 				salesGroup.name = "%" + " " + mUtils.GetTranslations().Get("sales_page_title");
 				lGoodsGroups.InsertItem(0, salesGroup);
 			}

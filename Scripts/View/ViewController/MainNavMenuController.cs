@@ -45,7 +45,7 @@ namespace Xsolla
 
 			if (components.ContainsKey("subscriptions") && components["subscriptions"].IsEnabled)
 			{
-				string lName = (components["subscriptions"].Name != "null") ? components["subscriptions"].Name : pUtils.GetTranslations().Get("state_name_subscription");  
+				string lName = (components["subscriptions"].Name != "") ? components["subscriptions"].Name : pUtils.GetTranslations().Get("state_name_subscription");  
 				addMenuBtn("", lName, RadioButton.RadioType.SCREEN_SUBSCRIPTION);
 			}
 

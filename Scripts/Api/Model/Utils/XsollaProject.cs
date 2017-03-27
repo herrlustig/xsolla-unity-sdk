@@ -76,7 +76,7 @@ namespace Xsolla
 		public bool	IsEnabled;
 
 		public XComponent(string newName, bool isEnabled) {
-			Name 		= newName;
+			Name 		= newName == "null" ? "" : newName ;
 			IsEnabled 	= isEnabled;
 		}
 	}

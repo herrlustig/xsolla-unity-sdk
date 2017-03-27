@@ -167,7 +167,7 @@ namespace Xsolla
 			if (mQuantityLabel == null)
 				return;
 
-			if (pItem.GetQuantityLimit() > 1)
+			if ((pItem.GetQuantityLimit() > 1) || (pItem.GetQuantityLimit() == 0))
 			{
 				// Блок кол-ва
 				if (mQuantityLabel != null && mQuantityCount != null)
