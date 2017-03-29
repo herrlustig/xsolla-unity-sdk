@@ -637,14 +637,12 @@ namespace Xsolla
 			switch (pType) {
 			case RadioButton.RadioType.SCREEN_GOODS:
 				{
-					//LoadGoodsGroups();
 					ShowGoodsShop();
 					mNavMenuController.SetVisibleBtn(true, RadioButton.RadioType.SCREEN_FAVOURITE);
 					break;
 				}
 			case RadioButton.RadioType.SCREEN_PRICEPOINT:
 				{
-					//LoadShopPricepoints();
 					ShowPricePointShop();
 					mNavMenuController.SetVisibleBtn(false, RadioButton.RadioType.SCREEN_FAVOURITE);
 					break;
@@ -663,7 +661,6 @@ namespace Xsolla
 				}
 			case RadioButton.RadioType.SCREEN_FAVOURITE:
 				{
-					//LoadFavorites();
 					ShowFavGoodsShop();
 					break;
 				}

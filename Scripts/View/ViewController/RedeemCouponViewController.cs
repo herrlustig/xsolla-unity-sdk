@@ -25,6 +25,8 @@ namespace Xsolla
 			_coupounNotif.text = _utiliLink.GetTranslations().Get(XsollaTranslations.COUPON_DESCRIPTION);
 			_nameInputField.text = _utiliLink.GetTranslations().Get(XsollaTranslations.COUPON_CODE_TITLE);
 			_inputFieldExample.text = _utiliLink.GetTranslations().Get(XsollaTranslations.COUPON_CODE_EXAMPLE);
+			_inputField.onEndEdit.AddListener(delegate {setAproveInput();});
+
 			Text btnText = _btnApply.GetComponentInChildren<Text>();
 			btnText.text = _utiliLink.GetTranslations().Get(XsollaTranslations.COUPON_CONTROL_APPLY);
 		}
@@ -44,6 +46,14 @@ namespace Xsolla
 		public string GetCode()
 		{
 			return _inputField.text;
+		}
+
+		public void setAproveInput()
+		{
+			// Задаем апрувные цвета поля
+			_inputField.gameObject.GetComponent<ColorInputController>().pType = StyleManager.BaseSprite.bckg_input_approve;
+			// Задаем цвета
+			_nameInputField.color = StyleManager.Instance.GetColor(StyleManager.BaseColor.bonus);
 		}
 
 		public RedeemCouponViewController ()

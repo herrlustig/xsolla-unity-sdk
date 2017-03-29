@@ -31,10 +31,14 @@ namespace Xsolla {
 			}
 			set 
 			{
-				Logger.Log("Expand is " + (value).ToString());
-				mExpandState.text = value ? "" : "";
-				mChildrenContainer.SetActive(value);
+				if (mExpandState != null)
+				{
+					Logger.Log("Expand is " + (value).ToString());
+					mExpandState.text = value ? "" : "";
+					mChildrenContainer.SetActive(value);
+				}
 				mExpand = value;
+				
 			}
 		}
 
