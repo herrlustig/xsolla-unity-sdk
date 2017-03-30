@@ -187,7 +187,7 @@ namespace Xsolla
 			mListItems.Clear();
 		}
 
-		private void ErrorRecived(JSONNode pNode)
+		private void ErrorRecived(XsollaErrorRe pErrors)
 		{
 			// описание ошибки
 		}

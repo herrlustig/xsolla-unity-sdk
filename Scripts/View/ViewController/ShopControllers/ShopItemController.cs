@@ -343,7 +343,7 @@ namespace Xsolla
 				lSummary.mFinance.mTotal.currency);
 		}
 
-		private void ErrorRecived(JSONNode pErrorNode)
+		private void ErrorRecived(XsollaErrorRe pErrors)
 		{
 			
 		}

@@ -91,12 +91,11 @@ namespace Xsolla
 				});
 
 			// Инициализируем панель кастомного пополнения
-			// Получим дефолтное кол-во 
 			if (mCustomAmountLink.activeSelf)
 			{
 				int lCountItems = lGoods.GetItemsList().Count;
 				int lAvgIdx = lCountItems / 2 + ((lCountItems % 2) > 0 ? 1 : 0);
-				mCustomController.init(mUtils, lGoods.GetItemsList()[lAvgIdx - 1].outAmount);
+				mCustomController.init(mUtils, lGoods.GetItemsList()[lAvgIdx - 1]);
 			}
 		}
 
@@ -119,7 +118,7 @@ namespace Xsolla
 			StateCustomAmount = !StateCustomAmount;
 		}
 
-		private void ErrorRecived(JSONNode pNode)
+		private void ErrorRecived(XsollaErrorRe pErrors)
 		{
 			// описание ошибки
 		}

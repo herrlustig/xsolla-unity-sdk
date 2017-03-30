@@ -35,7 +35,10 @@ namespace Xsolla
 			}
 
 			if(!_sub.IsSpecial())
+			{
 				_newPrice.text = CurrencyFormatter.FormatPrice(_sub.chargeCurrency, _sub.chargeAmount.ToString());
+				_oldPrice.gameObject.SetActive(false);
+			}
 			else
 			{
 				_oldPrice.text = CurrencyFormatter.FormatPrice(_sub.chargeCurrency, _sub.chargeAmountWithoutDiscount.ToString());

@@ -19,7 +19,7 @@ namespace Xsolla
 			mGlobalCache = new Dictionary<XsollaRequestPckg, JSONNode>();
 		}
 			
-		public void getApiRequest(XsollaRequestPckg pPckg, Action<JSONNode> pRecivedCallBack, Action<JSONNode> pReciverdError, bool pUseCached = true)
+		public void getApiRequest(XsollaRequestPckg pPckg, Action<JSONNode> pRecivedCallBack, Action<XsollaErrorRe> pReciverdError, bool pUseCached = true)
 		{
 
 			if (pUseCached && ChacheExist(pPckg, pRecivedCallBack))
@@ -37,55 +37,54 @@ namespace Xsolla
 			StartCoroutine(getRequest(lwww, pPckg, pRecivedCallBack, pReciverdError));
 		}
 
-		private IEnumerator getRequest(WWW pWww, XsollaRequestPckg pPckg, Action<JSONNode> pCallback, Action<JSONNode> pCallbackError)
+		private IEnumerator getRequest(WWW pWww, XsollaRequestPckg pPckg, Action<JSONNode> pCallback, Action<XsollaErrorRe> pCallbackError)
 		{
 			yield return pWww;
 
-			// логирование ответа
 			Logger.Log("WWW respond: Url: " + pWww.url);
+			JSONNode jsonRespond = JSON.Parse(pWww.text);
+
+			if (pWww.error != null)
+			{
+				Logger.Log("WWW respond: Error: " + pWww.error);
+
+				pCallbackError(new XsollaErrorRe().Parse(jsonRespond["errors"]) as XsollaErrorRe);
+				yield break;
+			}
+				
+			// проверка на версию API
+			if (jsonRespond["api"]["ver"].Value != mVerAPI)
+			{
+				Logger.LogError("Invalid API version");
+				yield break;
+			}
+				
 			Logger.Log("WWW respond: Time: " + pWww.progress.ToString());
 			Logger.Log("WWW respond: Size: " + pWww.size.ToString());
 			Logger.Log("WWW respond: Text: " + pWww.text);
 
-			JSONNode jsonRespond = JSON.Parse(pWww.text);
-
-			// проверка на версию API
-			if (jsonRespond["api"]["ver"].Value != mVerAPI)
+			// логируем запрос
+			bool lContaint = false;
+			IEnumerator lEnum = mGlobalCache.Keys.GetEnumerator();
+			while(lEnum.MoveNext())
 			{
-				pCallbackError("Версия SDK не актуальна");
-				yield break;
-			}
-
-			// Если есть ошибки, выбрасываем эксепшен
-			if (pWww.error != null)
-			{
-				pCallbackError(pWww.error.ToString());
-				yield break;
-			}
-			else
-			{
-				// логируем запрос
-				bool lContaint = false;
-				IEnumerator lEnum = mGlobalCache.Keys.GetEnumerator();
-				while(lEnum.MoveNext())
+				if (lEnum.Current.Equals(pPckg))
 				{
-					if (lEnum.Current.Equals(pPckg))
-					{
-						mGlobalCache[lEnum.Current as XsollaRequestPckg] = jsonRespond;
-						lContaint = true;
-						break;
-					}
+					mGlobalCache[lEnum.Current as XsollaRequestPckg] = jsonRespond;
+					lContaint = true;
+					break;
 				}
-
-				if (!lContaint)
-				{	
-					mGlobalCache.Add(pPckg, jsonRespond);
-				}
-
-				// отдаем запрос
-				if (!pPckg.isOnlyCache())
-					pCallback(jsonRespond); // отдаем данные
 			}
+
+			if (!lContaint)
+			{	
+				mGlobalCache.Add(pPckg, jsonRespond);
+			}
+
+			// отдаем запрос
+			if (!pPckg.isOnlyCache())
+				pCallback(jsonRespond); // отдаем данные
+			
 		}
 
 		private bool ChacheExist(XsollaRequestPckg pPckg, Action<JSONNode> pReciveAction)
@@ -105,5 +104,41 @@ namespace Xsolla
 		}
 
 	}
+
+	public class XsollaErrorRe: IParseble
+	{
+		public List<Error> mErrorList;
+
+		public IParseble Parse (JSONNode rootNode)
+		{
+			mErrorList = new List<Error>();
+			IEnumerator lEnum = rootNode.AsArray.GetEnumerator();
+
+			while(lEnum.MoveNext())
+				mErrorList.Add(new Error((lEnum.Current as JSONNode)["message"],(lEnum.Current as JSONNode)["support_code"]));
+				
+			return this;
+		}
+
+		public struct Error
+		{
+			String mMessage;
+			String mSupportCode;
+
+			public Error(String pMsg, String pSupportCode)
+			{
+				mMessage = pMsg;
+				mSupportCode = pSupportCode;
+			}
+
+			public override string ToString ()
+			{
+				return string.Format ("[Error: mMessage={0}, mSupportCode={1}]", mMessage, mSupportCode);
+			}
+			
+		}
+	}
+
+
 }
 

@@ -31,7 +31,7 @@ namespace Xsolla
 		}
 
 		//  новая инициализация 
-		public void init(XsollaUtils pUtils, Decimal pDefAmount)
+		public void init(XsollaUtils pUtils, XsollaPricepoint pDefPackage)
 		{
 			mUtils = pUtils;
 			if (pUtils.GetProject().isDiscrete)
@@ -41,6 +41,11 @@ namespace Xsolla
 
 			btnPay.gameObject.GetComponentInChildren<Text>().text = pUtils.GetTranslations().Get("form_continue");
 			FindObjectOfType<ImageLoader>().LoadImage(iconVirtCurr, pUtils.GetProject().virtualCurrencyIconUrl);
+
+			// Задаем дефолтное значение для обсчета
+			virtCurrAmount.text = pDefPackage.outAmount.ToString();
+			realCurrAmount.text = pDefPackage.sum.ToString();
+			mTotalAmount.text = CurrencyFormatter.FormatPrice(pDefPackage.currency, pDefPackage.sum.ToString("N2"));;
 
 			virtCurrAmount.onValueChanged.AddListener(delegate 
 				{
@@ -65,8 +70,7 @@ namespace Xsolla
 					BuyBtn();
 				});
 
-			// Задаем дефолтное значение для обсчета
-			virtCurrAmount.text = pDefAmount.ToString();
+
 		}
 
 		private void BuyBtn()
@@ -140,9 +144,9 @@ namespace Xsolla
 			setValues(calcRes);
 		}
 
-		private void ErrorRecived(JSONNode pNode)
+		private void ErrorRecived(XsollaErrorRe pErrors)
 		{
-			
+			Logger.LogError(this.GetType().ToString());
 		}
 
 		private decimal GetOutAmount()
