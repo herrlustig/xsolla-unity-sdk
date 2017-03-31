@@ -122,8 +122,8 @@ namespace Xsolla
 
 		public struct Error
 		{
-			String mMessage;
-			String mSupportCode;
+			public String mMessage;
+			public String mSupportCode;
 
 			public Error(String pMsg, String pSupportCode)
 			{
@@ -133,7 +133,7 @@ namespace Xsolla
 
 			public override string ToString ()
 			{
-				return string.Format ("[Error: mMessage={0}, mSupportCode={1}]", mMessage, mSupportCode);
+				return string.Format ("{0} \n {1}", mMessage, mSupportCode);
 			}
 			
 		}

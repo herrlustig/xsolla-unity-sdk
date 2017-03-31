@@ -13,8 +13,8 @@ namespace Xsolla
 		public GameObject mShopContent;
 		public GameObject mItemsContentGrid;
 		public GameObject mItemsContentList;
+		public Text mEmptyLabel;
 		public ScrollRect mScrollRectItemsContainer;
-
 
 		private const String mGroupsUrl = "paystation2/api/virtualitems/groups";
 		private const String mGoodsUrl = "paystation2/api/virtualitems/items";
@@ -46,6 +46,22 @@ namespace Xsolla
 			mGroupUseCached = new Dictionary<int, bool>();
 			// Задаем настройки на лэндинг
 			mIsListLayout = pUtils.GetSettings().mDesktop.pVirtItems.isListLayout();
+			SetLanding();
+				
+			// Задаем перевод на отсутствие товаров
+			mEmptyLabel.text = mUtils.GetTranslations().Get("virtualitem_no_data");
+			mEmptyLabel.gameObject.SetActive(false);
+
+			// строим навигационное меню магазина 
+			// получить список групп
+			Dictionary<String, object> lParams = new Dictionary<string, object>();
+			lParams.Add(XsollaApiConst.ACCESS_TOKEN, mUtils.GetAcceessToken());
+			lParams.Add(XsollaApiConst.USER_INITIAL_CURRENCY, mUtils.GetUser().userBalance.currency);
+			ApiRequest.Instance.getApiRequest(new XsollaRequestPckg(mGroupsUrl, lParams), GoodsGroupRecived, ErrorRecived);
+		}
+
+		private void SetLanding()
+		{
 			if (mIsListLayout)
 			{
 				mItemsContentGrid.SetActive(false);
@@ -59,17 +75,6 @@ namespace Xsolla
 				mItemsContentGrid.SetActive(true);
 				mItemsContentList.SetActive(false);
 			}
-
-			// строим навигационное меню магазина 
-			// получить список групп
-			Dictionary<String, object> lParams = new Dictionary<string, object>();
-			lParams.Add(XsollaApiConst.ACCESS_TOKEN, mUtils.GetAcceessToken());
-			lParams.Add(XsollaApiConst.USER_INITIAL_CURRENCY, mUtils.GetUser().userBalance.currency);
-			ApiRequest.Instance.getApiRequest(new XsollaRequestPckg(mGroupsUrl, lParams), GoodsGroupRecived, ErrorRecived);
-		}
-
-		public void init(XsollaUtils pUtils, GameObject pContent)
-		{
 		}
 
 		private void GoodsGroupRecived(JSONNode pNode)
@@ -120,6 +125,17 @@ namespace Xsolla
 			mScrollRectItemsContainer.verticalNormalizedPosition = 1;
 
 			XsollaGoodsManager lGoods = new XsollaGoodsManager().Parse(pNode) as XsollaGoodsManager;
+
+			// Если группа пустая
+			mEmptyLabel.gameObject.SetActive(lGoods.GetCount() == 0);
+			if (lGoods.GetCount() == 0)
+			{
+				mItemsContentGrid.SetActive(false);
+				mItemsContentList.SetActive(false);
+			}
+			else
+				SetLanding();
+
 			lGoods.GetItemsList().ForEach((item) => 
 				{ 
 					AddShopItem(item); 

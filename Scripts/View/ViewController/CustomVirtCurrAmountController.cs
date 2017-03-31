@@ -16,12 +16,17 @@ namespace Xsolla
 		public Text 		mTotalAmount;
 
 		public Image		iconVirtCurr;
-		public Text			iconRealCurr;	
+		public Text			iconRealCurr;
+
+		public GameObject 	mErrorPanel;
 
 		private string 		mCustomCurrency = "";
 		private bool 		mSetValues = false;
 		private XsollaUtils mUtils;
 		private bool 		mFirstCalc = true;
+
+		private bool 		mVcRecalc;
+		private bool 		mHasError = false;
 
 		private const String mCalculateUrl = "paystation2/api/pricepoints/calculate";
 
@@ -51,26 +56,39 @@ namespace Xsolla
 				{
 					if (!mSetValues)
 					{
+						mHasError ? SetVirtError();
 						CancelInvoke();
 						Invoke("RecalcVcAmount", 1);
 					}
 				});
-
+			virtCurrAmount.onEndEdit.AddListener(delegate {mErrorPanel.gameObject.SetActive(false);});
 			realCurrAmount.onValueChanged.AddListener(delegate 
 				{
 					if (!mSetValues)
 					{
+						SetRealError();
 						CancelInvoke();
 						Invoke("RecalcAmount", 1);
 					}
 				});
-			
+			realCurrAmount.onEndEdit.AddListener(delegate {mErrorPanel.gameObject.SetActive(false);});
+
 			btnPay.onClick.AddListener(delegate  
 				{
 					BuyBtn();
 				});
+		}
 
+		private void SetVirtError()
+		{
+			mErrorPanel.gameObject.SetActive(true);
+			mErrorPanel.gameObject.GetComponent<RectTransform>().position = virtCurrAmount.gameObject.GetComponent<RectTransform>().position;
+		}
 
+		private void SetRealError()
+		{
+			mErrorPanel.gameObject.SetActive(true);
+			mErrorPanel.gameObject.GetComponent<RectTransform>().position = realCurrAmount.gameObject.GetComponent<RectTransform>().position;
 		}
 
 		private void BuyBtn()
@@ -92,6 +110,7 @@ namespace Xsolla
 		private void RecalcVcAmount()
 		{
 			Logger.Log("Recalc vc change");
+			mVcRecalc = true;
 			if (virtCurrAmount.text == "")
 			{
 				virtCurrAmount.text = "1";
@@ -112,6 +131,7 @@ namespace Xsolla
 		private void RecalcAmount()
 		{
 			Logger.Log("Recalc real change");
+			mVcRecalc = false;
 			if (realCurrAmount.text == "")
 			{
 				realCurrAmount.text = "0.01";
@@ -140,13 +160,25 @@ namespace Xsolla
 
 		private void CalculateRecived(JSONNode pNode)
 		{
+			mHasError = false;
 			CustomAmountCalcRes calcRes = new CustomAmountCalcRes().Parse(pNode["calculation"]) as CustomAmountCalcRes;
 			setValues(calcRes);
 		}
 
 		private void ErrorRecived(XsollaErrorRe pErrors)
 		{
-			Logger.LogError(this.GetType().ToString());
+			mHasError = true;
+			mErrorPanel.GetComponentInChildren<Text>().text = pErrors.mErrorList[0].mMessage + "\n" + String.Format(StringHelper.PrepareFormatString(mUtils.GetTranslations().Get("error_code")), pErrors.mErrorList[0].mSupportCode);      
+			if (mVcRecalc)
+			{
+				virtCurrAmount.textComponent.color = StyleManager.Instance.GetColor(StyleManager.BaseColor.bg_error);
+				virtCurrAmount.gameObject.GetComponent<ColorInputController>().pType = StyleManager.BaseSprite.bckg_error_panel;
+			}
+			else
+			{
+				realCurrAmount.textComponent.color = StyleManager.Instance.GetColor(StyleManager.BaseColor.bg_error);
+				realCurrAmount.gameObject.GetComponent<ColorInputController>().pType = StyleManager.BaseSprite.bckg_error_panel;
+			}
 		}
 
 		private decimal GetOutAmount()
