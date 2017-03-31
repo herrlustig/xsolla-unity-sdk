@@ -75,6 +75,15 @@ namespace Xsolla {
 			formController.OpenPaystation (data, isSandbox);
 		}
 
+		public void CreateSLPaymentForm(InputField inputField)
+		{
+			XsollaPaystationController formController = GetPaystationController ();
+			string accessData = inputField.text;
+			formController.OkHandler += (status) => {Debug.Log("OkHandler 1 " + status);};
+			formController.ErrorHandler += (error) => {Debug.Log("ErrorHandler 2 " + error);};
+			formController.OpenSLPaystation(accessData, isSandbox);
+		}
+
 		public void CreatePaymentForm(XsollaJsonGenerator generator, Action<XsollaResult> actionOk, Action<XsollaError> actionError)
 		{
 			CreatePaymentForm (generator.GetPrepared (), actionOk, actionError);

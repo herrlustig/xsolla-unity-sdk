@@ -56,7 +56,6 @@ namespace Xsolla
 				{
 					if (!mSetValues)
 					{
-						mHasError ? SetVirtError();
 						CancelInvoke();
 						Invoke("RecalcVcAmount", 1);
 					}
@@ -66,7 +65,6 @@ namespace Xsolla
 				{
 					if (!mSetValues)
 					{
-						SetRealError();
 						CancelInvoke();
 						Invoke("RecalcAmount", 1);
 					}
@@ -79,16 +77,22 @@ namespace Xsolla
 				});
 		}
 
-		private void SetVirtError()
+		public void SetVirtError()
 		{
-			mErrorPanel.gameObject.SetActive(true);
-			mErrorPanel.gameObject.GetComponent<RectTransform>().position = virtCurrAmount.gameObject.GetComponent<RectTransform>().position;
+			if ((mHasError) && (mVcRecalc))
+			{
+				mErrorPanel.gameObject.SetActive(true);
+				mErrorPanel.gameObject.GetComponent<RectTransform>().position = virtCurrAmount.gameObject.GetComponent<RectTransform>().position;
+			}
 		}
 
-		private void SetRealError()
+		public void SetRealError()
 		{
-			mErrorPanel.gameObject.SetActive(true);
-			mErrorPanel.gameObject.GetComponent<RectTransform>().position = realCurrAmount.gameObject.GetComponent<RectTransform>().position;
+			if ((mHasError) && (!mVcRecalc))
+			{
+				mErrorPanel.gameObject.SetActive(true);
+				mErrorPanel.gameObject.GetComponent<RectTransform>().position = realCurrAmount.gameObject.GetComponent<RectTransform>().position;
+			}
 		}
 
 		private void BuyBtn()

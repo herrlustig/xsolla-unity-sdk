@@ -26,11 +26,11 @@ namespace Xsolla
 				return;
 			
 			WWWForm lForm = new WWWForm();
-			StringBuilder sb = new StringBuilder ();
+			//StringBuilder sb = new StringBuilder ();
 			foreach(KeyValuePair<string, object> pair in pPckg.Params())
 			{
 				string argValue = pair.Value != null ? pair.Value.ToString() : "";
-				sb.Append(pair.Key).Append("=").Append(argValue).Append("&");
+				//sb.Append(pair.Key).Append("=").Append(argValue).Append("&");
 				lForm.AddField(pair.Key, argValue);
 			}
 			WWW lwww = new WWW(DOMAIN + pPckg.Url(), lForm);
@@ -51,39 +51,41 @@ namespace Xsolla
 				pCallbackError(new XsollaErrorRe().Parse(jsonRespond["errors"]) as XsollaErrorRe);
 				yield break;
 			}
-				
-			// проверка на версию API
-			if (jsonRespond["api"]["ver"].Value != mVerAPI)
+			else
 			{
-				Logger.LogError("Invalid API version");
-				yield break;
-			}
-				
-			Logger.Log("WWW respond: Time: " + pWww.progress.ToString());
-			Logger.Log("WWW respond: Size: " + pWww.size.ToString());
-			Logger.Log("WWW respond: Text: " + pWww.text);
-
-			// логируем запрос
-			bool lContaint = false;
-			IEnumerator lEnum = mGlobalCache.Keys.GetEnumerator();
-			while(lEnum.MoveNext())
-			{
-				if (lEnum.Current.Equals(pPckg))
+				// проверка на версию API
+				if (jsonRespond["api"]["ver"].Value != mVerAPI)
 				{
-					mGlobalCache[lEnum.Current as XsollaRequestPckg] = jsonRespond;
-					lContaint = true;
-					break;
+					Logger.LogError("Invalid API version");
+					yield break;
 				}
-			}
+					
+				Logger.Log("WWW respond: Time: " + pWww.progress.ToString());
+				Logger.Log("WWW respond: Size: " + pWww.size.ToString());
+				Logger.Log("WWW respond: Text: " + pWww.text);
 
-			if (!lContaint)
-			{	
-				mGlobalCache.Add(pPckg, jsonRespond);
-			}
+				// логируем запрос
+				bool lContaint = false;
+				IEnumerator lEnum = mGlobalCache.Keys.GetEnumerator();
+				while(lEnum.MoveNext())
+				{
+					if (lEnum.Current.Equals(pPckg))
+					{
+						mGlobalCache[lEnum.Current as XsollaRequestPckg] = jsonRespond;
+						lContaint = true;
+						break;
+					}
+				}
 
-			// отдаем запрос
-			if (!pPckg.isOnlyCache())
-				pCallback(jsonRespond); // отдаем данные
+				if (!lContaint)
+				{	
+					mGlobalCache.Add(pPckg, jsonRespond);
+				}
+
+				// отдаем запрос
+				if (!pPckg.isOnlyCache())
+					pCallback(jsonRespond); // отдаем данные
+			}
 			
 		}
 

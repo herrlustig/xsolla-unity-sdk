@@ -82,7 +82,7 @@ namespace  Xsolla
 			currentPurchase = new ActivePurchase();
 			JSONNode rootNode = JSON.Parse(accessToken);
 			Dictionary<string, object> dict = new Dictionary<string, object> ();
-			if (rootNode == null) {
+			if (!accessToken.Contains("%")) {
 				isSimple = false;
 				dict.Add ("access_token", accessToken);
 				BaseParams = "access_token=" + accessToken;
@@ -92,6 +92,24 @@ namespace  Xsolla
 				BaseParams = "access_data=" + accessToken;
 			}
 			StartPayment (dict, isSandbox);
+		}
+
+		public void OpenSLPaystation(string accessData, bool isSandBox)
+		{
+			string lUrl = "paystation2/api/utils";
+			Dictionary<string, object> lparams = new Dictionary<string, object>();
+			lparams.Add("access_data", accessData);
+
+			ApiRequest.Instance.getApiRequest(new XsollaRequestPckg(lUrl, lparams), getRequest, delegate 
+				{
+					Logger.Log("Not Cool");
+				});
+		}
+
+		private void getRequest(JSONNode pNode)
+		{
+			XsollaUtils lUtils = new XsollaUtils().Parse(pNode) as XsollaUtils;
+			Logger.Log("Cool");
 		}
 
 		public static void AddHttpRequestObj(){
