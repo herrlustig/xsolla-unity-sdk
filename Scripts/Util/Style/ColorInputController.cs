@@ -50,6 +50,11 @@ namespace Xsolla
 				(mInputField.targetGraphic as Image).sprite = StyleManager.Instance.GetSprite(pType, "_def");
 			}
 		}
+
+		public void UpdateSprite()
+		{
+			Start();
+		}
 	}
 }
 

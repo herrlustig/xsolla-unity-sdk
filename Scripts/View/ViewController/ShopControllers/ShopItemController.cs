@@ -128,6 +128,10 @@ namespace Xsolla
 			LongDescState = false;
 			mLongDescLink.GetComponent<Button>().onClick.AddListener(delegate {SetStateLongState(!mLongDescState);});
 
+			// Блокируем минус
+			if (mQuantityMinus != null)
+				mQuantityMinus.interactable = false;
+
 			// Задаем поля для лэндинга list
 			SetListLandingItem(pItem);
 			// Рекламный блок
@@ -218,9 +222,9 @@ namespace Xsolla
 			if (mItem.IsVirtualPayment())
 			{
 				if (pVcAmount == pVcAmountWithoutDiscount)
-					mAmount.text = pVcAmount.ToString("0.00");
+					mAmount.text = pVcAmount.ToString("0.##");
 				else
-					mAmount.text = pVcAmountWithoutDiscount.ToString("0.00") + " " + pVcAmount.ToString("0.00");
+					mAmount.text = pVcAmountWithoutDiscount.ToString("0.##") + " " + pVcAmount.ToString("0.##");
 
 				if (mUtils.GetProject().virtualCurrencyIconUrl != "null")
 					// если тут придется ошибка с загрузкой, нужно залить альфа канал

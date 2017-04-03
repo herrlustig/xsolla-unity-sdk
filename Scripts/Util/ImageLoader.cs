@@ -60,7 +60,9 @@ namespace Xsolla {
 						//Create a new sprite using the Texture2D from the url. 
 						//Note that the 400 parameter is the width and height. 
 						//Adjust accordingly
-						sprite = Sprite.Create(imageURLWWW.texture, new Rect (0, 0, imageURLWWW.texture.width, imageURLWWW.texture.height), new Vector2(0,0));
+						Texture2D ltexture = imageURLWWW.texture;
+						ltexture.filterMode = FilterMode.Bilinear;
+						sprite = Sprite.Create(ltexture, new Rect (0, 0, ltexture.width, ltexture.height), new Vector2(0,0));
 						if(!imageCashe.ContainsKey(url))
 						{
 							imageCashe.Add (url, sprite);

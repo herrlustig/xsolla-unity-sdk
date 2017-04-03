@@ -23,7 +23,6 @@ namespace Xsolla
 		private string 		mCustomCurrency = "";
 		private bool 		mSetValues = false;
 		private XsollaUtils mUtils;
-		private bool 		mFirstCalc = true;
 
 		private bool 		mVcRecalc;
 		private bool 		mHasError = false;
@@ -108,33 +107,39 @@ namespace Xsolla
 			else
 			{
 				// Ошибка парса из поля
+				Logger.LogError("Error parse virt amount field!");
 			}
+		}
+
+		private void SetApproveFields()
+		{
+			virtCurrAmount.textComponent.color = StyleManager.Instance.GetColor(StyleManager.BaseColor.bonus);
+			virtCurrAmount.gameObject.GetComponent<ColorInputController>().pType = StyleManager.BaseSprite.bckg_input_approve;
+			virtCurrAmount.gameObject.GetComponent<ColorInputController>().UpdateSprite();
+
+			realCurrAmount.textComponent.color = StyleManager.Instance.GetColor(StyleManager.BaseColor.bonus);
+			realCurrAmount.gameObject.GetComponent<ColorInputController>().pType = StyleManager.BaseSprite.bckg_input_approve;
+			realCurrAmount.gameObject.GetComponent<ColorInputController>().UpdateSprite();
 		}
 
 		private void RecalcVcAmount()
 		{
-			Logger.Log("Recalc vc change");
 			mVcRecalc = true;
 			if (virtCurrAmount.text == "")
 			{
 				virtCurrAmount.text = "1";
 				return;
 			}
+				
+			SetApproveFields();
 
-			if (!mFirstCalc)
-			{
-				virtCurrAmount.textComponent.color = StyleManager.Instance.GetColor(StyleManager.BaseColor.bonus);
-				virtCurrAmount.gameObject.GetComponent<ColorInputController>().pType = StyleManager.BaseSprite.bckg_input_approve;
-			}
 			Dictionary<string, object> res = new Dictionary<string, object>();
 			res.Add("custom_vc_amount", virtCurrAmount.text);
 			RequestCalculate(res);
-			mFirstCalc = false;
 		}
 
 		private void RecalcAmount()
 		{
-			Logger.Log("Recalc real change");
 			mVcRecalc = false;
 			if (realCurrAmount.text == "")
 			{
@@ -142,15 +147,13 @@ namespace Xsolla
 				return;
 			}
 
-			if (!mFirstCalc)
-			{
-				realCurrAmount.textComponent.color = StyleManager.Instance.GetColor(StyleManager.BaseColor.bonus);
-				realCurrAmount.gameObject.GetComponent<ColorInputController>().pType = StyleManager.BaseSprite.bckg_input_approve;
-			}
+			realCurrAmount.textComponent.color = StyleManager.Instance.GetColor(StyleManager.BaseColor.bonus);
+			realCurrAmount.gameObject.GetComponent<ColorInputController>().pType = StyleManager.BaseSprite.bckg_input_approve;
+			realCurrAmount.gameObject.GetComponent<ColorInputController>().UpdateSprite();
+
 			Dictionary<string, object> res = new Dictionary<string, object>();
 			res.Add("custom_amount", realCurrAmount.text);
 			RequestCalculate(res);
-			mFirstCalc = false;
 		}
 
 		private void RequestCalculate(Dictionary<string, object> pParams)
@@ -165,6 +168,7 @@ namespace Xsolla
 		private void CalculateRecived(JSONNode pNode)
 		{
 			mHasError = false;
+			btnPay.interactable = true;
 			CustomAmountCalcRes calcRes = new CustomAmountCalcRes().Parse(pNode["calculation"]) as CustomAmountCalcRes;
 			setValues(calcRes);
 		}
@@ -172,16 +176,19 @@ namespace Xsolla
 		private void ErrorRecived(XsollaErrorRe pErrors)
 		{
 			mHasError = true;
+			btnPay.interactable = false;
 			mErrorPanel.GetComponentInChildren<Text>().text = pErrors.mErrorList[0].mMessage + "\n" + String.Format(StringHelper.PrepareFormatString(mUtils.GetTranslations().Get("error_code")), pErrors.mErrorList[0].mSupportCode);      
 			if (mVcRecalc)
 			{
 				virtCurrAmount.textComponent.color = StyleManager.Instance.GetColor(StyleManager.BaseColor.bg_error);
-				virtCurrAmount.gameObject.GetComponent<ColorInputController>().pType = StyleManager.BaseSprite.bckg_error_panel;
+				virtCurrAmount.gameObject.GetComponent<ColorInputController>().pType = StyleManager.BaseSprite.bckg_input_error;
+				virtCurrAmount.gameObject.GetComponent<ColorInputController>().UpdateSprite();
 			}
 			else
 			{
 				realCurrAmount.textComponent.color = StyleManager.Instance.GetColor(StyleManager.BaseColor.bg_error);
-				realCurrAmount.gameObject.GetComponent<ColorInputController>().pType = StyleManager.BaseSprite.bckg_error_panel;
+				realCurrAmount.gameObject.GetComponent<ColorInputController>().pType = StyleManager.BaseSprite.bckg_input_error;
+				realCurrAmount.gameObject.GetComponent<ColorInputController>().UpdateSprite();
 			}
 		}
 
@@ -209,12 +216,12 @@ namespace Xsolla
 			}
 			
 			if (pValue.vcAmount != 0)
-				virtCurrAmount.text = pValue.vcAmount.ToString();
+				virtCurrAmount.text = pValue.vcAmount.ToString("N2");
 			else
 				virtCurrAmount.text = "";
 			
 			if (pValue.amount != 0)
-				realCurrAmount.text = pValue.amount.ToString("0.00");
+				realCurrAmount.text = pValue.amount.ToString("N2");
 			else
 				realCurrAmount.text = "";
 

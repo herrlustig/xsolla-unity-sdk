@@ -48,7 +48,7 @@ namespace Xsolla
 			mUtils = pUtils;
 			mListItems = new List<PricePointItemController>();
 
-			mShopTitle.text = mUtils.GetTranslations().Get("pricepoint_page_title");
+			mShopTitle.text = (pUtils.GetProject().components ["virtual_currency"].Name != "") ? pUtils.GetProject().components["virtual_currency"].Name : pUtils.GetTranslations().Get(XsollaTranslations.PRICEPOINT_PAGE_TITLE); 
 
 			// Возможность произвольной покупки
 			if (mUtils.GetSettings().components.virtualCurreny.customAmount)

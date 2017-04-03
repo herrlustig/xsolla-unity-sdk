@@ -88,7 +88,10 @@ namespace Xsolla {
 			bckg_input,
 			bckg_input_approve,
 			bckg_circle,
-			bckg_error_panel
+			bckg_error_panel,
+			bckg_main,
+			bckg_input_error,
+			bckg_popup_menu
 		}
 		
 		public Dictionary<BaseColor, Color32> colorsMap;

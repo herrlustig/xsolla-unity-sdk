@@ -15,6 +15,8 @@ namespace Xsolla
 			SpriteState lSpriteState = new SpriteState();
 			lSpriteState.highlightedSprite = StyleManager.Instance.GetSprite(pType, "_hover");
 			lSpriteState.pressedSprite = StyleManager.Instance.GetSprite(pType, "_hover");
+			lSpriteState.disabledSprite = StyleManager.Instance.GetSprite(pType, "_disable");
+
 
 			if (mButton.targetGraphic is Image)
 			{
