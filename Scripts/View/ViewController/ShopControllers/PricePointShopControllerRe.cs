@@ -15,6 +15,7 @@ namespace Xsolla
 		public GameObject mCustomAmountLink;
 		public GameObject mShopScreen;
 		public GameObject mCustomAmountScreen;
+		public Text mEmptyLabel;
 
 		private const String mPricePointsUrl = "paystation2/api/pricepoints";
 
@@ -50,6 +51,10 @@ namespace Xsolla
 
 			mShopTitle.text = (pUtils.GetProject().components ["virtual_currency"].Name != "") ? pUtils.GetProject().components["virtual_currency"].Name : pUtils.GetTranslations().Get(XsollaTranslations.PRICEPOINT_PAGE_TITLE); 
 
+			// Задаем перевод на отсутствие товаров
+			mEmptyLabel.text = mUtils.GetTranslations().Get("virtualitem_no_data");
+			mEmptyLabel.gameObject.SetActive(false);
+
 			// Возможность произвольной покупки
 			if (mUtils.GetSettings().components.virtualCurreny.customAmount)
 			{
@@ -72,6 +77,10 @@ namespace Xsolla
 		{
 			Logger.Log("PricePoints recived");
 			XsollaPricepointsManager lGoods = new XsollaPricepointsManager().Parse(pNode) as XsollaPricepointsManager;
+			// Если группа пустая
+			mEmptyLabel.gameObject.SetActive(lGoods.GetCount() == 0);
+			if (lGoods.GetCount() == 0)
+				mItemsContentGrid.SetActive(false);
 
 			// расчитываем кол-во столбцов
 			if ((lGoods.GetCount() % 4) == 0) 

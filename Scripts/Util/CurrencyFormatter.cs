@@ -3,7 +3,6 @@ namespace Xsolla
 {
 	public class CurrencyFormatter 
 	{
-
 		public static string FormatPrice(string currency, string amount){
 			switch (currency) {
 				case "USD":

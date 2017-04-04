@@ -79,6 +79,7 @@ namespace Xsolla
 		}
 		public Action mCollapseAnotherDesc;
 		private bool mLongDescState = false; 
+		private bool mIsListLayoutItem;
 		public bool LongDescState 
 		{
 			get
@@ -95,12 +96,13 @@ namespace Xsolla
 			}
 		}
 			
-		public void init(XsollaShopItem pItem, XsollaUtils pUtils, int pGroupId, Action<int, bool> pActionResetCacheGroup)
+		public void init(XsollaShopItem pItem, XsollaUtils pUtils, int pGroupId, Action<int, bool> pActionResetCacheGroup, bool pList)
 		{
 			mItem = pItem;
 			mUtils = pUtils;
 			mGroupId = pGroupId;
 			mActionResetCacheGroup = pActionResetCacheGroup;
+			mIsListLayoutItem = pList;
 
 			// Загружаем картинку
 			mImgLoader.LoadImage(mItemImg, pItem.GetImageUrl());
@@ -207,6 +209,10 @@ namespace Xsolla
 		private void SetAdBlock(XsollaShopItem pItem)
 		{
 			StyleManager.BaseSprite lItemBckg = ShopItemHelper.SetAdBlockItem(pItem, mUtils, mAdPanel.GetComponentInChildren<Text>(), mAdPanel.GetComponent<Image>());
+			if ((lItemBckg == StyleManager.BaseSprite.bckg_item) && (mIsListLayoutItem))
+			{
+				mAdPanel.SetActive(false);
+			}
 			SetSpecialAdBkcg(lItemBckg);
 		}
 
@@ -222,9 +228,9 @@ namespace Xsolla
 			if (mItem.IsVirtualPayment())
 			{
 				if (pVcAmount == pVcAmountWithoutDiscount)
-					mAmount.text = pVcAmount.ToString("0.##");
+					mAmount.text = pVcAmount.ToString("N2");
 				else
-					mAmount.text = pVcAmountWithoutDiscount.ToString("0.##") + " " + pVcAmount.ToString("0.##");
+					mAmount.text = pVcAmountWithoutDiscount.ToString("N2") + " " + pVcAmount.ToString("N2");
 
 				if (mUtils.GetProject().virtualCurrencyIconUrl != "null")
 					// если тут придется ошибка с загрузкой, нужно залить альфа канал
@@ -241,7 +247,7 @@ namespace Xsolla
 				mVcIcon.gameObject.SetActive(false);
 				if (pAmount == pAmountWithoutDiscount)
 				{
-					mAmount.text = CurrencyFormatter.FormatPrice(pCurrency , pAmount.ToString("0.00"));
+					mAmount.text = CurrencyFormatter.FormatPrice(pCurrency , pAmount.ToString("N2"));
 					if (pCurrency == "RUB")
 						mCurrency.enabled = true;
 					else
@@ -250,8 +256,8 @@ namespace Xsolla
 				else
 				{
 					mOldAmount.enabled = true;
-					mOldAmount.text = CurrencyFormatter.FormatPrice(pCurrency, pAmountWithoutDiscount.ToString("##.00"));
-					mAmount.text = CurrencyFormatter.FormatPrice(pCurrency, pAmount.ToString("##.00"));
+					mOldAmount.text = CurrencyFormatter.FormatPrice(pCurrency, pAmountWithoutDiscount.ToString("N2"));
+					mAmount.text = CurrencyFormatter.FormatPrice(pCurrency, pAmount.ToString("N2"));
 					if (pCurrency == "RUB")
 						mCurrency.enabled = true;
 					else
@@ -276,9 +282,9 @@ namespace Xsolla
 			if (pItem.IsVirtualPayment())
 			{
 				if (pItem.vcAmount == pItem.vcAmountWithoutDiscount)
-					mAmount.text = pItem.vcAmount.ToString("##.##");
+					mAmount.text = pItem.vcAmount.ToString("N2");
 				else
-					mAmount.text = pItem.vcAmountWithoutDiscount.ToString("##.00") + " " + pItem.vcAmount.ToString("##.00");
+					mAmount.text = pItem.vcAmountWithoutDiscount.ToString("N2") + " " + pItem.vcAmount.ToString("N2");
 
 				if (mUtils.GetProject().virtualCurrencyIconUrl != "null")
 					mImgLoader.LoadImage(mVcIcon, mUtils.GetProject().virtualCurrencyIconUrl);
@@ -293,15 +299,15 @@ namespace Xsolla
 				mVcIcon.gameObject.SetActive(false);
 				if (pItem.amount == pItem.amountWithoutDiscount)
 				{
-					mAmount.text = CurrencyFormatter.FormatPrice(pItem.currency, pItem.amount.ToString("##.00"));
+					mAmount.text = CurrencyFormatter.FormatPrice(pItem.currency, pItem.amount.ToString("N2"));
 					if (pItem.currency == "RUB")
 						mCurrency.enabled = true;
 				}
 				else
 				{
 					mOldAmount.enabled = true;
-					mOldAmount.text = CurrencyFormatter.FormatPrice(pItem.currency, pItem.amountWithoutDiscount.ToString("##.00"));
-					mAmount.text = CurrencyFormatter.FormatPrice(pItem.currency, pItem.amount.ToString("##.00"));
+					mOldAmount.text = CurrencyFormatter.FormatPrice(pItem.currency, pItem.amountWithoutDiscount.ToString("N2"));
+					mAmount.text = CurrencyFormatter.FormatPrice(pItem.currency, pItem.amount.ToString("N2"));
 					if (pItem.currency == "RUB")
 						mCurrency.enabled = true;
 				}

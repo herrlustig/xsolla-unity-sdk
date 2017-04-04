@@ -41,13 +41,13 @@ namespace Xsolla
 				if (pUtils.GetProject().virtualCurrencyIconUrl != "null")
 					mImgLoader.LoadImage(mItemImg, pUtils.GetProject().virtualCurrencyIconUrl);
 				else
-					mItemImg.gameObject.transform.parent.gameObject.SetActive(false);
+					mItemImg.color = new Color(255,255,255,0);
 
 			// Задаем короткое описание 
 			mShortDesc.text = pItem.GetDescription();
 
 			// Задаем название
-			mItemName.text = pItem.outAmount.ToString("#.00");
+			mItemName.text = pUtils.GetProject().isDiscrete ? pItem.outAmount.ToString("D") : pItem.outAmount.ToString("##.00");
 			mVcCurr.text = mUtils.GetProject().virtualCurrencyName;
 
 			// Рекламный блок
@@ -73,15 +73,15 @@ namespace Xsolla
 		{
 			if (pAmount == pAmountWithoutDiscount)
 			{
-				mAmount.text = CurrencyFormatter.FormatPrice(pCurrency , pAmount.ToString("0.00"));
+				mAmount.text = CurrencyFormatter.FormatPrice(pCurrency , pAmount.ToString("N2"));
 				if (pCurrency == "RUB")
 					mCurrency.enabled = true;
 			}
 			else
 			{
 				mOldAmount.enabled = true;
-				mOldAmount.text = CurrencyFormatter.FormatPrice(pCurrency, pAmountWithoutDiscount.ToString("0.00"));
-				mAmount.text = CurrencyFormatter.FormatPrice(pCurrency, pAmount.ToString("0.00"));
+				mOldAmount.text = CurrencyFormatter.FormatPrice(pCurrency, pAmountWithoutDiscount.ToString("N2"));
+				mAmount.text = CurrencyFormatter.FormatPrice(pCurrency, pAmount.ToString("N2"));
 				if (pCurrency == "RUB")
 					mCurrency.enabled = true;
 			}

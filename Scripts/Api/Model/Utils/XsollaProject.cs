@@ -20,6 +20,7 @@ namespace Xsolla
 		public string 	projectUrl			{get; private set;}// "projectUrl":"xsolla.com",
 		public string 	returnUrl			{get; private set;}// "returnUrl":"https:\/\/secure.xsolla.com?v1=user_1&v2=John+Smith",
 		public string 	eula				{get; private set;}// "eula":"http:\/\/xsolla.com\/termsandconditions\/?lang=en&ca=2340",
+		public string 	eulaUrl				{get; private set;}
 
 		public bool 	isDiscrete			{get; private set;}// "isDiscrete":false,
 		public bool 	isKeepUsers			{get; private set;}// "isKeepUsers":false,
@@ -45,7 +46,11 @@ namespace Xsolla
 			returnUrl = projectNode ["returnUrl"];
 			isKeepUsers = projectNode ["isKeepUsers"].AsBool;
 			recurringPackageCount = projectNode ["recurringPackageCount"].AsInt;
-			eula = projectNode ["eula"];
+			if (projectNode ["eula"] != null)
+			{
+				eula = projectNode ["eula"]["label"];
+				eulaUrl = projectNode ["eula"]["url"];
+			}
 			canRepeatPayment = projectNode ["canRepeatPayment"].AsBool;
 			
 			JSONClass jsonObj = projectNode["components"].AsObject;

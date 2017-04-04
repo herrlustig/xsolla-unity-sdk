@@ -94,12 +94,14 @@ namespace Xsolla
 					}
 				default:
 					{
-						pPanel.gameObject.SetActive(false);
+						pPanel.color = new Color(255,255,255,0);
+						pLabel.text = "";
 						return StyleManager.BaseSprite.bckg_item;
 					}
 				}
 			}	
-			pPanel.gameObject.SetActive(false);
+			pPanel.color = new Color(255,255,255,0);
+			pLabel.text = "";
 			return StyleManager.BaseSprite.bckg_item;
 		}
 	}

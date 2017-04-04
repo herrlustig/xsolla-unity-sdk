@@ -141,6 +141,33 @@ namespace Xsolla
 					AddShopItem(item); 
 				});
 		}
+
+		private void UpdateLayout()
+		{
+			// Подгоняем размер ячейки 
+			float lMaxCellHeight = 0;
+			mListItems.ForEach((item) => 
+				{
+					if (item.mMainBckg.gameObject.GetComponent<ContentSizeFitter>().enabled)
+					if (item.mMainBckg.gameObject.GetComponent<RectTransform>().rect.height > lMaxCellHeight)
+						lMaxCellHeight = item.mMainBckg.gameObject.GetComponent<RectTransform>().rect.height;
+				});
+
+			Logger.Log("Max height " + lMaxCellHeight);
+
+			if (lMaxCellHeight != 0)
+			{
+				Vector2 lCellSize = mItemsContentGrid.GetComponent<GridLayoutGroup>().cellSize;
+				mItemsContentGrid.GetComponent<GridLayoutGroup>().cellSize = new Vector2(lCellSize.x, lMaxCellHeight);
+			}
+
+			mListItems.ForEach((item) => 
+				{
+					item.mMainBckg.gameObject.GetComponent<ContentSizeFitter>().enabled = false;
+					item.mMainBckg.gameObject.GetComponent<RectTransform>().offsetMin = new Vector2(item.mMainBckg.gameObject.GetComponent<RectTransform>().offsetMin.x, 0);
+				});
+			
+		}
 			
 		private void AddShopItem(XsollaShopItem pItem)
 		{
@@ -150,7 +177,7 @@ namespace Xsolla
 			// получаем контроллер
 			ShopItemController itemController = lItemObj.GetComponent<ShopItemController>();
 			// инициализируем контроллер
-			itemController.init(pItem, mUtils, mCurrGroupId, SetCachedStateOnGroupId);
+			itemController.init(pItem, mUtils, mCurrGroupId, SetCachedStateOnGroupId, mIsListLayout);
 			itemController.mCollapseAnotherDesc = CollapseAllDesc;
 			// добавляем на панель
 			lItemObj.transform.SetParent(GetItemContainer.transform);
@@ -210,7 +237,7 @@ namespace Xsolla
 
 		void Update()
 		{
-			// TODO обновление кол-ва столбцов в контейнере 	
+			
 		}
 
 	}

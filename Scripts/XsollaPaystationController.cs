@@ -671,7 +671,7 @@ namespace Xsolla
 
 		private void TryAgain(){
 			SetLoading (true);
-			menuTransform.gameObject.SetActive (true);
+			//menuTransform.gameObject.SetActive (true);
 			Restart ();
 		}
 
@@ -681,7 +681,7 @@ namespace Xsolla
 			switch (group){
 				case XsollaStatus.Group.DONE:
 					Logger.Log ("Status Done");
-					menuTransform.gameObject.SetActive (true);
+					//menuTransform.gameObject.SetActive (true);
 					if (result == null)
 						result = new XsollaResult();
 					result.invoice = invoice;

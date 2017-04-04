@@ -2,6 +2,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using Xsolla;
+using System.Text.RegularExpressions;
 
 namespace Xsolla
 {
@@ -25,10 +26,28 @@ namespace Xsolla
 			_coupounNotif.text = _utiliLink.GetTranslations().Get(XsollaTranslations.COUPON_DESCRIPTION);
 			_nameInputField.text = _utiliLink.GetTranslations().Get(XsollaTranslations.COUPON_CODE_TITLE);
 			_inputFieldExample.text = _utiliLink.GetTranslations().Get(XsollaTranslations.COUPON_CODE_EXAMPLE);
-			_inputField.onEndEdit.AddListener(delegate {setAproveInput();});
+			_inputField.onValidateInput += delegate(string input, int charIndex, char addedChar) 
+			{ 
+				return MyValidate(addedChar); 
+			};
+
+			_inputField.onEndEdit.AddListener(delegate 
+				{
+					setAproveInput();
+				});
 
 			Text btnText = _btnApply.GetComponentInChildren<Text>();
 			btnText.text = _utiliLink.GetTranslations().Get(XsollaTranslations.COUPON_CONTROL_APPLY);
+		}
+
+		private char MyValidate(char charToValidate)
+		{
+			if(Regex.IsMatch(charToValidate.ToString(), "[^a-zA-Z0-9\\-\\_]"))
+			{
+				// не латинский и не цифровой и не - и _
+				return '\0';
+			}
+			return charToValidate;
 		}
 
 		public void ShowError(string pErrMsg)

@@ -59,10 +59,10 @@ namespace Xsolla
 	public class XsollaSubscription : IXsollaObject, IParseble
 	{
 		public string id { get; private set;}// 						"id":"5f23c3de",
-		public float chargeAmount { get; private set;}//				"charge_amount":19.99,
-		public float chargeAmountLocal { get; private set;}//			"charge_amount_local":19.99,
-		public float chargeAmountWithoutDiscount{ get; private set;}//	"charge_amount_without_discount":19.99,
-		public float chargeAmountWithoutDiscountLocal{ get; private set;}//	"charge_amount_without_discount_local":19.99,
+		public decimal chargeAmount { get; private set;}//				"charge_amount":19.99,
+		public decimal chargeAmountLocal { get; private set;}//			"charge_amount_local":19.99,
+		public decimal chargeAmountWithoutDiscount{ get; private set;}//	"charge_amount_without_discount":19.99,
+		public decimal chargeAmountWithoutDiscountLocal{ get; private set;}//	"charge_amount_without_discount_local":19.99,
 		public string chargeCurrency { get; private set;}//				"charge_currency":"USD",
 		public string chargeCurrencyLocal { get; private set;}//		"charge_currency_local":"USD",
 		public bool isActive {get; private set;}//						"is_active:false",
@@ -136,10 +136,10 @@ namespace Xsolla
 		public IParseble Parse (JSONNode subscriptionNode)
 		{
 			id = subscriptionNode ["id"];
-			chargeAmount = subscriptionNode ["charge_amount"].AsFloat;
-			chargeAmountLocal = subscriptionNode ["charge_amount_local"].AsFloat;
-			chargeAmountWithoutDiscount = subscriptionNode ["charge_amount_without_discount"].AsFloat;
-			chargeAmountWithoutDiscountLocal = subscriptionNode ["charge_amount_without_discount_local"].AsFloat;
+			chargeAmount = subscriptionNode ["charge_amount"].AsDecimal;
+			chargeAmountLocal = subscriptionNode ["charge_amount_local"].AsDecimal;
+			chargeAmountWithoutDiscount = subscriptionNode ["charge_amount_without_discount"].AsDecimal;
+			chargeAmountWithoutDiscountLocal = subscriptionNode ["charge_amount_without_discount_local"].AsDecimal;
 			chargeCurrency = subscriptionNode ["charge_currency"];
 			chargeCurrencyLocal = subscriptionNode ["charge_currency_local"];
 			isActive = subscriptionNode ["is_active"].AsBool;
