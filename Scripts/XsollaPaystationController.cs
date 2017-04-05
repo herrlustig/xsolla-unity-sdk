@@ -603,7 +603,7 @@ namespace Xsolla
 			// задаем родителя и заполняем 
 			Resizer.SetParentToFullScreen(goodsShop, mainScreenContainer);
 			// Выделяем элемент меню
-			mNavMenuController.SelectRadioItem(RadioButton.RadioType.GOODS_ITEM);
+			mNavMenuController.SelectRadioItem(RadioButton.RadioType.SCREEN_GOODS);
 		}
 
 		/// <summary>

@@ -74,7 +74,10 @@ namespace Xsolla
 				StateCustomAmount = false;
 			}
 			else
+			{
 				mCustomAmountLink.SetActive(false);
+				StateCustomAmount = false;
+			}
 
 			// получить список пакетов
 			Dictionary<String, object> lParams = new Dictionary<string, object>();

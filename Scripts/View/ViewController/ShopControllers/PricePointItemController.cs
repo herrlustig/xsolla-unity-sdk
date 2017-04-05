@@ -47,7 +47,7 @@ namespace Xsolla
 			mShortDesc.text = pItem.GetDescription();
 
 			// Задаем название
-			mItemName.text = pUtils.GetProject().isDiscrete ? pItem.outAmount.ToString("D") : pItem.outAmount.ToString("##.00");
+			mItemName.text = pUtils.GetProject().isDiscrete ? pItem.outAmount.ToString("N2") : pItem.outAmount.ToString("##.00");
 			mVcCurr.text = mUtils.GetProject().virtualCurrencyName;
 
 			// Рекламный блок

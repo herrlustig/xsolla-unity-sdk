@@ -35,7 +35,7 @@ namespace Xsolla {
 					if (user.country != null) { 
 						builder.Append ("\"country\":{")
 							.Append ("\"value\":\"").Append (user.country).Append ("\"").Append (",")
-								.Append ("\"allow_modify\":").Append (true)
+								.Append ("\"allow_modify\":").Append ("true")
 								.Append ("}").Append (",");
 					}
 				builder.Length--;
