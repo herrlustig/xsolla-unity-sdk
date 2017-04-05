@@ -179,6 +179,7 @@ namespace Xsolla
 			GameObject lBaseObj = Resources.Load(mIsListLayout ? PREFAB_SHOP_ITEM_LIST : PREFAB_SHOP_ITEM_GRID) as GameObject;
 			// создаем экземпляр объекта товара
 			GameObject lItemObj = Instantiate(lBaseObj);
+			lItemObj.GetComponent<RectTransform>().localScale = new Vector3(1,1,1);
 			// получаем контроллер
 			ShopItemController itemController = lItemObj.GetComponent<ShopItemController>();
 			// инициализируем контроллер
