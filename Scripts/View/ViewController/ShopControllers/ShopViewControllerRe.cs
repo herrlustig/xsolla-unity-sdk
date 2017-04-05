@@ -15,6 +15,7 @@ namespace Xsolla
 		public GameObject mItemsContentList;
 		public Text mEmptyLabel;
 		public ScrollRect mScrollRectItemsContainer;
+		public MyRotation  mProgressBar;
 
 		private const String mGroupsUrl = "paystation2/api/virtualitems/groups";
 		private const String mGoodsUrl = "paystation2/api/virtualitems/items";
@@ -100,6 +101,10 @@ namespace Xsolla
 
 		private void SelectGoodsGroup(XsollaGoodsGroup pGroup)
 		{
+			// Зачищаем панель с товарами
+			ClearItemsContent();
+			// Запускаем прелоадер
+			mProgressBar.SetLoading(true);
 			// выбор товаров по группе
 			// Меняем заголовок
 			mShopTitle.text = pGroup.GetName();
@@ -119,8 +124,6 @@ namespace Xsolla
 
 		private void GoodsRecived(JSONNode pNode)
 		{
-			// Зачищаем панель с товарами
-			ClearItemsContent();
 			// Позиция для скролла
 			mScrollRectItemsContainer.verticalNormalizedPosition = 1;
 
@@ -140,6 +143,8 @@ namespace Xsolla
 				{ 
 					AddShopItem(item); 
 				});
+
+			mProgressBar.SetLoading(false);
 		}
 
 		private void UpdateLayout()

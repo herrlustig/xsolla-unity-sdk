@@ -8,7 +8,9 @@ namespace Xsolla
 
 		public static void ResizeToParrent(GameObject go)
 		{
-			var containerRectTransform = go.GetComponent<RectTransform>();
+			Logger.Log("Screen size - " + Screen.currentResolution.ToString() + " Screen dpi - " + Screen.dpi);
+
+			RectTransform containerRectTransform = go.GetComponent<RectTransform>();
 			var parentRectTransform = go.transform.parent.gameObject.GetComponent<RectTransform> ();
 			var parentHeight = parentRectTransform.rect.height;
 			var parentWidth = parentRectTransform.rect.width;
@@ -61,6 +63,19 @@ namespace Xsolla
 			objRect.offsetMin = new Vector2(0, 0);
 			objRect.offsetMax = new Vector2(0, 0);
 		}
+
+		public static void ResizeMainScreen(GameObject pObj)
+		{
+			RectTransform objRect = pObj.GetComponent<RectTransform>();
+
+			objRect.anchorMin = new Vector2(0, 0);
+			objRect.anchorMax = new Vector2(1, 1);
+			objRect.localScale = new Vector3(1, 1, 1);
+			objRect.localPosition = new Vector3(0, 0, 0);
+			objRect.offsetMin = new Vector2(0, 0);
+			objRect.offsetMax = new Vector2(0, 0);
+		}
+
 	}
 
 }

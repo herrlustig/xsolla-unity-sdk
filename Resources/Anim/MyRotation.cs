@@ -15,8 +15,14 @@ public class MyRotation : MonoBehaviour {
 
 	public void SetLoading(bool isLoading){
 		gameObject.SetActive(isLoading);
-		anmator.SetBool ("IsRotating", isLoading);
+		if (this.isActiveAndEnabled)
+			StartCoroutine(setAnim(isLoading));
+	}
 
+	private IEnumerator setAnim(bool pState)
+	{
+		yield return new WaitForEndOfFrame();
+		anmator.SetBool ("IsRotating", pState);
 	}
 
 	public void StartRotation(){

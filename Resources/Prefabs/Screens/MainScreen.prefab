@@ -1183,7 +1183,7 @@ MonoBehaviour:
   - color: 14
     whatToColor: {fileID: 11421916}
   - color: 34
-    whatToColor: {fileID: 11494762}
+    whatToColor: {fileID: 0}
   - color: 1
     whatToColor: {fileID: 0}
   - color: 34
@@ -1191,7 +1191,7 @@ MonoBehaviour:
   - color: 34
     whatToColor: {fileID: 0}
   - color: 0
-    whatToColor: {fileID: 11425672}
+    whatToColor: {fileID: 0}
 --- !u!114 &11464264
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1729,7 +1729,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.5529412, g: 0.48235294, b: 0.7176471, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:

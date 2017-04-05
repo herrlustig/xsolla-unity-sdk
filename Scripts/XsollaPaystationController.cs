@@ -68,6 +68,7 @@ namespace Xsolla
 			mainScreenContainer = mMainScreenController.mMainContainer;
 			//mainScreenContainer = mainScreen.GetComponentsInChildren<ScrollRect> ()[0].gameObject;
 			//menuTransform = mainScreen.GetComponentsInChildren<RectTransform> ()[8].transform;
+
 			Resizer.ResizeToParrent (mainScreen);
 			//base.RecieveUtils(utils);
 			base.Utils = utils;
@@ -601,6 +602,8 @@ namespace Xsolla
 
 			// задаем родителя и заполняем 
 			Resizer.SetParentToFullScreen(goodsShop, mainScreenContainer);
+			// Выделяем элемент меню
+			mNavMenuController.SelectRadioItem(RadioButton.RadioType.GOODS_ITEM);
 		}
 
 		/// <summary>
@@ -618,14 +621,15 @@ namespace Xsolla
 		/// </summary>
 		private void ShowPricePointShop()
 		{
-			SetLoading(true);
 			GameObject pricePointShop = Instantiate(Resources.Load(PREFAB_SCREEN_PRICEPOINT_SHOP)) as GameObject;
 			PricePointShopControllerRe controller = pricePointShop.GetComponent<PricePointShopControllerRe>();
+			controller.SetProgressBarAction(delegate {progressBar.SetLoading(true);}, delegate {progressBar.SetLoading(false);});
 			controller.init(Utils);
 
 			// задаем родителя и заполняем 
 			Resizer.SetParentToFullScreen(pricePointShop, mainScreenContainer);
-			SetLoading(false);
+			// Выделяем элемент меню
+			mNavMenuController.SelectRadioItem(RadioButton.RadioType.SCREEN_PRICEPOINT);
 		}
 
 		/// <summary>

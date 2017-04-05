@@ -25,6 +25,8 @@ namespace Xsolla
 		private List<PricePointItemController> mListItems;
 		private CustomVirtCurrAmountController mCustomController;
 		private bool mStateCustomAmount;
+		private Action mStartProgressBar;
+		private Action mStopProgressBar;
 
 		public bool StateCustomAmount
 		{
@@ -44,10 +46,18 @@ namespace Xsolla
 			}
 		}
 
+		public void SetProgressBarAction(Action pStart, Action pStop)
+		{
+			mStartProgressBar = pStart;
+			mStopProgressBar = pStop;
+		}
+
 		public void init(XsollaUtils pUtils)
 		{
 			mUtils = pUtils;
 			mListItems = new List<PricePointItemController>();
+
+			mStartProgressBar();
 
 			mShopTitle.text = (pUtils.GetProject().components ["virtual_currency"].Name != "") ? pUtils.GetProject().components["virtual_currency"].Name : pUtils.GetTranslations().Get(XsollaTranslations.PRICEPOINT_PAGE_TITLE); 
 
@@ -77,6 +87,7 @@ namespace Xsolla
 		{
 			Logger.Log("PricePoints recived");
 			XsollaPricepointsManager lGoods = new XsollaPricepointsManager().Parse(pNode) as XsollaPricepointsManager;
+
 			// Если группа пустая
 			mEmptyLabel.gameObject.SetActive(lGoods.GetCount() == 0);
 			if (lGoods.GetCount() == 0)
@@ -106,6 +117,8 @@ namespace Xsolla
 				int lAvgIdx = lCountItems / 2 + ((lCountItems % 2) > 0 ? 1 : 0);
 				mCustomController.init(mUtils, lGoods.GetItemsList()[lAvgIdx - 1]);
 			}
+
+			mStopProgressBar();
 		}
 
 		private void AddPricePointItem(XsollaPricepoint pItem)
