@@ -107,7 +107,6 @@ namespace Xsolla {
 			} else {
 				tokenCallback(null);
 			}
-
 		}
 
 		public static string Base64Encode(string plainText) {

@@ -22,6 +22,7 @@ namespace Xsolla {
 		private bool isSelected = false;
 		private RadioType _typeRadioBtn;
 		private bool mExpand = false;
+		private bool mHover = false;
 
 		public bool Expand 
 		{
@@ -118,12 +119,24 @@ namespace Xsolla {
 		}
 
 		void Update() {
-			if (mIcon != null)
-				mIcon.color = isSelected ? StyleManager.Instance.GetColor (activeText) : StyleManager.Instance.GetColor (normalText);
-			if (mName != null)
-				mName.color = isSelected ? StyleManager.Instance.GetColor (activeText) : StyleManager.Instance.GetColor (normalText);
-			if (mDevider != null)
-				mDevider.color = isSelected ? StyleManager.Instance.GetColor (StyleManager.BaseColor.selected) : StyleManager.Instance.GetColor (StyleManager.BaseColor.divider_1);
+			if (mHover)
+			{
+				if (mIcon != null)
+					mIcon.color = isSelected ? StyleManager.Instance.GetColor (StyleManager.BaseColor.nav_menu_item_select_hover) : StyleManager.Instance.GetColor (StyleManager.BaseColor.nav_menu_item_not_select_hover);
+				if (mName != null)
+					mName.color = isSelected ? StyleManager.Instance.GetColor (StyleManager.BaseColor.nav_menu_item_select_hover) : StyleManager.Instance.GetColor (StyleManager.BaseColor.nav_menu_item_not_select_hover);
+				if (mDevider != null)
+					mDevider.color = isSelected ? StyleManager.Instance.GetColor (StyleManager.BaseColor.nav_menu_item_select_hover) : StyleManager.Instance.GetColor (StyleManager.BaseColor.nav_menu_item_not_select_hover);
+			}
+			else
+			{
+				if (mIcon != null)
+					mIcon.color = isSelected ? StyleManager.Instance.GetColor (activeText) : StyleManager.Instance.GetColor (normalText);
+				if (mName != null)
+					mName.color = isSelected ? StyleManager.Instance.GetColor (activeText) : StyleManager.Instance.GetColor (normalText);
+				if (mDevider != null)
+					mDevider.color = isSelected ? StyleManager.Instance.GetColor (StyleManager.BaseColor.selected) : StyleManager.Instance.GetColor (StyleManager.BaseColor.divider_1);
+			}
 
 			if (getType() == RadioType.GOODS_ITEM)
 			{
@@ -157,6 +170,16 @@ namespace Xsolla {
 						});
 				}
 			}
+		}
+
+		public void setHoverImg()
+		{
+			mHover = true;
+		}
+
+		public void onExitPoint()
+		{
+			mHover = false;
 		}
 
 		private void ChangeExpand()

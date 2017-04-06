@@ -68,6 +68,7 @@ namespace Xsolla
 			controller.init(pIcon, pName, pType, delegate { onNavMenuItemClick(pType, pOnlyAction); }, 0, pOnlyAction);
 
 			menuItemPrefab.transform.SetParent(mNavMenuPanel.transform);
+			menuItemPrefab.GetComponent<RectTransform>().localScale = new Vector3(1,1,1);
 			mRadioGroupController.AddButton(menuItemPrefab.GetComponent<RadioButton>());
 		}
 

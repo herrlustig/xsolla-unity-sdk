@@ -44,7 +44,9 @@
 				"518CB8",
 				"75A4C7",
 				"FFFFFF",
-				"75A4C7"
+				"75A4C7",
+				"518CB8",
+				"C4C4C4"
 			]
 		},
 		"default" : {
@@ -91,7 +93,9 @@
 				"715AA5",
 				"8D7BB7",
 				"868686",
-				"C2B3E5"
+				"C2B3E5",
+				"715aa5",
+				"7C7C7C"
 			]
 		}
 	},
@@ -138,6 +142,8 @@
 		"link_hover",
 		"link_normal",
 		"title_screen",
-		"expand_icon"
+		"expand_icon",
+		"nav_menu_item_select_hover",
+		"nav_menu_item_not_select_hover"
 	]
 }

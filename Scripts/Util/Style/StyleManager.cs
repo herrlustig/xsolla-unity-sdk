@@ -58,7 +58,9 @@ namespace Xsolla {
 			link_hover,
 			link_normal,
 			title_screen,
-			expand_icon
+			expand_icon,
+			nav_menu_item_select_hover,
+			nav_menu_item_not_select_hover
 		};
 
 		public enum BaseSprite

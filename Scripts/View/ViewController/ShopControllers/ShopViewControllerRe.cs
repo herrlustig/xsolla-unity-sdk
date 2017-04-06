@@ -171,7 +171,6 @@ namespace Xsolla
 					item.mMainBckg.gameObject.GetComponent<ContentSizeFitter>().enabled = false;
 					item.mMainBckg.gameObject.GetComponent<RectTransform>().offsetMin = new Vector2(item.mMainBckg.gameObject.GetComponent<RectTransform>().offsetMin.x, 0);
 				});
-			
 		}
 			
 		private void AddShopItem(XsollaShopItem pItem)
@@ -179,7 +178,6 @@ namespace Xsolla
 			GameObject lBaseObj = Resources.Load(mIsListLayout ? PREFAB_SHOP_ITEM_LIST : PREFAB_SHOP_ITEM_GRID) as GameObject;
 			// создаем экземпляр объекта товара
 			GameObject lItemObj = Instantiate(lBaseObj);
-			lItemObj.GetComponent<RectTransform>().localScale = new Vector3(1,1,1);
 			// получаем контроллер
 			ShopItemController itemController = lItemObj.GetComponent<ShopItemController>();
 			// инициализируем контроллер
@@ -187,6 +185,8 @@ namespace Xsolla
 			itemController.mCollapseAnotherDesc = CollapseAllDesc;
 			// добавляем на панель
 			lItemObj.transform.SetParent(GetItemContainer.transform);
+			// масштабирование
+			lItemObj.GetComponent<RectTransform>().localScale = new Vector3(1,1,1);
 			// Добавляем в лист кэша магазина
 			mListItems.Add(itemController);
 		}

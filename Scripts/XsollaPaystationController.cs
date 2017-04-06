@@ -416,30 +416,32 @@ namespace Xsolla
 			controller.InitScreen(translations, status);
 		}
 
+		/// <summary>
+		/// Draws the subscriptions.
+		/// </summary>
+		/// <param name="pSubs">Коллекция подписок</param>
 		private void DrawSubscriptions(XsollaSubscriptions pSubs)
 		{
 			currentActive = ActiveScreen.SUBSCRIPTIONS;
 			GameObject screenSubs = Instantiate(Resources.Load(PREFAB_SCREEN_SUBSCRIPTIONS)) as GameObject;
 			Resizer.DestroyChilds(mainScreenContainer.transform);
-			screenSubs.transform.SetParent (mainScreenContainer.transform);
-			screenSubs.transform.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, 0);
-			Resizer.ResizeToParrent(screenSubs);
-			mainScreenContainer.GetComponentInParent<ScrollRect> ().content = screenSubs.GetComponent<RectTransform> ();
+			Resizer.SetParentToFullScreen(screenSubs, mainScreenContainer);
+
 			_subsController = screenSubs.GetComponent<SubscriptionsViewController>();
 			_subsController.InitScreen(Utils.GetTranslations(),pSubs);
 
 		}
 
+		/// <summary>
+		/// Shows the redeem coupon.
+		/// </summary>
 		public void ShowRedeemCoupon()
 		{
 			currentActive = ActiveScreen.REDEEM_COUPONS;
 			GameObject screenRedeemCoupons = Instantiate(Resources.Load(PREFAB_SCREEN_REDEEM_COUPON)) as GameObject;
-			// clear container
 			Resizer.DestroyChilds(mainScreenContainer.transform);
-			screenRedeemCoupons.transform.SetParent (mainScreenContainer.transform);
-			screenRedeemCoupons.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, 0);
-			Resizer.ResizeToParrent (screenRedeemCoupons);
-			mainScreenContainer.GetComponentInParent<ScrollRect> ().content = screenRedeemCoupons.GetComponent<RectTransform> ();
+			Resizer.SetParentToFullScreen(screenRedeemCoupons, mainScreenContainer);
+
 			_couponController = screenRedeemCoupons.GetComponent<RedeemCouponViewController>();
 			_couponController.InitScreen(base.Utils);
 			_couponController._btnApply.onClick.AddListener(delegate

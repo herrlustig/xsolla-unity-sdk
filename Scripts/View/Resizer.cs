@@ -21,7 +21,7 @@ namespace Xsolla
 				containerRectTransform.offsetMin = new Vector2 (-parentWidth/2, -parentHeight/2);
 				containerRectTransform.offsetMax = new Vector2 (parentWidth/2, parentHeight/2);
 			} else {
-				var newWidth = parentWidth/3;
+				var newWidth = parentWidth/2;
 				if(width < newWidth){
 					containerRectTransform.offsetMin = new Vector2 (-newWidth/2, -parentHeight/2);
 					containerRectTransform.offsetMax = new Vector2 (newWidth/2, parentHeight/2);
@@ -30,6 +30,9 @@ namespace Xsolla
 					containerRectTransform.offsetMax = new Vector2 (width/2, parentHeight/2/parentScale);
 				}
 			}
+
+			// масштабирование
+			go.GetComponent<RectTransform>().localScale = new Vector3(1,1,1);
 		}
 
 		public static void DestroyChilds(Transform parentTransform)
