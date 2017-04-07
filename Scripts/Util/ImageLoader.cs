@@ -57,16 +57,17 @@ namespace Xsolla {
 						//Construct a new Sprite
 						Sprite sprite = new Sprite ();     
 					
-						//Create a new sprite using the Texture2D from the url. 
-						//Note that the 400 parameter is the width and height. 
-						//Adjust accordingly
-						Texture2D ltexture = imageURLWWW.texture;
-						ltexture.filterMode = FilterMode.Bilinear;
-						sprite = Sprite.Create(ltexture, new Rect (0, 0, ltexture.width, ltexture.height), new Vector2(0,0));
+						Texture2D image = new Texture2D(imageURLWWW.texture.width, imageURLWWW.texture.height, TextureFormat.DXT1, false);
+						imageURLWWW.LoadImageIntoTexture(image);
+						image.filterMode = FilterMode.Trilinear;
+						image.anisoLevel = 8;
+						image.Compress(true);
+						sprite = Sprite.Create(image, new Rect (0, 0, image.width, image.height), new Vector2(0,0));
 						if(!imageCashe.ContainsKey(url))
 						{
 							imageCashe.Add (url, sprite);
 						}
+
 						//Assign the sprite to the Image Component
 						if (imageView != null) 
 						{

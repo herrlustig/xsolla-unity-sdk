@@ -124,6 +124,8 @@ namespace Xsolla
 
 		private void GoodsRecived(JSONNode pNode)
 		{
+			// Зачищаем панель с товарами
+			ClearItemsContent();
 			// Позиция для скролла
 			mScrollRectItemsContainer.verticalNormalizedPosition = 1;
 
