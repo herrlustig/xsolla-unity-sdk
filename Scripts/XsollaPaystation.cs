@@ -82,7 +82,7 @@ namespace  Xsolla
 			currentPurchase = new ActivePurchase();
 			JSONNode rootNode = JSON.Parse(accessToken);
 			Dictionary<string, object> dict = new Dictionary<string, object> ();
-			if (!accessToken.Contains("%")) {
+			if (rootNode == null) {
 				isSimple = false;
 				dict.Add ("access_token", accessToken);
 				BaseParams = "access_token=" + accessToken;
@@ -100,16 +100,10 @@ namespace  Xsolla
 			Dictionary<string, object> lparams = new Dictionary<string, object>();
 			lparams.Add("access_data", accessData);
 
-			ApiRequest.Instance.getApiRequest(new XsollaRequestPckg(lUrl, lparams), getRequest, delegate 
-				{
-					Logger.Log("Not Cool");
-				});
-		}
-
-		private void getRequest(JSONNode pNode)
-		{
-			XsollaUtils lUtils = new XsollaUtils().Parse(pNode) as XsollaUtils;
-			Logger.Log("Cool");
+//			ApiRequest.Instance.getApiRequest(new XsollaRequestPckg(lUrl, lparams), getRequest, delegate 
+//				{
+//					Logger.Log("Not Cool");
+//				});
 		}
 
 		public static void AddHttpRequestObj(){
@@ -291,7 +285,8 @@ namespace  Xsolla
 		{
 			Logger.Log("Show Payment manager");
 			Dictionary<string, object> lParams = new Dictionary<string, object>();
-			lParams.Add("userInitialCurrency", Utils.GetUser().userBalance.currency);
+			if (Utils.GetUser().userBalance != null)
+				lParams.Add(XsollaApiConst.USER_INITIAL_CURRENCY, Utils.GetUser().userBalance.currency);
 			Payment.GetSavedPaymentsForManager(lParams);
 		}
 
@@ -299,7 +294,8 @@ namespace  Xsolla
 		{
 			Logger.Log("Show Subscription manager");
 			Dictionary<string, object> lParams = new Dictionary<string, object>();
-			lParams.Add("userInitialCurrency", Utils.GetUser().userBalance.currency);
+			if (Utils.GetUser().userBalance != null)
+				lParams.Add(XsollaApiConst.USER_INITIAL_CURRENCY, Utils.GetUser().userBalance.currency);
 			Payment.GetSubscriptionForManager(lParams);
 			SetLoading(true);
 		}

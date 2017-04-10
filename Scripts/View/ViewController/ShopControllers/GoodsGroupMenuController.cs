@@ -51,7 +51,7 @@ namespace Xsolla
 			}
 				
 			lMenuItem.transform.SetParent(pParent.transform);
-			lMenuItem.GetComponent<RectTransform>().localScale = new Vector3(1,1,1);
+			Resizer.SetDefScale(lMenuItem);
 		}
 			
 		public void clickItem(int pIndx)

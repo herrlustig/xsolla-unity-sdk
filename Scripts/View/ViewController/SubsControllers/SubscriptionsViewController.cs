@@ -28,8 +28,7 @@ namespace Xsolla
 		{
 			GameObject subObj = Instantiate(Resources.Load(PREFAB_SPEC_SUBS)) as GameObject;
 			subObj.transform.SetParent(_listSubsView.transform);
-			// масштабирование
-			subObj.GetComponent<RectTransform>().localScale = new Vector3(1,1,1);
+			Resizer.SetDefScale(subObj);
 			SubscriptionBtnController controller = subObj.GetComponent<SubscriptionBtnController>();
 			controller.InitBtn(pSub,pTranslation);
 

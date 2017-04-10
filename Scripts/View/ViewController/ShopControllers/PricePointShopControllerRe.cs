@@ -82,7 +82,8 @@ namespace Xsolla
 			// получить список пакетов
 			Dictionary<String, object> lParams = new Dictionary<string, object>();
 			lParams.Add(XsollaApiConst.ACCESS_TOKEN, mUtils.GetAcceessToken());
-			lParams.Add(XsollaApiConst.USER_INITIAL_CURRENCY, mUtils.GetUser().userBalance.currency);
+			if (mUtils.GetUser().userBalance != null)
+				lParams.Add(XsollaApiConst.USER_INITIAL_CURRENCY, mUtils.GetUser().userBalance.currency);
 			ApiRequest.Instance.getApiRequest(new XsollaRequestPckg(mPricePointsUrl, lParams), PricePointsRecived, ErrorRecived);
 		}
 
@@ -136,7 +137,7 @@ namespace Xsolla
 			// добавляем на панель
 			lItemObj.transform.SetParent(mItemsContentGrid.transform);
 			// масштабирование
-			lItemObj.GetComponent<RectTransform>().localScale = new Vector3(1,1,1);
+			Resizer.SetDefScale(lItemObj);
 			mListItems.Add(itemController);
 		}
 

@@ -516,7 +516,8 @@ namespace Xsolla
 							if(rootNode.Count > 2){
 								XsollaUtils utils = new XsollaUtils().Parse(rootNode) as XsollaUtils;
 								projectId = utils.GetProject().id.ToString();
-								utils.SetAccessToken(baseParams[XsollaApiConst.ACCESS_TOKEN].ToString());
+								if (baseParams.ContainsKey(XsollaApiConst.ACCESS_TOKEN))
+									utils.SetAccessToken(baseParams[XsollaApiConst.ACCESS_TOKEN].ToString());
 
 								OnUtilsRecieved(utils);
 //								// if base param not containKey access token, then add token from util

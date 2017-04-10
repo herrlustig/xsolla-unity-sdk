@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
+using SimpleJSON;
 
 namespace Xsolla
 {
@@ -10,21 +11,21 @@ namespace Xsolla
 	{
 		public Text mTitle;
 		public GameObject mHistoryContainer;
-		private const string PREFAB_HISTORY_ROW  = "Prefabs/SimpleView/HistoryItem";
-		private int mLimit = 0;
-		private int mCountMore = 20;
-		private bool isRefresh = false;
-		private bool sortDesc = true;
-		private String mVirtCurrName;
-
-//		public Text mDateTitle;
-//		public Text mTypeTitle;
-//		public Text mItemTitle;
-//		public Text mBalanceTitle;
-//		public Text mPriceTitle;
-
 		public Button mBtnRefresh;
 		public GameObject mBtnContinue;
+
+		private XsollaUtils mUtils;
+		private const string mHistoryUrl = "paystation2/api/balance/history";
+		private const string PREFAB_HISTORY_ROW  = "Prefabs/SimpleView/HistoryItem";
+		private List<HistoryElemController> mList;
+		private int mCountMore = 20;
+		private bool sortDesc = true;
+
+
+		private int mLimit = 0;
+		private bool isRefresh = false;
+
+		private String mVirtCurrName;
 
 		public bool IsRefresh()
 		{
@@ -40,8 +41,8 @@ namespace Xsolla
 			mBtnContinue.GetComponent<Text>().text = pTranslation.Get("balance_back_button") + " >";	
 			mBtnContinue.GetComponent<Button>().onClick.AddListener(delegate 
 				{
-					Logger.Log("Destroy history");
 					Destroy(this.gameObject);	
+					GetComponentInParent<XsollaPaystationController>().NavMenuClick(RadioButton.RadioType.SCREEN_GOODS);
 				});
 
 			AddHistoryRow(pTranslation, null, false, true);
@@ -54,6 +55,44 @@ namespace Xsolla
 				
 			isRefresh = false;
 		}
+
+		public void Init(XsollaUtils pUtils)
+		{
+			mUtils = pUtils;
+			mTitle.text = mUtils.GetTranslations().Get("balance_history_page_title");
+			mBtnContinue.GetComponent<Text>().text = mUtils.GetTranslations().Get("balance_back_button");
+
+			// Делаем запрос на лист
+			GetRequestList();
+		}
+
+		private void GetRequestList()
+		{
+			Dictionary<String, object> lParams = new Dictionary<string, object>();
+			lParams.Add(XsollaApiConst.ACCESS_TOKEN, mUtils.GetAcceessToken());
+			lParams.Add("offset", mList.Count);
+			lParams.Add("limit", mCountMore);
+			lParams.Add("sortDesc", sortDesc);
+			lParams.Add("sortKey", "dateTimestamp");
+			ApiRequest.Instance.getApiRequest(new XsollaRequestPckg(mHistoryUrl, lParams), HistoryListRecived, ErrorRecived);
+		}
+
+		private void HistoryListRecived(JSONNode pNode)
+		{
+			XsollaHistoryList lList = new XsollaHistoryList().Parse(pNode["operations"]) as XsollaHistoryList;
+			//TODO реализовать заполнение 
+
+		}
+
+		private void ErrorRecived(XsollaErrorRe pError)
+		{
+			
+		}
+
+
+
+
+
 
 		public void SortHistory()
 		{

@@ -88,7 +88,7 @@ namespace Xsolla
 			}
 			set
 			{
-				if (value)
+				if ((value) && (!mIsListLayoutItem))
 					mCollapseAnotherDesc();
 				mLongDescState = value;
 				mLongPanel.SetActive(value);
@@ -152,7 +152,8 @@ namespace Xsolla
 			Logger.Log("Get summary");
 			Dictionary<String, object> lParams = new Dictionary<string, object>();
 			lParams.Add(XsollaApiConst.ACCESS_TOKEN, mUtils.GetAcceessToken());
-			lParams.Add(XsollaApiConst.USER_INITIAL_CURRENCY, mUtils.GetUser().userBalance.currency);
+			if (mUtils.GetUser().userBalance != null)
+				lParams.Add(XsollaApiConst.USER_INITIAL_CURRENCY, mUtils.GetUser().userBalance.currency);
 			lParams.Add("virtual_item_id", mItem.GetId());
 			lParams.Add("is_favorite", mItem.IsFavorite()? "0" : "1");
 			ApiRequest.Instance.getApiRequest(new XsollaRequestPckg(mFavoriteUrl, lParams), FavoriteRecived, ErrorRecived, false);
@@ -364,6 +365,11 @@ namespace Xsolla
 			Dictionary<string, object> map = new Dictionary<string, object>();
 			map.Add ("sku[" + pItem.GetKey() + "]", mCount);
 			gameObject.GetComponentInParent<XsollaPaystationController> ().ChooseItem (map, pItem.IsVirtualPayment());
+		}
+
+		public void Update()
+		{
+			
 		}
 	}
 

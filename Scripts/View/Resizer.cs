@@ -32,7 +32,12 @@ namespace Xsolla
 			}
 
 			// масштабирование
-			go.GetComponent<RectTransform>().localScale = new Vector3(1,1,1);
+			SetDefScale(go);
+		}
+
+		public static void SetDefScale(GameObject pObj)
+		{
+			pObj.GetComponent<RectTransform>().localScale = new Vector3(1,1,1);
 		}
 
 		public static void DestroyChilds(Transform parentTransform)

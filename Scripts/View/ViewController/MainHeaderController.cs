@@ -12,6 +12,7 @@ namespace Xsolla
 		public GameObject _btnDropDownObj;
 		public Text _userName;
 		public Button _pMenuBtnComponent;
+		public Button mDropIcon;
 
 		private const string PREFAB_USER_MENU_BTN = "Prefabs/SimpleView/ProfileBtn";
 
@@ -35,7 +36,11 @@ namespace Xsolla
 				AddUserMenuBtn(pUtils.GetTranslations().Get("user_menu_user_subscription"), ShowSubscriptionManager);
 			}
 			else
+			{
+				_userName.color = StyleManager.Instance.GetColor(StyleManager.BaseColor.disable_user_menu);
 				_pMenuBtnComponent.enabled = false;
+				mDropIcon.gameObject.SetActive(false);
+			}
 		}
 
 		private void AddUserMenuBtn(String pTitle, Action pAction)
@@ -44,6 +49,7 @@ namespace Xsolla
 			UserProfileBtnController controllerSubs = objSubs.GetComponentInChildren<UserProfileBtnController>();
 			controllerSubs.InitScreen(pTitle, pAction);
 			objSubs.transform.SetParent(_btnDropDownObj.transform);
+			Resizer.SetDefScale(objSubs);
 		}
 
 		// TODO переделать на метод вызова в верхний класс по типу

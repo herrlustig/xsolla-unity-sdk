@@ -159,7 +159,8 @@ namespace Xsolla
 		private void RequestCalculate(Dictionary<string, object> pParams)
 		{
 			pParams.Add(XsollaApiConst.ACCESS_TOKEN, mUtils.GetAcceessToken());
-			pParams.Add(XsollaApiConst.USER_INITIAL_CURRENCY, mUtils.GetUser().userBalance.currency);
+			if (mUtils.GetUser().userBalance != null)
+				pParams.Add(XsollaApiConst.USER_INITIAL_CURRENCY, mUtils.GetUser().userBalance.currency);
 			pParams.Add("custom_currency", mCustomCurrency);
 
 			ApiRequest.Instance.getApiRequest(new XsollaRequestPckg(mCalculateUrl, pParams), CalculateRecived, ErrorRecived, false);
@@ -183,12 +184,14 @@ namespace Xsolla
 				virtCurrAmount.textComponent.color = StyleManager.Instance.GetColor(StyleManager.BaseColor.bg_error);
 				virtCurrAmount.gameObject.GetComponent<ColorInputController>().pType = StyleManager.BaseSprite.bckg_input_error;
 				virtCurrAmount.gameObject.GetComponent<ColorInputController>().UpdateSprite();
+				SetVirtError();
 			}
 			else
 			{
 				realCurrAmount.textComponent.color = StyleManager.Instance.GetColor(StyleManager.BaseColor.bg_error);
 				realCurrAmount.gameObject.GetComponent<ColorInputController>().pType = StyleManager.BaseSprite.bckg_input_error;
 				realCurrAmount.gameObject.GetComponent<ColorInputController>().UpdateSprite();
+				SetRealError();
 			}
 		}
 
@@ -216,7 +219,7 @@ namespace Xsolla
 			}
 			
 			if (pValue.vcAmount != 0)
-				virtCurrAmount.text = pValue.vcAmount.ToString("N2");
+				virtCurrAmount.text = mUtils.GetProject().isDiscrete ? pValue.vcAmount.ToString("N0") : pValue.vcAmount.ToString("N2");
 			else
 				virtCurrAmount.text = "";
 			

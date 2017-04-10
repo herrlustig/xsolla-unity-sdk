@@ -268,7 +268,7 @@ namespace Xsolla
 					controller.InitScreen(Utils.GetTranslations(), pList, Utils.GetProject().virtualCurrencyName);
 				screenHistoryView.transform.SetParent (mainScreenContainer.transform);
 				screenHistoryView.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, 0);
-				Resizer.ResizeToParrent (screenHistoryView);
+				Resizer.ResizeToParrentRe(screenHistoryView);
 			}
 		}
 
@@ -632,6 +632,16 @@ namespace Xsolla
 			Resizer.SetParentToFullScreen(pricePointShop, mainScreenContainer);
 			// Выделяем элемент меню
 			mNavMenuController.SelectRadioItem(RadioButton.RadioType.SCREEN_PRICEPOINT);
+		}
+
+		private void ShowHistory()
+		{
+			GameObject historyScreen = Instantiate(Resources.Load(PREFAB_SCREEN_HISTORY_USER)) as GameObject;
+			HistoryController controller = historyScreen.GetComponent<HistoryController>();
+			controller.Init(Utils);
+
+			// задаем родителя и заполняем 
+			Resizer.SetParentToFullScreen(historyScreen, mainScreenContainer);
 		}
 
 		/// <summary>

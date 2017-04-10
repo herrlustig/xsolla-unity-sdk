@@ -57,7 +57,8 @@ namespace Xsolla
 			// получить список групп
 			Dictionary<String, object> lParams = new Dictionary<string, object>();
 			lParams.Add(XsollaApiConst.ACCESS_TOKEN, mUtils.GetAcceessToken());
-			lParams.Add(XsollaApiConst.USER_INITIAL_CURRENCY, mUtils.GetUser().userBalance.currency);
+			if (mUtils.GetUser().userBalance != null)
+				lParams.Add(XsollaApiConst.USER_INITIAL_CURRENCY, mUtils.GetUser().userBalance.currency);
 			ApiRequest.Instance.getApiRequest(new XsollaRequestPckg(mGroupsUrl, lParams), GoodsGroupRecived, ErrorRecived);
 		}
 
@@ -114,7 +115,8 @@ namespace Xsolla
 			Logger.Log("Load goods from groupId:" + pGroup.id.ToString());
 			Dictionary<String, object> lParams = new Dictionary<string, object>();
 			lParams.Add(XsollaApiConst.ACCESS_TOKEN, mUtils.GetAcceessToken());
-			lParams.Add(XsollaApiConst.USER_INITIAL_CURRENCY, mUtils.GetUser().userBalance.currency);
+			if (mUtils.GetUser().userBalance != null)
+				lParams.Add(XsollaApiConst.USER_INITIAL_CURRENCY, mUtils.GetUser().userBalance.currency);
 			lParams.Add("group_id", pGroup.id);
 			// Если id = -1 то это распродажа и делаем запрос по другому адресу
 			ApiRequest.Instance.getApiRequest(new XsollaRequestPckg((pGroup.id == -1) ? mSalesUrl : mGoodsUrl, lParams), GoodsRecived, ErrorRecived, mGroupUseCached.ContainsKey(mCurrGroupId) ? mGroupUseCached[mCurrGroupId] : true);
@@ -160,8 +162,6 @@ namespace Xsolla
 						lMaxCellHeight = item.mMainBckg.gameObject.GetComponent<RectTransform>().rect.height;
 				});
 
-			Logger.Log("Max height " + lMaxCellHeight);
-
 			if (lMaxCellHeight != 0)
 			{
 				Vector2 lCellSize = mItemsContentGrid.GetComponent<GridLayoutGroup>().cellSize;
@@ -188,7 +188,7 @@ namespace Xsolla
 			// добавляем на панель
 			lItemObj.transform.SetParent(GetItemContainer.transform);
 			// масштабирование
-			lItemObj.GetComponent<RectTransform>().localScale = new Vector3(1,1,1);
+			Resizer.SetDefScale(lItemObj);
 			// Добавляем в лист кэша магазина
 			mListItems.Add(itemController);
 		}
@@ -206,7 +206,8 @@ namespace Xsolla
 			Logger.Log("Get request on favorite items");
 			Dictionary<String, object> lParams = new Dictionary<string, object>();
 			lParams.Add(XsollaApiConst.ACCESS_TOKEN, mUtils.GetAcceessToken());
-			lParams.Add(XsollaApiConst.USER_INITIAL_CURRENCY, mUtils.GetUser().userBalance.currency);
+			if (mUtils.GetUser().userBalance != null)
+				lParams.Add(XsollaApiConst.USER_INITIAL_CURRENCY, mUtils.GetUser().userBalance.currency);
 			ApiRequest.Instance.getApiRequest(new XsollaRequestPckg(mFavItemsUrl, lParams), FavItemsRecived, ErrorRecived, false);
 		}
 

@@ -46,7 +46,8 @@
 				"FFFFFF",
 				"75A4C7",
 				"518CB8",
-				"C4C4C4"
+				"C4C4C4",
+				"FFFFFF"
 			]
 		},
 		"default" : {
@@ -95,7 +96,8 @@
 				"868686",
 				"C2B3E5",
 				"715aa5",
-				"7C7C7C"
+				"7C7C7C",
+				"B4B4B4"
 			]
 		}
 	},
@@ -144,6 +146,7 @@
 		"title_screen",
 		"expand_icon",
 		"nav_menu_item_select_hover",
-		"nav_menu_item_not_select_hover"
+		"nav_menu_item_not_select_hover",
+		"disable_user_menu"
 	]
 }

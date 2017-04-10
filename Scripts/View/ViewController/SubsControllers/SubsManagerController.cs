@@ -96,7 +96,8 @@ namespace Xsolla
 			Dictionary<string, object> lParams = new Dictionary<string, object>();
 			lParams.Add(XsollaApiConst.ACCESS_TOKEN, mUtils.GetAcceessToken());
 			lParams.Add("subscription_id", pSubId);
-			lParams.Add("userInitialCurrency", mUtils.GetUser().userBalance.currency);
+			if (mUtils.GetUser().userBalance != null)
+				lParams.Add(XsollaApiConst.USER_INITIAL_CURRENCY, mUtils.GetUser().userBalance.currency);
 
 			getApiRequest(DOMAIN + "/paystation2/api/useraccount/subscription", lParams, callbackShowSubDetail);
 		}
@@ -280,7 +281,8 @@ namespace Xsolla
 			Dictionary<String, object> lParams = new Dictionary<string, object>();
 			lParams.Add(XsollaApiConst.ACCESS_TOKEN, mUtils.GetAcceessToken());
 			lParams.Add("subscription_id", pSubDetail.mId);
-			lParams.Add("userInitialCurrency", mUtils.GetUser().userBalance.currency);
+			if (mUtils.GetUser().userBalance != null)
+				lParams.Add(XsollaApiConst.USER_INITIAL_CURRENCY, mUtils.GetUser().userBalance.currency);
 
 			getApiRequest(DOMAIN + "/paystation2/api/useraccount/unlinkpaymentaccount", lParams, callbackUnlinkMethod);
 		}
@@ -311,7 +313,8 @@ namespace Xsolla
 			Logger.Log("On click back to subs");
 			Dictionary<String, object> lParams = new Dictionary<string, object>();
 			lParams.Add(XsollaApiConst.ACCESS_TOKEN, mUtils.GetAcceessToken());
-			lParams.Add("userInitialCurrency", mUtils.GetUser().userBalance.currency);
+			if (mUtils.GetUser().userBalance != null)
+				lParams.Add(XsollaApiConst.USER_INITIAL_CURRENCY, mUtils.GetUser().userBalance.currency);
 
 			getApiRequest(DOMAIN + "/paystation2/api/useraccount/subscriptions", lParams, callbackGetSubsList);
 		}
@@ -350,7 +353,8 @@ namespace Xsolla
 			Dictionary<String, object> lParams = new Dictionary<string, object>();
 			lParams.Add(XsollaApiConst.ACCESS_TOKEN, mUtils.GetAcceessToken());
 			lParams.Add("subscription_id", mLocalSubDetail.mId);
-			lParams.Add("userInitialCurrency", mUtils.GetUser().userBalance.currency);
+			if (mUtils.GetUser().userBalance != null)
+				lParams.Add(XsollaApiConst.USER_INITIAL_CURRENCY, mUtils.GetUser().userBalance.currency);
 
 			getApiRequest(DOMAIN + "/paystation2/api/useraccount/unholdsubscription", lParams, callbackUnholdMethod);
 		}
@@ -361,7 +365,8 @@ namespace Xsolla
 			Dictionary<String, object> lParams = new Dictionary<string, object>();
 			lParams.Add(XsollaApiConst.ACCESS_TOKEN, mUtils.GetAcceessToken());
 			lParams.Add("subscription_id", mLocalSubDetail.mId);
-			lParams.Add("userInitialCurrency", mUtils.GetUser().userBalance.currency);
+			if (mUtils.GetUser().userBalance != null)
+				lParams.Add(XsollaApiConst.USER_INITIAL_CURRENCY, mUtils.GetUser().userBalance.currency);
 			lParams.Add("status", "non_renewing");
 
 			getApiRequest(DOMAIN + "/paystation2/api/useraccount/holdsubscription", lParams, callbackDontrenewMethod);
@@ -374,7 +379,8 @@ namespace Xsolla
 			Dictionary<String, object> lParams = new Dictionary<string, object>();
 			lParams.Add(XsollaApiConst.ACCESS_TOKEN, mUtils.GetAcceessToken());
 			lParams.Add("subscription_id", mLocalSubDetail.mId);
-			lParams.Add("userInitialCurrency", mUtils.GetUser().userBalance.currency);
+			if (mUtils.GetUser().userBalance != null)
+				lParams.Add(XsollaApiConst.USER_INITIAL_CURRENCY, mUtils.GetUser().userBalance.currency);
 			lParams.Add("status", "canceled");
 
 			getApiRequest(DOMAIN + "/paystation2/api/useraccount/holdsubscription", lParams, callbackDeleteSubMethod);
