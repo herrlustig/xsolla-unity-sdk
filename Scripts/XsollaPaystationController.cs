@@ -50,7 +50,6 @@ namespace Xsolla
 		private MainScreenController 		mMainScreenController;
 
 		private static ActiveScreen 		currentActive = ActiveScreen.UNKNOWN;
-		private Transform 					menuTransform;
 		private GameObject 					mainScreenContainer;
 
 		public enum ActiveScreen
@@ -66,9 +65,6 @@ namespace Xsolla
 			mainScreen.SetActive (true);
 			mMainScreenController = mainScreen.GetComponent<MainScreenController>();
 			mainScreenContainer = mMainScreenController.mMainContainer;
-			//mainScreenContainer = mainScreen.GetComponentsInChildren<ScrollRect> ()[0].gameObject;
-			//menuTransform = mainScreen.GetComponentsInChildren<RectTransform> ()[8].transform;
-
 			Resizer.ResizeToParrent (mainScreen);
 			//base.RecieveUtils(utils);
 			base.Utils = utils;
@@ -159,6 +155,7 @@ namespace Xsolla
 				GameObject paymentListScreen = Instantiate (paymentListScreenPrefab);
 				_paymentListScreenController = paymentListScreen.GetComponent<PaymentListScreenController> ();
 				_paymentListScreenController.transform.SetParent (mainScreenContainer.transform);
+				Resizer.SetDefScale(paymentListScreen);
 				_paymentListScreenController.GetComponent<RectTransform> ().anchoredPosition = new Vector2 (0, 0);
 				mainScreenContainer.GetComponentInParent<ScrollRect> ().content = _paymentListScreenController.GetComponent<RectTransform> ();
 			}
@@ -242,33 +239,6 @@ namespace Xsolla
 			{
 				_couponController.ShowError(pResult._error);
 				return;
-			}
-		}
-
-		protected override void ShowHistory (XsollaHistoryList pList)
-		{
-			GameObject screenHistoryView;
-			HistoryController controller;
-			controller = GameObject.FindObjectOfType<HistoryController>();
-			// if we have controller
-			if (controller != null)
-			{
-				controller = GameObject.FindObjectOfType<HistoryController>();
-				if (!controller.IsRefresh())
-					controller.AddListRows(Utils.GetTranslations(), pList);
-				else
-					controller.InitScreen(Utils.GetTranslations(), pList, Utils.GetProject().virtualCurrencyName);
-			}
-			else
-			{
-				currentActive = ActiveScreen.HISTORY_LIST;
-				screenHistoryView = Instantiate(Resources.Load(PREFAB_SCREEN_HISTORY_USER)) as GameObject;
-				controller = screenHistoryView.GetComponent<HistoryController>();	
-				if (controller != null)
-					controller.InitScreen(Utils.GetTranslations(), pList, Utils.GetProject().virtualCurrencyName);
-				screenHistoryView.transform.SetParent (mainScreenContainer.transform);
-				screenHistoryView.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, 0);
-				Resizer.ResizeToParrentRe(screenHistoryView);
 			}
 		}
 
@@ -406,7 +376,6 @@ namespace Xsolla
 		private void DrawStatus(XsollaTranslations translations, XsollaStatus status)
 		{
 			currentActive = ActiveScreen.STATUS;
-			menuTransform.gameObject.SetActive (false);
 			GameObject statusScreen = Instantiate (Resources.Load(PREFAB_SCREEN_STATUS)) as GameObject;
 			statusScreen.transform.SetParent(mainScreenContainer.transform);
 			statusScreen.GetComponent<RectTransform> ().anchoredPosition = new Vector2 (0, 0);
@@ -500,6 +469,7 @@ namespace Xsolla
 			currentActive = ActiveScreen.PAYMENT;
 			GameObject checkoutScreen = Instantiate (Resources.Load(PREFAB_SCREEN_CHECKOUT)) as GameObject;
 			checkoutScreen.transform.SetParent(mainScreenContainer.transform);
+			Resizer.SetDefScale(checkoutScreen);
 			checkoutScreen.GetComponent<RectTransform> ().anchoredPosition = new Vector2 (0, 0);
 			//scroll.content = paymentScreen.GetComponent<RectTransform> ();
 			mainScreenContainer.GetComponentInParent<ScrollRect> ().content = checkoutScreen.GetComponent<RectTransform> ();
@@ -512,9 +482,9 @@ namespace Xsolla
 		{
 			_summary = summary;
 			currentActive = ActiveScreen.VP_PAYMENT;
-			//menuTransform.gameObject.SetActive (true);
 			GameObject statusScreen = Instantiate (Resources.Load(PREFAB_SCREEN_VP_SUMMARY)) as GameObject;
 			statusScreen.transform.SetParent(mainScreenContainer.transform);
+			Resizer.SetDefScale(statusScreen);
 			statusScreen.GetComponent<RectTransform> ().anchoredPosition = new Vector2 (0, 0);
 			mainScreenContainer.GetComponentInParent<ScrollRect> ().content = statusScreen.GetComponent<RectTransform> ();
 			ScreenVPController screenVpController = statusScreen.GetComponent<ScreenVPController> ();
@@ -523,9 +493,9 @@ namespace Xsolla
 
 		private void DrawVPError(XsollaUtils utils, string error) {
 			currentActive = ActiveScreen.VP_PAYMENT;
-			//menuTransform.gameObject.SetActive (true);
 			GameObject statusScreen = Instantiate (Resources.Load(PREFAB_SCREEN_VP_SUMMARY)) as GameObject;
 			statusScreen.transform.SetParent(mainScreenContainer.transform);
+			Resizer.SetDefScale(statusScreen);
 			statusScreen.GetComponent<RectTransform> ().anchoredPosition = new Vector2 (0, 0);
 			mainScreenContainer.GetComponentInParent<ScrollRect> ().content = statusScreen.GetComponent<RectTransform> ();
 			ScreenVPController screenVpController = statusScreen.GetComponent<ScreenVPController> ();
@@ -535,9 +505,9 @@ namespace Xsolla
 					
 		private void DrawVPStatus (XsollaUtils utils, XVPStatus status) {
 			currentActive = ActiveScreen.STATUS;
-			//menuTransform.gameObject.SetActive (false);
 			GameObject statusScreen = Instantiate (Resources.Load(PREFAB_SCREEN_STATUS)) as GameObject;
 			statusScreen.transform.SetParent(mainScreenContainer.transform);
+			Resizer.SetDefScale(statusScreen);
 			statusScreen.GetComponent<RectTransform> ().anchoredPosition = new Vector2 (0, 0);
 			mainScreenContainer.GetComponentInParent<ScrollRect> ().content = statusScreen.GetComponent<RectTransform> ();
 			StatusViewController controller = statusScreen.GetComponent<StatusViewController> ();
@@ -634,6 +604,9 @@ namespace Xsolla
 			mNavMenuController.SelectRadioItem(RadioButton.RadioType.SCREEN_PRICEPOINT);
 		}
 
+		/// <summary>
+		/// Shows the history.
+		/// </summary>
 		private void ShowHistory()
 		{
 			GameObject historyScreen = Instantiate(Resources.Load(PREFAB_SCREEN_HISTORY_USER)) as GameObject;
@@ -680,6 +653,11 @@ namespace Xsolla
 					ShowFavGoodsShop();
 					break;
 				}
+			case RadioButton.RadioType.SCREEN_HISTORY:
+				{
+					ShowHistory();
+					break;
+				}
 			default:
 				break;
 			}
@@ -687,7 +665,6 @@ namespace Xsolla
 
 		private void TryAgain(){
 			SetLoading (true);
-			//menuTransform.gameObject.SetActive (true);
 			Restart ();
 		}
 
@@ -697,7 +674,6 @@ namespace Xsolla
 			switch (group){
 				case XsollaStatus.Group.DONE:
 					Logger.Log ("Status Done");
-					//menuTransform.gameObject.SetActive (true);
 					if (result == null)
 						result = new XsollaResult();
 					result.invoice = invoice;

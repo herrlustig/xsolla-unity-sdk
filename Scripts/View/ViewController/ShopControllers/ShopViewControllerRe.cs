@@ -133,20 +133,24 @@ namespace Xsolla
 
 			XsollaGoodsManager lGoods = new XsollaGoodsManager().Parse(pNode) as XsollaGoodsManager;
 
+			lGoods.GetItemsList().ForEach((item) => 
+				{ 
+					// Если бессерверная то товары за вирт валюту не проходят
+					if (mUtils.IsServerLess() && item.IsVirtualPayment())
+						Logger.Log("Item " + item.GetId() + " can't be buy");
+					else
+						AddShopItem(item); 
+				});
+
 			// Если группа пустая
-			mEmptyLabel.gameObject.SetActive(lGoods.GetCount() == 0);
-			if (lGoods.GetCount() == 0)
+			mEmptyLabel.gameObject.SetActive(mListItems.Count == 0);
+			if (mListItems.Count == 0)
 			{
 				mItemsContentGrid.SetActive(false);
 				mItemsContentList.SetActive(false);
 			}
 			else
 				SetLanding();
-
-			lGoods.GetItemsList().ForEach((item) => 
-				{ 
-					AddShopItem(item); 
-				});
 
 			mProgressBar.SetLoading(false);
 		}

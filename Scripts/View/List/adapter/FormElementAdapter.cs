@@ -65,6 +65,7 @@ namespace Xsolla {
 			GameObject newItem = Instantiate(tablePrefab) as GameObject;
 			ElementTableController controller = newItem.GetComponent<ElementTableController>();
             controller.InitScreen(element);
+			Resizer.SetDefScale(newItem);
 			return newItem;
 		}
 
@@ -75,6 +76,7 @@ namespace Xsolla {
 
 			GameObject newItem = Instantiate(labelPrefab) as GameObject;
 			newItem.GetComponentInChildren<Text> ().text = element.GetTitle ();
+			Resizer.SetDefScale(newItem);
 			return newItem;
 		}
 

@@ -150,18 +150,21 @@ namespace Xsolla {
 		private void AddTitle(string s){
 			GameObject titleInstance = Instantiate (rowTitlePrefab) as GameObject;
 			titleInstance.transform.SetParent (checkListTransform);
+			Resizer.SetDefScale(titleInstance);
 			titleInstance.GetComponentInChildren<Text> ().text = s;
 		}
 
 		private void AddStatus(string s){
 			GameObject statusInstance = Instantiate (rowStatusPrefab) as GameObject;
 			statusInstance.transform.SetParent (checkListTransform);
+			Resizer.SetDefScale(statusInstance);
 			statusInstance.GetComponentInChildren<Text> ().text = s;
 		}
 
 		private void AddLine(){
 			GameObject lineInstance = Instantiate (rowLinePrefab) as GameObject;
 			lineInstance.transform.SetParent (checkListTransform);
+			Resizer.SetDefScale(lineInstance);
 		}
 
 		private void AddElement(string s, string s1){
@@ -171,6 +174,7 @@ namespace Xsolla {
 			
 			GameObject elementInstance = Instantiate (rowInfoElementPrefab) as GameObject;
 			elementInstance.transform.SetParent (checkListTransform);
+			Resizer.SetDefScale(elementInstance);
 			Text[] texts = elementInstance.GetComponentsInChildren<Text> ();
 			texts [0].text = s;
 			texts [1].text = s1;
@@ -183,6 +187,7 @@ namespace Xsolla {
 
 			GameObject elementInstance = Instantiate (rowInfoElementBigPrefab) as GameObject;
 			elementInstance.transform.SetParent (checkListTransform);
+			Resizer.SetDefScale(elementInstance);
 			Text[] texts = elementInstance.GetComponentsInChildren<Text> ();
 			texts [0].text = s;
 			texts [1].text = s1;

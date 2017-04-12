@@ -453,17 +453,17 @@ MonoBehaviour:
   itemsToColor:
   - color: 7
     whatToColor: {fileID: 0}
-  - color: 21
+  - color: 23
     whatToColor: {fileID: 11416712}
   - color: 21
     whatToColor: {fileID: 11499454}
-  - color: 21
+  - color: 23
     whatToColor: {fileID: 11497916}
-  - color: 21
+  - color: 17
     whatToColor: {fileID: 114000010728958876}
   - color: 17
     whatToColor: {fileID: 114000013525189922}
-  - color: 21
+  - color: 12
     whatToColor: {fileID: 11448194}
 --- !u!114 &11458474
 MonoBehaviour:

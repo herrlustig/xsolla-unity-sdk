@@ -24,7 +24,7 @@ namespace Xsolla
 			// user name 
 			_userName.text = pUtils.GetUser().GetName();
 		
-			if (pUtils.GetUser().virtualCurrencyBalance != null)
+			if (!pUtils.IsServerLess())
 			{
 				AddUserMenuBtn(pUtils.GetTranslations().Get("user_menu_balance"), ShowHistory);
 				_pMenuBtnComponent.enabled = true;
@@ -61,13 +61,7 @@ namespace Xsolla
 		private void ShowHistory()
 		{
 			Logger.Log("Show user history");
-			Dictionary<string, object> lParams = new Dictionary<string, object>();
-			// Load History
-			lParams.Add("offset", 0);
-			lParams.Add("limit", 20);
-			lParams.Add("sortDesc", true);
-			lParams.Add("sortKey", "dateTimestamp");
-			GetComponentInParent<XsollaPaystation> ().LoadHistory(lParams);
+			GetComponentInParent<XsollaPaystationController>().NavMenuClick(RadioButton.RadioType.SCREEN_HISTORY);
 		}
 
 		private void ShowSubscriptionManager()

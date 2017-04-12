@@ -2,6 +2,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using SimpleJSON;
+using System.Collections;
 using System.Collections.Generic;
 
 namespace Xsolla
@@ -144,6 +145,8 @@ namespace Xsolla
 
 		private void SetFavoriteState()
 		{
+			// Проверка на бессерверную интеграцию
+			mFav.gameObject.SetActive(mUtils.GetUser().userBalance != null);
 			mFav.text = mItem.IsFavorite() ? "" : "";
 		}
 
@@ -267,10 +270,21 @@ namespace Xsolla
 			}
 
 			mBuyBtn.GetComponentInChildren<Text>().text = mUtils.GetTranslations().Get("virtual_item_option_button");
-//			if (mUtils.GetSettings().mDesktop.pVirtItems.mButtonWithPrice)
-//				mBuyBtn.GetComponentInChildren<Text>().text = "";
-//			else
-//				mBuyBtn.GetComponentInChildren<Text>().text = mUtils.GetTranslations().Get("virtual_item_option_button");
+
+			// Если цена должна быть в кнопке
+			if (mUtils.GetSettings().mDesktop.pVirtItems.mButtonWithPrice)
+			{
+				// Скрываем текст самой кнопки
+				mBuyBtn.GetComponentInChildren<Text>().gameObject.SetActive(false);
+				// Переносим ценовой блок в кнопку
+				mAmountPanel.transform.SetParent(mBuyBtn.transform);
+				// Растягиваем 
+				Resizer.ResizeToParrentRe(mAmountPanel);
+				// Меняем цвет текстов
+				IEnumerator lEnum = mAmountPanel.transform.GetComponentsInChildren<ColorController>().GetEnumerator();
+				while(lEnum.MoveNext())
+					(lEnum.Current as ColorController).itemsToColor[0].color = StyleManager.BaseColor.txt_white;
+			}
 
 			mBuyBtn.GetComponent<Button>().onClick.AddListener(delegate
 				{

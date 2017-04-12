@@ -58,7 +58,8 @@ namespace Xsolla
 			GameObject menuItemEmpty = Instantiate (menuItemEmptyPrefab);
 			menuItemEmpty.transform.SetParent (mNavMenuPanel.transform);
 
-			addMenuBtn("", "", RadioButton.RadioType.SCREEN_FAVOURITE, true);
+			if (!pUtils.IsServerLess())
+				addMenuBtn("", "", RadioButton.RadioType.SCREEN_FAVOURITE, true);
 		}
 
 		private void addMenuBtn(string pIcon, string pName, RadioButton.RadioType pType, bool pOnlyAction = false)

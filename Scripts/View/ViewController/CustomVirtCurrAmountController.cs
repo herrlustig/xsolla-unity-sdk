@@ -47,6 +47,7 @@ namespace Xsolla
 			FindObjectOfType<ImageLoader>().LoadImage(iconVirtCurr, pUtils.GetProject().virtualCurrencyIconUrl);
 
 			// Задаем дефолтное значение для обсчета
+			totalAmountTitle.text = mUtils.GetTranslations().Get("form_subtotal");
 			virtCurrAmount.text = pDefPackage.outAmount.ToString();
 			realCurrAmount.text = pDefPackage.sum.ToString();
 			mTotalAmount.text = CurrencyFormatter.FormatPrice(pDefPackage.currency, pDefPackage.sum.ToString("N2"));;
@@ -209,7 +210,6 @@ namespace Xsolla
 			mSetValues = true;
 			if (pValue.amount != 0)
 			{
-				totalAmountTitle.text = mUtils.GetTranslations().Get("form_subtotal");
 				mTotalAmount.text = CurrencyFormatter.FormatPrice(pValue.currency, pValue.amount.ToString("N2"));
 			}
 			else

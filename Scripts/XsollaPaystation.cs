@@ -55,7 +55,6 @@ namespace  Xsolla
 		protected abstract void ShowCountries (XsollaCountries paymentMethods);
 
 		protected abstract void ApplyPromoCouponeCode(XsollaForm pForm);
-		protected abstract void ShowHistory(XsollaHistoryList pList);
 		protected abstract void UpdateCustomAmount(CustomVirtCurrAmountController.CustomAmountCalcRes pRes);
 		protected abstract void ShowSubs (XsollaSubscriptions pSubs);
 
@@ -94,18 +93,6 @@ namespace  Xsolla
 			StartPayment (dict, isSandbox);
 		}
 
-		public void OpenSLPaystation(string accessData, bool isSandBox)
-		{
-			string lUrl = "paystation2/api/utils";
-			Dictionary<string, object> lparams = new Dictionary<string, object>();
-			lparams.Add("access_data", accessData);
-
-//			ApiRequest.Instance.getApiRequest(new XsollaRequestPckg(lUrl, lparams), getRequest, delegate 
-//				{
-//					Logger.Log("Not Cool");
-//				});
-		}
-
 		public static void AddHttpRequestObj(){
 			GameObject loader = GameObject.Find(HttpTlsRequest.loaderGameObjName);
 			if (loader == null)
@@ -136,7 +123,6 @@ namespace  Xsolla
 			Payment.PaymentMethodsRecieved += ShowPaymentsList;
 			Payment.SavedPaymentMethodsRecieved += ShowSavedPaymentsList;
 			Payment.CountriesRecieved += ShowCountries;
-			Payment.HistoryRecieved += ShowHistory;
 
 			Payment.PricepointsRecieved += (pricepoints) => ShowPricepoints(Utils, pricepoints);
 			Payment.GoodsGroupsRecieved += (goods) => ShowGoodsGroups(goods);
@@ -274,11 +260,6 @@ namespace  Xsolla
 			Logger.Log ("Load Countries request");
 			SetLoading (true);
 			Payment.GetCountries (currentPurchase.GetMergedMap());
-		}
-
-		public void LoadHistory(Dictionary<string, object> pParams)
-		{	
-			Payment.GetHistory(pParams);
 		}
 
 		public void LoadPaymentManager()

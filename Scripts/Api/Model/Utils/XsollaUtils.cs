@@ -49,6 +49,11 @@ namespace Xsolla
 			accessToken = pToken;
 		}
 			
+		public bool IsServerLess()
+		{
+			return GetUser().virtualCurrencyBalance == null;
+		}
+
 		public IParseble Parse (JSONNode utilsNode)
 		{
 			accessToken 	= utilsNode [XsollaApiConst.ACCESS_TOKEN].Value;

@@ -40,7 +40,6 @@ namespace Xsolla
 
 		public Action<XsollaUtils> 					UtilsRecieved;
 		public Action<XsollaTranslations> 			TranslationRecieved;
-		public Action<XsollaHistoryList>			HistoryRecieved;
 
 		public Action<XsollaPricepointsManager> 	PricepointsRecieved;
 		public Action<XsollaGroupsManager> 			GoodsGroupsRecieved;
@@ -227,12 +226,6 @@ namespace Xsolla
 				TranslationRecieved(translations);
 		}
 
-		protected virtual void OnHistoryRecieved(XsollaHistoryList pHistoryList)
-		{
-			if (HistoryRecieved != null)
-				HistoryRecieved(pHistoryList);
-		}
-		
 		// ---------------------------------------------------------------------------
 
 		protected virtual void OnFormReceived(XsollaForm form) 
@@ -439,13 +432,6 @@ namespace Xsolla
 			StartCoroutine(POST (COUNTRIES, GetCountriesListUrl(), requestParams));
 		}
 			
-		public void GetHistory(Dictionary<string, object> pParams)
-		{
-			if (!pParams.ContainsKey(XsollaApiConst.ACCESS_TOKEN))
-				pParams.Add(XsollaApiConst.ACCESS_TOKEN, baseParams[XsollaApiConst.ACCESS_TOKEN]);
-
-			StartCoroutine(POST(HISTORY, GetHistoryUrl(), pParams));
-		}
 		public void ApplyPromoCoupone(Dictionary<string, object> pParams)
 		{
 			StartCoroutine(POST(APPLY_PROMO_COUPONE, GetDirectpaymentLink(), pParams));
@@ -713,12 +699,6 @@ namespace Xsolla
 							}
 							break;
 						}
-						case HISTORY:
-						{
-							XsollaHistoryList history = new XsollaHistoryList().Parse(rootNode["operations"]) as XsollaHistoryList;
-							OnHistoryRecieved(history);
-							break;
-						}
 						case CALCULATE_CUSTOM_AMOUNT:
 						{
 							CustomVirtCurrAmountController.CustomAmountCalcRes res = new CustomVirtCurrAmountController.CustomAmountCalcRes().Parse(rootNode["calculation"]) as CustomVirtCurrAmountController.CustomAmountCalcRes;
@@ -819,12 +799,6 @@ namespace Xsolla
 		private string GetItemsUrl(){
 			return DOMAIN + "/paystation2/api/virtualitems/items";
 		}
-
-		private string GetHistoryUrl()
-		{
-			return DOMAIN + "/paystation2/api/balance/history";
-		}
-
 
 		/*		PAYMENT METHODS LINKS	 */
 

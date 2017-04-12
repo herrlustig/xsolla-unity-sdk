@@ -69,6 +69,7 @@ namespace Xsolla{
 		{
 			GameObject quickBtn = Instantiate(Resources.Load("Prefabs/SimpleView/_PaymentFormElements/QuickPaymentBtn")) as GameObject;
 			quickBtn.transform.SetParent(quickPanel.transform);
+			Resizer.SetDefScale(quickBtn);
 			QuickPaymentBtnController controller = quickBtn.GetComponent<QuickPaymentBtnController>();
 			listQuickBtns.Add(controller);
 			if (pMethod == null)
@@ -109,6 +110,7 @@ namespace Xsolla{
 		{
 			GameObject popularBtn = Instantiate(Resources.Load("Prefabs/SimpleView/_PaymentFormElements/ShopPaymentBtn")) as GameObject;
 			popularBtn.transform.SetParent(recPanel.transform);
+			Resizer.SetDefScale(popularBtn);
 			ShopPaymentBtnController controller = popularBtn.GetComponent<ShopPaymentBtnController>();
 
 			if (!pMethod.isVisible)

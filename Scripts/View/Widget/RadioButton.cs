@@ -55,7 +55,8 @@ namespace Xsolla {
 			SCREEN_SUBSCRIPTION, 
 			SCREEN_REDEEMCOUPON, 
 			SCREEN_FAVOURITE,
-			GOODS_ITEM
+			GOODS_ITEM,
+			SCREEN_HISTORY
 		};
 
 		public void init(string pIcon, string pName, RadioType pType, Action pActionClick, int pLevel, bool pOnlyAction = false)
@@ -119,35 +120,60 @@ namespace Xsolla {
 		}
 
 		void Update() {
-			if (mHover)
-			{
-				if (mIcon != null)
-					mIcon.color = isSelected ? StyleManager.Instance.GetColor (StyleManager.BaseColor.nav_menu_item_select_hover) : StyleManager.Instance.GetColor (StyleManager.BaseColor.nav_menu_item_not_select_hover);
-				if (mName != null)
-					mName.color = isSelected ? StyleManager.Instance.GetColor (StyleManager.BaseColor.nav_menu_item_select_hover) : StyleManager.Instance.GetColor (StyleManager.BaseColor.nav_menu_item_not_select_hover);
-				if (mDevider != null)
-					mDevider.color = isSelected ? StyleManager.Instance.GetColor (StyleManager.BaseColor.nav_menu_item_select_hover) : StyleManager.Instance.GetColor (StyleManager.BaseColor.nav_menu_item_not_select_hover);
-			}
-			else
-			{
-				if (mIcon != null)
-					mIcon.color = isSelected ? StyleManager.Instance.GetColor (activeText) : StyleManager.Instance.GetColor (normalText);
-				if (mName != null)
-					mName.color = isSelected ? StyleManager.Instance.GetColor (activeText) : StyleManager.Instance.GetColor (normalText);
-				if (mDevider != null)
-					mDevider.color = isSelected ? StyleManager.Instance.GetColor (StyleManager.BaseColor.selected) : StyleManager.Instance.GetColor (StyleManager.BaseColor.divider_1);
+
+			switch (getType()) {
+			case RadioType.GOODS_ITEM:
+				{
+					if (mIcon != null)
+						mIcon.color = isSelected ? StyleManager.Instance.GetColor (activeText) : StyleManager.Instance.GetColor (normalText);
+					if (mName != null)
+						mName.color = isSelected ? StyleManager.Instance.GetColor (activeText) : StyleManager.Instance.GetColor (normalText);
+					if (mDevider != null)
+						mDevider.color = isSelected ? StyleManager.Instance.GetColor (StyleManager.BaseColor.selected) : StyleManager.Instance.GetColor (StyleManager.BaseColor.divider_1);
+
+					if (isSelected)
+						this.gameObject.GetComponent<Image>().color = StyleManager.Instance.GetColor(StyleManager.BaseColor.txt_white);
+					else
+					{
+						if (mHover)
+							this.gameObject.GetComponent<Image>().color = new Color(255,255,255,255);
+						else
+							this.gameObject.GetComponent<Image>().color = new Color(255,255,255,0);
+					}
+
+
+
+					ColorBlock lBlock = new ColorBlock();
+					lBlock.normalColor = isSelected ? StyleManager.Instance.GetColor (StyleManager.BaseColor.bg_item_btn) : StyleManager.Instance.GetColor (StyleManager.BaseColor.bg_main);
+					lBlock.highlightedColor = isSelected ? StyleManager.Instance.GetColor (StyleManager.BaseColor.bg_item_btn) : StyleManager.Instance.GetColor (StyleManager.BaseColor.divider_1);
+					lBlock.pressedColor = isSelected ? StyleManager.Instance.GetColor (StyleManager.BaseColor.bg_item_btn) : StyleManager.Instance.GetColor (StyleManager.BaseColor.divider_1);
+					lBlock.fadeDuration = 0.1f;
+					lBlock.colorMultiplier = 1;
+					mBtn.colors = lBlock;
+					break;
+				}
+			default:
+				if (mHover)
+				{
+					if (mIcon != null)
+						mIcon.color = isSelected ? StyleManager.Instance.GetColor (StyleManager.BaseColor.nav_menu_item_select_hover) : StyleManager.Instance.GetColor (StyleManager.BaseColor.nav_menu_item_not_select_hover);
+					if (mName != null)
+						mName.color = isSelected ? StyleManager.Instance.GetColor (StyleManager.BaseColor.nav_menu_item_select_hover) : StyleManager.Instance.GetColor (StyleManager.BaseColor.nav_menu_item_not_select_hover);
+					if (mDevider != null)
+						mDevider.color = isSelected ? StyleManager.Instance.GetColor (StyleManager.BaseColor.nav_menu_item_select_hover) : StyleManager.Instance.GetColor (StyleManager.BaseColor.nav_menu_item_not_select_hover);
+				}
+				else
+				{
+					if (mIcon != null)
+						mIcon.color = isSelected ? StyleManager.Instance.GetColor (activeText) : StyleManager.Instance.GetColor (normalText);
+					if (mName != null)
+						mName.color = isSelected ? StyleManager.Instance.GetColor (activeText) : StyleManager.Instance.GetColor (normalText);
+					if (mDevider != null)
+						mDevider.color = isSelected ? StyleManager.Instance.GetColor (StyleManager.BaseColor.selected) : StyleManager.Instance.GetColor (StyleManager.BaseColor.divider_1);
+				}
+				break;
 			}
 
-			if (getType() == RadioType.GOODS_ITEM)
-			{
-				ColorBlock lBlock = new ColorBlock();
-				lBlock.normalColor = isSelected ? StyleManager.Instance.GetColor (StyleManager.BaseColor.bg_item_btn) : StyleManager.Instance.GetColor (StyleManager.BaseColor.bg_main);
-				lBlock.highlightedColor = isSelected ? StyleManager.Instance.GetColor (StyleManager.BaseColor.bg_item_btn) : StyleManager.Instance.GetColor (StyleManager.BaseColor.divider_1);
-				lBlock.pressedColor = isSelected ? StyleManager.Instance.GetColor (StyleManager.BaseColor.bg_item_btn) : StyleManager.Instance.GetColor (StyleManager.BaseColor.divider_1);
-				lBlock.fadeDuration = 0.1f;
-				lBlock.colorMultiplier = 1;
-				mBtn.colors = lBlock;
-			}
 		}
 
 		public void visibleBtn(bool pState)

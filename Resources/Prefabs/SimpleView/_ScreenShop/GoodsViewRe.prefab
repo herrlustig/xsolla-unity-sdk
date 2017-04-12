@@ -60,6 +60,7 @@ GameObject:
   - 222: {fileID: 222000013905861116}
   - 114: {fileID: 114000010575592274}
   - 114: {fileID: 114000011273479344}
+  - 114: {fileID: 114000011726436284}
   m_Layer: 5
   m_Name: ScreenShop
   m_TagString: Untagged
@@ -159,6 +160,7 @@ GameObject:
   - 114: {fileID: 114000011486964796}
   - 114: {fileID: 114000010593819944}
   - 114: {fileID: 114000012714226020}
+  - 114: {fileID: 114000014275066200}
   m_Layer: 5
   m_Name: ShopScreenContent
   m_TagString: Untagged
@@ -230,6 +232,7 @@ GameObject:
   - 224: {fileID: 224000010773869130}
   - 222: {fileID: 222000011440844152}
   - 114: {fileID: 114000013891336006}
+  - 114: {fileID: 114000010998786258}
   m_Layer: 5
   m_Name: Divider
   m_TagString: Untagged
@@ -412,6 +415,20 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: 
+--- !u!114 &114000010998786258
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000013716539760}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fc117f59f61de4868b1f1d085ec2e3e1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemsToColor:
+  - color: 32
+    whatToColor: {fileID: 114000013891336006}
 --- !u!114 &114000011177072852
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -536,6 +553,20 @@ MonoBehaviour:
   m_Spacing: 0
   m_ChildForceExpandWidth: 1
   m_ChildForceExpandHeight: 0
+--- !u!114 &114000011726436284
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000011072426020}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fc117f59f61de4868b1f1d085ec2e3e1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemsToColor:
+  - color: 0
+    whatToColor: {fileID: 114000010575592274}
 --- !u!114 &114000011835759484
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -928,6 +959,20 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
+--- !u!114 &114000014275066200
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000011970498500}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fc117f59f61de4868b1f1d085ec2e3e1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemsToColor:
+  - color: 0
+    whatToColor: {fileID: 114000010077161826}
 --- !u!222 &222000010090156706
 CanvasRenderer:
   m_ObjectHideFlags: 1

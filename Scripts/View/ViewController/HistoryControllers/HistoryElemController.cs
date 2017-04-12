@@ -14,6 +14,8 @@ namespace Xsolla
 		public GameObject mSymbolRub;
 		public GameObject mDevider;
 
+		private XsollaUtils mUtils;
+
 		public String prepareTypeStr(String pStr)
 		{
 			String res = pStr;
@@ -42,26 +44,27 @@ namespace Xsolla
 
 		}
 
-		public void Init(XsollaTranslations pTranslation, XsollaHistoryItem pItem, String pVirtCurrName,  Boolean pEven, Action pSortAction, Boolean pHeader = false, Boolean pDesc = true)
+		public void Init(XsollaUtils pUtils, XsollaHistoryItem pItem, Boolean pEven, Action pSortAction, Boolean pHeader = false, Boolean pDesc = true)
 		{
+			mUtils = pUtils;
 			Image imgComp = this.GetComponent<Image>();
 			imgComp.enabled = pEven;
 	
 			if (pHeader)
 			{
-				mDate.text = pTranslation.Get("balance_history_date") + (pDesc==true?" ▼":" ▲");
+				mDate.text = mUtils.GetTranslations().Get("balance_history_date") + (pDesc==true?" ▼":" ▲");
 				Button sortBtn = mDate.gameObject.AddComponent<Button>();
 				sortBtn.onClick.AddListener(delegate 
 					{
 						Logger.Log("On sort btn click");
 						pSortAction();
-						mDate.text = pTranslation.Get("balance_history_date") + " ↓";
+						mDate.text = mUtils.GetTranslations().Get("balance_history_date") + " ↓";
 					});
 
-				mType.text = pTranslation.Get("balance_history_purpose");
-				mItem.text = pTranslation.Get("balance_history_item");
-				mBalance.text = pTranslation.Get("balance_history_vc_amount");
-				mPrice.text = pTranslation.Get("balance_history_payment_amount");
+				mType.text = mUtils.GetTranslations().Get("balance_history_purpose");
+				mItem.text = mUtils.GetTranslations().Get("balance_history_item");
+				mBalance.text = mUtils.GetTranslations().Get("balance_history_vc_amount");
+				mPrice.text = mUtils.GetTranslations().Get("balance_history_payment_amount");
 				mPrice.alignment = TextAnchor.LowerLeft;
 
 				// Activate devider 
@@ -87,47 +90,47 @@ namespace Xsolla
 			{
 			case "payment":
 				{
-					mType.text = String.Format(prepareTypeStr(pTranslation.Get("balance_history_payment_info")), pItem.paymentName, pItem.invoiceId);
+					mType.text = String.Format(prepareTypeStr(mUtils.GetTranslations().Get("balance_history_payment_info")), pItem.paymentName, pItem.invoiceId);
 					break;
 				}
 			case "cancellation":
 				{
-					mType.text = String.Format(prepareTypeStr(pTranslation.Get("balance_history_payment_info_cancellation")), pItem.paymentName, pItem.invoiceId);
+					mType.text = String.Format(prepareTypeStr(mUtils.GetTranslations().Get("balance_history_payment_info_cancellation")), pItem.paymentName, pItem.invoiceId);
 					break;
 				}
 			case "inGamePurchase":
 				{
-					mType.text = String.Format(prepareTypeStr(pTranslation.Get("balance_history_ingame_info")));
+					mType.text = String.Format(prepareTypeStr(mUtils.GetTranslations().Get("balance_history_ingame_info")));
 					break;
 				}
 			case "internal":
 				{
-					mType.text = String.Format(prepareTypeStr(pTranslation.Get("balance_history_internal_info")), pItem.comment);
+					mType.text = String.Format(prepareTypeStr(mUtils.GetTranslations().Get("balance_history_internal_info")), pItem.comment);
 					break;
 				}
 			case "coupon":
 				{
-					mType.text = String.Format(prepareTypeStr(pTranslation.Get("balance_history_coupon_info")), pItem.couponeCode);
+					mType.text = String.Format(prepareTypeStr(mUtils.GetTranslations().Get("balance_history_coupon_info")), pItem.couponeCode);
 					break;
 				}
 			case "subscriptionRenew":
 				{
-					mType.text = String.Format(prepareTypeStr(pTranslation.Get("balance_history_subscription_renew")), pItem.paymentName, pItem.invoiceId);
+					mType.text = String.Format(prepareTypeStr(mUtils.GetTranslations().Get("balance_history_subscription_renew")), pItem.paymentName, pItem.invoiceId);
 					break;
 				}
 			case "subscriptionCreate":
 				{
-					mType.text = String.Format(prepareTypeStr(pTranslation.Get("balance_history_subscription_create")), pItem.paymentName, pItem.invoiceId);
+					mType.text = String.Format(prepareTypeStr(mUtils.GetTranslations().Get("balance_history_subscription_create")), pItem.paymentName, pItem.invoiceId);
 					break;
 				}
 			case "subscriptionChange":
 				{
-					mType.text = String.Format(prepareTypeStr(pTranslation.Get("balance_history_subscription_change")), pItem.paymentName, pItem.invoiceId);
+					mType.text = String.Format(prepareTypeStr(mUtils.GetTranslations().Get("balance_history_subscription_change")), pItem.paymentName, pItem.invoiceId);
 					break;
 				}
 			case "subscriptionCancellation":
 				{
-					mType.text = String.Format(prepareTypeStr(pTranslation.Get("subscription_cancellation")), pItem.paymentName, pItem.invoiceId);
+					mType.text = String.Format(prepareTypeStr(mUtils.GetTranslations().Get("subscription_cancellation")), pItem.paymentName, pItem.invoiceId);
 					break;
 				}
 			default:
@@ -141,7 +144,10 @@ namespace Xsolla
 				mItem.text = pItem.virtualItems.items.GetItemByPosition(0).GetName();
 
 			if (pItem.vcAmount != 0)
-				mBalance.text = ((pItem.vcAmount > 0)?"+":"") + pItem.vcAmount + " " + pVirtCurrName + "\n" + "(=" + pItem.userBalance + " " + pVirtCurrName + ")";
+			{
+				if (mUtils.GetUser().userBalance != null)
+					mBalance.text = ((pItem.vcAmount > 0)?"+":"") + pItem.vcAmount + " " + mUtils.GetUser().userBalance.currency + "\n" + "(=" + pItem.userBalance + " " + mUtils.GetUser().userBalance.currency + ")";
+			}
 			else
 				mBalance.text = "";
 

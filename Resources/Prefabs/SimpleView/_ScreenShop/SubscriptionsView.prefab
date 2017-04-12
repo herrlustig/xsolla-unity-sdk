@@ -10,6 +10,7 @@ GameObject:
   - 224: {fileID: 22493438}
   - 222: {fileID: 22248010}
   - 114: {fileID: 11452554}
+  - 114: {fileID: 114000011687299516}
   m_Layer: 5
   m_Name: Divider
   m_TagString: Untagged
@@ -298,7 +299,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemsToColor:
   - color: 0
-    whatToColor: {fileID: 0}
+    whatToColor: {fileID: 11452736}
   - color: 15
     whatToColor: {fileID: 11472550}
   - color: 30
@@ -699,6 +700,20 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &114000011687299516
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 112492}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fc117f59f61de4868b1f1d085ec2e3e1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemsToColor:
+  - color: 32
+    whatToColor: {fileID: 11452554}
 --- !u!114 &114000011958245164
 MonoBehaviour:
   m_ObjectHideFlags: 1
