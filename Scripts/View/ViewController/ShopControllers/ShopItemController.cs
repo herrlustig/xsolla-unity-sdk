@@ -37,6 +37,8 @@ namespace Xsolla
 		public Text mOldAmountStrange;
 
 		public GameObject mBuyBtn;
+		public Text mBtnBuyText;
+		public MyRotation mBtnProgressBar;
 
 		private const String mSummaryUrl = "paystation2/api/cart/summary";
 		private const String mFavoriteUrl = "paystation2/api/virtualitems/setfavorite";
@@ -45,6 +47,10 @@ namespace Xsolla
 		private int mGroupId;
 		private Action<int, bool> mActionResetCacheGroup;
 		private int mCount = 1;
+		/// <summary>
+		/// Gets or sets the item quantity.
+		/// </summary>
+		/// <value>The item quantity.</value>
 		public int ItemQuantity
 		{
 			get 
@@ -75,12 +81,17 @@ namespace Xsolla
 					// Отмена возможного запрос
 					CancelInvoke();
 					Invoke("GetSummaryRequest", 1);
+					ProgressBarBuyBtn(true);
 				}
 			}
 		}
 		public Action mCollapseAnotherDesc;
 		private bool mLongDescState = false; 
 		private bool mIsListLayoutItem;
+		/// <summary>
+		/// Gets or sets a value indicating whether this <see cref="Xsolla.ShopItemController"/> long desc state.
+		/// </summary>
+		/// <value><c>true</c> if long desc state; otherwise, <c>false</c>.</value>
 		public bool LongDescState 
 		{
 			get
@@ -97,6 +108,14 @@ namespace Xsolla
 			}
 		}
 			
+		/// <summary>
+		/// Init the specified pItem, pUtils, pGroupId, pActionResetCacheGroup and pList.
+		/// </summary>
+		/// <param name="pItem">P item.</param>
+		/// <param name="pUtils">P utils.</param>
+		/// <param name="pGroupId">P group identifier.</param>
+		/// <param name="pActionResetCacheGroup">P action reset cache group.</param>
+		/// <param name="pList">If set to <c>true</c> p list.</param>
 		public void init(XsollaShopItem pItem, XsollaUtils pUtils, int pGroupId, Action<int, bool> pActionResetCacheGroup, bool pList)
 		{
 			mItem = pItem;
@@ -113,6 +132,9 @@ namespace Xsolla
 
 			// Задаем короткое описание 
 			mShortDesc.text = pItem.GetDescription();
+
+			// Дефолтное состояние прогресс бара
+			ProgressBarBuyBtn(false);
 
 			// Задаем полное описание 
 			if (mLongCanvas != null)
@@ -143,6 +165,9 @@ namespace Xsolla
 			SetAmountBlock(pItem.vcAmount,pItem.vcAmountWithoutDiscount,pItem.amount,pItem.amountWithoutDiscount,pItem.currency);
 		}
 
+		/// <summary>
+		/// Sets the state of the favorite.
+		/// </summary>
 		private void SetFavoriteState()
 		{
 			// Проверка на бессерверную интеграцию
@@ -150,6 +175,9 @@ namespace Xsolla
 			mFav.text = mItem.IsFavorite() ? "" : "";
 		}
 
+		/// <summary>
+		/// Changes the state of the fav.
+		/// </summary>
 		private void ChangeFavState()
 		{
 			Logger.Log("Get summary");
@@ -162,6 +190,10 @@ namespace Xsolla
 			ApiRequest.Instance.getApiRequest(new XsollaRequestPckg(mFavoriteUrl, lParams), FavoriteRecived, ErrorRecived, false);
 		}
 
+		/// <summary>
+		/// Favorites the recived.
+		/// </summary>
+		/// <param name="pNode">P node.</param>
 		private void FavoriteRecived(JSONNode pNode)
 		{
 			int lFavState = pNode["is_favorite"].AsInt;
@@ -171,7 +203,11 @@ namespace Xsolla
 			Logger.Log("Next respond on groupID - " + mGroupId + " without Cache");
 			mActionResetCacheGroup(mGroupId, false);
 		}
-
+			
+		/// <summary>
+		/// Sets the list landing item.
+		/// </summary>
+		/// <param name="pItem">P item.</param>
 		private void SetListLandingItem(XsollaShopItem pItem)
 		{
 			if (mQuantityLabel == null)
@@ -200,16 +236,26 @@ namespace Xsolla
 			}
 		}
 
+		/// <summary>
+		/// Adds the quantity.
+		/// </summary>
 		private void AddQuantity()
 		{
 			ItemQuantity++;
 		}
 
+		/// <summary>
+		/// Minuses the quantity.
+		/// </summary>
 		private void MinusQuantity()
 		{
 			ItemQuantity--;
 		}
 
+		/// <summary>
+		/// Sets the ad block.
+		/// </summary>
+		/// <param name="pItem">P item.</param>
 		private void SetAdBlock(XsollaShopItem pItem)
 		{
 			StyleManager.BaseSprite lItemBckg = ShopItemHelper.SetAdBlockItem(pItem, mUtils, mAdPanel.GetComponentInChildren<Text>(), mAdPanel.GetComponent<Image>());
@@ -220,6 +266,10 @@ namespace Xsolla
 			SetSpecialAdBkcg(lItemBckg);
 		}
 
+		/// <summary>
+		/// Sets the special ad bkcg.
+		/// </summary>
+		/// <param name="pSprite">P sprite.</param>
 		private void SetSpecialAdBkcg(StyleManager.BaseSprite pSprite)
 		{
 			mMainBckg.sprite = StyleManager.Instance.GetSprite(pSprite);
@@ -227,8 +277,17 @@ namespace Xsolla
 				mListImagePanel.sprite = StyleManager.Instance.GetSprite(pSprite);	
 		}
 
+		/// <summary>
+		/// Sets the amount block.
+		/// </summary>
+		/// <param name="pVcAmount">P vc amount.</param>
+		/// <param name="pVcAmountWithoutDiscount">P vc amount without discount.</param>
+		/// <param name="pAmount">P amount.</param>
+		/// <param name="pAmountWithoutDiscount">P amount without discount.</param>
+		/// <param name="pCurrency">P currency.</param>
 		private void SetAmountBlock(Decimal pVcAmount, Decimal pVcAmountWithoutDiscount, Decimal pAmount, Decimal pAmountWithoutDiscount, String pCurrency)
 		{
+			// Виртуальная покупка или нет
 			if (mItem.IsVirtualPayment())
 			{
 				if (pVcAmount == pVcAmountWithoutDiscount)
@@ -269,7 +328,9 @@ namespace Xsolla
 				}
 			}
 
-			mBuyBtn.GetComponentInChildren<Text>().text = mUtils.GetTranslations().Get("virtual_item_option_button");
+
+			// Название для кнопки покупки
+			mBtnBuyText.text = mUtils.GetTranslations().Get("virtual_item_option_button");
 
 			// Если цена должна быть в кнопке
 			if (mUtils.GetSettings().mDesktop.pVirtItems.mButtonWithPrice)
@@ -292,60 +353,30 @@ namespace Xsolla
 				});
 		}
 
-		private void SetAmountBlock(XsollaShopItem pItem)
-		{	 
-			if (pItem.IsVirtualPayment())
-			{
-				if (pItem.vcAmount == pItem.vcAmountWithoutDiscount)
-					mAmount.text = pItem.vcAmount.ToString("N2");
-				else
-					mAmount.text = pItem.vcAmountWithoutDiscount.ToString("N2") + " " + pItem.vcAmount.ToString("N2");
-
-				if (mUtils.GetProject().virtualCurrencyIconUrl != "null")
-					mImgLoader.LoadImage(mVcIcon, mUtils.GetProject().virtualCurrencyIconUrl);
-				else
-				{
-					mAmount.text = mAmount.text + " " + mUtils.GetProject().virtualCurrencyName;
-					mVcIcon.gameObject.SetActive(false);
-				}
-			}
-			else
-			{
-				mVcIcon.gameObject.SetActive(false);
-				if (pItem.amount == pItem.amountWithoutDiscount)
-				{
-					mAmount.text = CurrencyFormatter.FormatPrice(pItem.currency, pItem.amount.ToString("N2"));
-					if (pItem.currency == "RUB")
-						mCurrency.enabled = true;
-				}
-				else
-				{
-					mOldAmount.enabled = true;
-					mOldAmount.text = CurrencyFormatter.FormatPrice(pItem.currency, pItem.amountWithoutDiscount.ToString("N2"));
-					mAmount.text = CurrencyFormatter.FormatPrice(pItem.currency, pItem.amount.ToString("N2"));
-					if (pItem.currency == "RUB")
-						mCurrency.enabled = true;
-				}
-			}
-
-			mBuyBtn.GetComponentInChildren<Text>().text = mUtils.GetTranslations().Get("virtual_item_option_button");
-//			if (mUtils.GetSettings().mDesktop.pVirtItems.mButtonWithPrice)
-//				mBuyBtn.GetComponentInChildren<Text>().text = "";
-//			else
-//				mBuyBtn.GetComponentInChildren<Text>().text = mUtils.GetTranslations().Get("virtual_item_option_button");
-
-			mBuyBtn.GetComponent<Button>().onClick.AddListener(delegate
-				{
-					BuyClick(pItem);
-				});
-
+		/// <summary>
+		/// Progresses the bar buy button.
+		/// </summary>
+		/// <param name="pState">If set to <c>true</c> p state.</param>
+		private void ProgressBarBuyBtn(bool pState)
+		{
+			mBtnProgressBar.SetLoading(pState);
+			mBtnBuyText.gameObject.SetActive(!pState);
+			mAmountPanel.SetActive(!pState);
+			mBuyBtn.GetComponent<Image>().color = pState ? new Color(255,255,255,0) : new Color(255,255,255,255);
 		}
 
+		/// <summary>
+		/// Sets the state of the state long.
+		/// </summary>
+		/// <param name="pState">If set to <c>true</c> p state.</param>
 		private void SetStateLongState(bool pState)
 		{
 			LongDescState = pState;
 		}
 
+		/// <summary>
+		/// Gets the summary request.
+		/// </summary>
 		private void GetSummaryRequest()
 		{
 			Logger.Log("Get summary");
@@ -356,9 +387,14 @@ namespace Xsolla
 			ApiRequest.Instance.getApiRequest(new XsollaRequestPckg(mSummaryUrl, lParams), SummaryRecived, ErrorRecived, false);
 		}
 
+		/// <summary>
+		/// Summaries the recived.
+		/// </summary>
+		/// <param name="pNode">P node.</param>
 		private void SummaryRecived(JSONNode pNode)
 		{
 			Logger.Log("Summary recived");
+			ProgressBarBuyBtn(false);
 			XsollaSummaryRecived lSummary = new XsollaSummaryRecived().Parse(pNode) as XsollaSummaryRecived;
 			// Заполнить новые цены
 			SetAmountBlock(lSummary.mFinance.mTotal.vcAmount, 
@@ -368,11 +404,19 @@ namespace Xsolla
 				lSummary.mFinance.mTotal.currency);
 		}
 
+		/// <summary>
+		/// Errors the recived.
+		/// </summary>
+		/// <param name="pErrors">P errors.</param>
 		private void ErrorRecived(XsollaErrorRe pErrors)
 		{
-			
+			ProgressBarBuyBtn(false);
 		}
 
+		/// <summary>
+		/// Buies the click.
+		/// </summary>
+		/// <param name="pItem">P item.</param>
 		private void BuyClick(XsollaShopItem pItem)
 		{
 			Logger.Log("Click buy btn " + pItem.GetId());

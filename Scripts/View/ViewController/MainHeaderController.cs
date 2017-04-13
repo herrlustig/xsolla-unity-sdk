@@ -30,6 +30,8 @@ namespace Xsolla
 				_pMenuBtnComponent.enabled = true;
 			}
 
+			// TOFO Разобраться про условия отображения 
+			// 4H48XfDdg2bHd4DUYk4iv8ZVL0xUtNgr
 			if (!pUtils.GetUser().IdAllowModify())
 			{
 				AddUserMenuBtn(pUtils.GetTranslations().Get("user_menu_payment_accounts"), ShowPaymentManager);
