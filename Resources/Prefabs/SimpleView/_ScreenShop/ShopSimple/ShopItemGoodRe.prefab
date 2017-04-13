@@ -299,6 +299,7 @@ GameObject:
   - 114: {fileID: 114000012382422900}
   - 114: {fileID: 114000010572810882}
   - 114: {fileID: 114000011617657740}
+  - 114: {fileID: 114000010595144276}
   m_Layer: 5
   m_Name: Button
   m_TagString: Untagged
@@ -679,6 +680,26 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
+--- !u!114 &114000010595144276
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000012533107560}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -405508275, guid: f5f67c52d1564df4a8936ccd202a3bd8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Padding:
+    m_Left: 0
+    m_Right: 0
+    m_Top: 0
+    m_Bottom: 0
+  m_ChildAlignment: 4
+  m_Spacing: 0
+  m_ChildForceExpandWidth: 0
+  m_ChildForceExpandHeight: 1
 --- !u!114 &114000010595251566
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1208,6 +1229,8 @@ MonoBehaviour:
   mQuantityCount: {fileID: 0}
   mOldAmountStrange: {fileID: 0}
   mBuyBtn: {fileID: 1000012533107560}
+  mBtnBuyText: {fileID: 114000011723496304}
+  mBtnProgressBar: {fileID: 0}
 --- !u!114 &114000012314481610
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2143,7 +2166,7 @@ RectTransform:
   m_Father: {fileID: 224000012672487054}
   m_RootOrder: 0
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
+  m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}

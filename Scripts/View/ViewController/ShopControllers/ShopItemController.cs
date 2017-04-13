@@ -327,8 +327,7 @@ namespace Xsolla
 						mCurrency.gameObject.SetActive(false);
 				}
 			}
-
-
+				
 			// Название для кнопки покупки
 			mBtnBuyText.text = mUtils.GetTranslations().Get("virtual_item_option_button");
 

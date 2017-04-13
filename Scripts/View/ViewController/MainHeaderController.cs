@@ -24,20 +24,19 @@ namespace Xsolla
 			// user name 
 			_userName.text = pUtils.GetUser().GetName();
 		
-			if (!pUtils.IsServerLess())
+			if (pUtils.GetUser().virtualCurrencyBalance != null)
 			{
 				AddUserMenuBtn(pUtils.GetTranslations().Get("user_menu_balance"), ShowHistory);
 				_pMenuBtnComponent.enabled = true;
 			}
-
-			// TOFO Разобраться про условия отображения 
-			// 4H48XfDdg2bHd4DUYk4iv8ZVL0xUtNgr
-			if (!pUtils.GetUser().IdAllowModify())
-			{
+				
+			if (!pUtils.IsServerLess())
 				AddUserMenuBtn(pUtils.GetTranslations().Get("user_menu_payment_accounts"), ShowPaymentManager);
+
+			if (pUtils.GetProject().components.ContainsKey("subscriptions"))
 				AddUserMenuBtn(pUtils.GetTranslations().Get("user_menu_user_subscription"), ShowSubscriptionManager);
-			}
-			else
+
+			if (pUtils.IsServerLess())
 			{
 				_userName.color = StyleManager.Instance.GetColor(StyleManager.BaseColor.disable_user_menu);
 				_pMenuBtnComponent.enabled = false;

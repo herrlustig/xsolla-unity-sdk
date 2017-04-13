@@ -132,19 +132,10 @@ namespace Xsolla {
 						mDevider.color = isSelected ? StyleManager.Instance.GetColor (StyleManager.BaseColor.selected) : StyleManager.Instance.GetColor (StyleManager.BaseColor.divider_1);
 
 					if (isSelected)
-						this.gameObject.GetComponent<Image>().color = StyleManager.Instance.GetColor(StyleManager.BaseColor.txt_white);
-					else
-					{
-						if (mHover)
-							this.gameObject.GetComponent<Image>().color = new Color(255,255,255,255);
-						else
-							this.gameObject.GetComponent<Image>().color = new Color(255,255,255,0);
-					}
-
-
+						(mBtn.targetGraphic as Image).color = StyleManager.Instance.GetColor(StyleManager.BaseColor.txt_white);
 
 					ColorBlock lBlock = new ColorBlock();
-					lBlock.normalColor = isSelected ? StyleManager.Instance.GetColor (StyleManager.BaseColor.bg_item_btn) : StyleManager.Instance.GetColor (StyleManager.BaseColor.bg_main);
+					lBlock.normalColor = isSelected ? StyleManager.Instance.GetColor (StyleManager.BaseColor.bg_item_btn) : StyleManager.Instance.GetColor (StyleManager.BaseColor.bg_left_menu);
 					lBlock.highlightedColor = isSelected ? StyleManager.Instance.GetColor (StyleManager.BaseColor.bg_item_btn) : StyleManager.Instance.GetColor (StyleManager.BaseColor.divider_1);
 					lBlock.pressedColor = isSelected ? StyleManager.Instance.GetColor (StyleManager.BaseColor.bg_item_btn) : StyleManager.Instance.GetColor (StyleManager.BaseColor.divider_1);
 					lBlock.fadeDuration = 0.1f;

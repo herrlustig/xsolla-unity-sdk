@@ -51,7 +51,7 @@ namespace Xsolla
 			
 		public bool IsServerLess()
 		{
-			return GetUser().virtualCurrencyBalance == null;
+			return GetUser().IdAllowModify();
 		}
 
 		public IParseble Parse (JSONNode utilsNode)

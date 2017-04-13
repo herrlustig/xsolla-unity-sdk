@@ -87,7 +87,7 @@ namespace Xsolla
 
 		public void SetVisibleBtn(bool pVisible, RadioButton.RadioType pType)
 		{
-			mRadioGroupController.radioButtons.Find(x => x.getType() == pType).visibleBtn(pVisible);
+			mRadioGroupController.radioButtons.Find(x => (x != null && x.getType() == pType)).visibleBtn(pVisible);
 		}
 
 		public void SelectRadioItem(RadioButton.RadioType pType)
