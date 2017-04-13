@@ -359,10 +359,13 @@ namespace Xsolla
 		/// <param name="pState">If set to <c>true</c> p state.</param>
 		private void ProgressBarBuyBtn(bool pState)
 		{
-			mBtnProgressBar.SetLoading(pState);
-			mBtnBuyText.gameObject.SetActive(!pState);
-			mAmountPanel.SetActive(!pState);
-			mBuyBtn.GetComponent<Image>().color = pState ? new Color(255,255,255,0) : new Color(255,255,255,255);
+			if (mBtnProgressBar != null)
+			{
+				mBtnProgressBar.SetLoading(pState);
+				mBtnBuyText.gameObject.SetActive(!pState);
+				mAmountPanel.SetActive(!pState);
+				mBuyBtn.GetComponent<Image>().color = pState ? new Color(255,255,255,0) : new Color(255,255,255,255);
+			}
 		}
 
 		/// <summary>
