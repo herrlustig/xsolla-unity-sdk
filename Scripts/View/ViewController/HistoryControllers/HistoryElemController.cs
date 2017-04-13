@@ -74,7 +74,6 @@ namespace Xsolla
 				return;
 			}
 				
-			//mDate.text = pItem.date.ToShortDateString();
 			mDate.text = pItem.date.ToString("MMM d, yyyy hh:mm tt");
 			// balance_history_payment_info:"Payment via {{paymentName}}, transaction ID {{transactionId}}"
 			// balance_history_payment_info_cancellation:"Refund. Payment via {{paymentName}}, transaction ID {{transactionId}}"
@@ -146,7 +145,7 @@ namespace Xsolla
 			if (pItem.vcAmount != 0)
 			{
 				if (mUtils.GetUser().userBalance != null)
-					mBalance.text = ((pItem.vcAmount > 0)?"+":"") + pItem.vcAmount + " " + mUtils.GetUser().userBalance.currency + "\n" + "(=" + pItem.userBalance + " " + mUtils.GetUser().userBalance.currency + ")";
+					mBalance.text = ((pItem.vcAmount > 0)?"+":"") + pItem.vcAmount + " " + mUtils.GetProject().virtualCurrencyName + "\n" + "(=" + pItem.userBalance + " " + mUtils.GetProject().virtualCurrencyName + ")";
 			}
 			else
 				mBalance.text = "";

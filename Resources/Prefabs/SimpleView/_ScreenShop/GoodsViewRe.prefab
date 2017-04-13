@@ -296,7 +296,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   itemsToColor:
-  - color: 18
+  - color: 14
     whatToColor: {fileID: 114000011835759484}
 --- !u!114 &114000010419472066
 MonoBehaviour:

@@ -2,6 +2,7 @@
 using System.Collections;
 using UnityEngine.UI;
 using System.Collections.Generic;
+using System.IO;
 
 
 namespace Xsolla {
@@ -57,12 +58,13 @@ namespace Xsolla {
 						//Construct a new Sprite
 						Sprite sprite = new Sprite ();     
 					
-						Texture2D image = new Texture2D(imageURLWWW.texture.width, imageURLWWW.texture.height, TextureFormat.DXT1, false);
+						Texture2D image = new Texture2D(imageURLWWW.texture.width, imageURLWWW.texture.height, TextureFormat.RGBA32, true);
 						imageURLWWW.LoadImageIntoTexture(image);
+						image.SetPixels( image.GetPixels(0,0,image.width,image.height));
+						image.Apply();
 						image.filterMode = FilterMode.Trilinear;
-						image.anisoLevel = 8;
-						image.Compress(true);
 						sprite = Sprite.Create(image, new Rect (0, 0, image.width, image.height), new Vector2(0,0));
+
 						if(!imageCashe.ContainsKey(url))
 						{
 							imageCashe.Add (url, sprite);

@@ -22,6 +22,10 @@ namespace Xsolla
 				itemsMap.Add(item.GetKey(), item);
 				Count++;
 			}
+			else
+			{
+				Logger.LogError("Content ITEM! " + item.GetKey());
+			}
 		}
 
 		public void InsertItem(int pIdx, T pItem)
@@ -30,6 +34,10 @@ namespace Xsolla
 				itemsList.Insert(pIdx, pItem);
 				itemsMap.Add(pItem.GetKey(), pItem);
 				Count++;
+			}
+			else
+			{
+				Logger.LogError("Content ITEM! " + pItem.GetKey());
 			}
 		}
 

@@ -26,6 +26,10 @@ namespace Xsolla
 			}
 			return amount;
 		}
-		
+
+		public static string FormatVcPrice(bool pIsescrite, decimal pAmount)
+		{
+			return pIsescrite ? pAmount.ToString("N0") : pAmount.ToString("N2");
+		}
 	}
 }

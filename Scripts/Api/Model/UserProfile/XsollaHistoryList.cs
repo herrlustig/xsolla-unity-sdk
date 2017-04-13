@@ -20,6 +20,7 @@ namespace Xsolla
 
 	public class XsollaHistoryItem: IXsollaObject, IParseble
 	{
+		public string id {get; private set;}
 		public string comment {get; private set;} //comment:null
 		public string couponeCode {get; private set;} //couponCode:null
 		public DateTime date{get; private set;}// date:"2016-10-04T12:36:03+03:00"
@@ -53,13 +54,14 @@ namespace Xsolla
 			vcAmount = pNode["vcAmount"].AsFloat;
 			virtualItems = new XsollaHistoryVirtualItems().Parse(pNode["virtualItems"]) as XsollaHistoryVirtualItems;
 			virtualItemsOperationType = pNode["virtualItemsOperationType"];
+			id = Guid.NewGuid().ToString();
 
 			return this;
 		}
 
 		public string GetKey()
 		{
-			return date.ToString("u");
+			return id;
 		}
 
 		public string GetName()

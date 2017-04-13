@@ -139,13 +139,6 @@ namespace Xsolla
 			DrawError (error);
 		}
 
-		protected override void ShowSubs (XsollaSubscriptions pSubs)
-		{
-			Logger.Log ("Show subscriptions");
-			DrawSubscriptions(pSubs);
-			SetLoading (false);
-		}
-
 		// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 		// >>>>>>>>>>>>>>>>>>>>>>>>>>>> PAYMENT METHODS >>>>>>>>>>>>>>>>>>>>>>>>>>>> 
 		// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
@@ -386,22 +379,6 @@ namespace Xsolla
 		}
 
 		/// <summary>
-		/// Draws the subscriptions.
-		/// </summary>
-		/// <param name="pSubs">Коллекция подписок</param>
-		private void DrawSubscriptions(XsollaSubscriptions pSubs)
-		{
-			currentActive = ActiveScreen.SUBSCRIPTIONS;
-			GameObject screenSubs = Instantiate(Resources.Load(PREFAB_SCREEN_SUBSCRIPTIONS)) as GameObject;
-			Resizer.DestroyChilds(mainScreenContainer.transform);
-			Resizer.SetParentToFullScreen(screenSubs, mainScreenContainer);
-
-			_subsController = screenSubs.GetComponent<SubscriptionsViewController>();
-			_subsController.InitScreen(Utils.GetTranslations(),pSubs);
-
-		}
-
-		/// <summary>
 		/// Shows the redeem coupon.
 		/// </summary>
 		public void ShowRedeemCoupon()
@@ -569,6 +546,7 @@ namespace Xsolla
 		private void ShowGoodsShop()
 		{
 			GameObject goodsShop = Instantiate(Resources.Load(PREFAB_SCREEN_GOODS_SHOP)) as GameObject;
+			Resizer.DestroyChilds(mainScreenContainer.transform);
 			ShopViewControllerRe controller = goodsShop.GetComponent<ShopViewControllerRe>();
 			controller.init(Utils);
 
@@ -594,6 +572,7 @@ namespace Xsolla
 		private void ShowPricePointShop()
 		{
 			GameObject pricePointShop = Instantiate(Resources.Load(PREFAB_SCREEN_PRICEPOINT_SHOP)) as GameObject;
+			Resizer.DestroyChilds(mainScreenContainer.transform);
 			PricePointShopControllerRe controller = pricePointShop.GetComponent<PricePointShopControllerRe>();
 			controller.SetProgressBarAction(delegate {progressBar.SetLoading(true);}, delegate {progressBar.SetLoading(false);});
 			controller.init(Utils);
@@ -602,6 +581,24 @@ namespace Xsolla
 			Resizer.SetParentToFullScreen(pricePointShop, mainScreenContainer);
 			// Выделяем элемент меню
 			mNavMenuController.SelectRadioItem(RadioButton.RadioType.SCREEN_PRICEPOINT);
+		}
+
+		/// <summary>
+		/// Draws the subscriptions.
+		/// </summary>
+		private void DrawSubscriptions()
+		{
+			GameObject screenSubs = Instantiate(Resources.Load(PREFAB_SCREEN_SUBSCRIPTIONS)) as GameObject;
+			Resizer.DestroyChilds(mainScreenContainer.transform);
+			SubscriptionsViewController controller = screenSubs.GetComponent<SubscriptionsViewController>();
+			controller.init(Utils);
+//			_subsController = screenSubs.GetComponent<SubscriptionsViewController>();
+//			_subsController.init(Utils);
+
+			// задаем родителя и заполняем 
+			Resizer.SetParentToFullScreen(screenSubs, mainScreenContainer);
+			// Выделяем элемент меню
+			mNavMenuController.SelectRadioItem(RadioButton.RadioType.SCREEN_SUBSCRIPTION);
 		}
 
 		/// <summary>
@@ -638,7 +635,8 @@ namespace Xsolla
 				}
 			case RadioButton.RadioType.SCREEN_SUBSCRIPTION:
 				{
-					LoadSubscriptions();
+					//LoadSubscriptions();
+					DrawSubscriptions();
 					mNavMenuController.SetVisibleBtn(false, RadioButton.RadioType.SCREEN_FAVOURITE);
 					break;
 				}

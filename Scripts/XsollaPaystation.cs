@@ -56,7 +56,6 @@ namespace  Xsolla
 
 		protected abstract void ApplyPromoCouponeCode(XsollaForm pForm);
 		protected abstract void UpdateCustomAmount(CustomVirtCurrAmountController.CustomAmountCalcRes pRes);
-		protected abstract void ShowSubs (XsollaSubscriptions pSubs);
 
 		protected abstract void ShowPaymentForm (XsollaUtils utils, XsollaForm form);
 
@@ -130,8 +129,6 @@ namespace  Xsolla
 
 			Payment.CustomAmountCalcRecieved += (calcRes) => UpdateCustomAmount(calcRes);
 
-			Payment.SubsReceived += (pSubs) => ShowSubs(pSubs);
-
 			Payment.VirtualPaymentSummaryRecieved += (summary) => ShowVPSummary(Utils, summary);
 			Payment.VirtualPaymentProceedError += (error) => ShowVPError(Utils, error);
 			Payment.VirtualPaymentStatusRecieved += (status) => ShowVPStatus(Utils, status);
@@ -194,14 +191,6 @@ namespace  Xsolla
 		{
 			Logger.Log ("Load Goods request");
 			Payment.GetItems (groupId, currentPurchase.GetMergedMap());
-		}
-
-		public void LoadSubscriptions()
-		{
-			Logger.Log("Load subscriptions");
-			SetLoading (true);
-			Payment.GetSubscriptions();
-			SelectRadioItem(RadioButton.RadioType.SCREEN_SUBSCRIPTION);
 		}
 
 		public void LoadFavorites()

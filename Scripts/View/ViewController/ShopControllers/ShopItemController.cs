@@ -291,7 +291,9 @@ namespace Xsolla
 			if (mItem.IsVirtualPayment())
 			{
 				if (pVcAmount == pVcAmountWithoutDiscount)
+				{
 					mAmount.text = pVcAmount.ToString("N2");
+				}
 				else
 					mAmount.text = pVcAmountWithoutDiscount.ToString("N2") + " " + pVcAmount.ToString("N2");
 

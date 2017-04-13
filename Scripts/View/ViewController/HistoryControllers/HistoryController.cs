@@ -14,6 +14,7 @@ namespace Xsolla
 		public Button mBtnRefresh;
 		public GameObject mBtnContinue;
 		public MyRotation mProgressBar;
+		public Text mEmptyItems;
 
 		private XsollaUtils mUtils;
 		private const string mHistoryUrl = "paystation2/api/balance/history";
@@ -31,6 +32,7 @@ namespace Xsolla
 			mUtils = pUtils;
 			mList = new List<HistoryElemController>();
 			mTitle.text = mUtils.GetTranslations().Get("balance_history_page_title");
+			mEmptyItems.text = mUtils.GetTranslations().Get("balance_history_no_data");
 			mBtnContinue.GetComponent<Text>().text = mUtils.GetTranslations().Get("balance_back_button");
 			mBtnContinue.GetComponent<Button>().onClick.AddListener(delegate 
 				{
@@ -67,11 +69,15 @@ namespace Xsolla
 		private void HistoryListRecived(JSONNode pNode)
 		{
 			XsollaHistoryList lList = new XsollaHistoryList().Parse(pNode["operations"]) as XsollaHistoryList;
-			//TODO реализовать заполнение 
 			for (int idx = 0; idx < lList.Count ; idx ++)
 			{
 				AddHistoryRow(lList.GetItemByPosition(idx));
 			}
+
+			// Если лист пустой
+			mEmptyItems.gameObject.SetActive(lList.Count == 0);
+			mHistoryContainer.transform.parent.gameObject.SetActive(lList.Count != 0);
+
 			mProgressBar.SetLoading(false);
 		}
 
