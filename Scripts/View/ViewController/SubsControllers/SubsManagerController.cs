@@ -304,7 +304,7 @@ namespace Xsolla
 		{
 			Logger.Log("On click back shop");
 			// уничтожаем объект чтобы отобразить то что под ним
-			GameObject.FindObjectOfType<XsollaPaystation>().LoadShop();
+			GetComponentInParent<XsollaPaystationController>().NavMenuClick(RadioButton.RadioType.SCREEN_GOODS);
 			Destroy(this.gameObject);
 		}
 
