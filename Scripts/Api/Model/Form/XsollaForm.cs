@@ -20,7 +20,7 @@ namespace Xsolla
         private String title;
         private String iconUrl;
         private String currency;
-        private String sum;
+        private Decimal sum;
         private String instruction;
         private int pid;
 		private bool skipForm;
@@ -205,13 +205,13 @@ namespace Xsolla
 
 		public string GetSumTotal()
 		{
-			if(buyData != null && buyData.sum != null && buyData.currency != null){
-				return PriceFormatter.Format(buyData.sum, buyData.currency);
+			if(buyData != null && buyData.currency != null){
+				return CurrencyFormatter.Instance.FormatPrice(buyData.currency, buyData.sum);
 			} else if (summary != null) {
-				return PriceFormatter.Format(summary.GetFinance().total.amount, summary.GetFinance().total.currency);
+				return CurrencyFormatter.Instance.FormatPrice(summary.GetFinance().total.currency, summary.GetFinance().total.amount);
 			} else {
-				if(sum != null && currency != null){
-					return PriceFormatter.Format(sum, currency);
+				if(currency != null){
+					return CurrencyFormatter.Instance.FormatPrice(currency, sum);
 				} else {
 					return "";
 				}
@@ -286,7 +286,7 @@ namespace Xsolla
             this.currency = currency;
         }
 
-		private void SetSum(string sum){
+		private void SetSum(decimal sum){
             this.sum = sum;
         }
 
@@ -341,7 +341,7 @@ namespace Xsolla
 			this.SetTitle (rootNode[XsollaApiConst.R_TITLE]);
 			this.SetIconUrl (rootNode[XsollaApiConst.R_ICONURL]);
 			this.SetCurrency (rootNode[XsollaApiConst.R_CURRENCY]);
-			this.SetSum (rootNode[XsollaApiConst.R_BUYDATA]["sum"]);
+			this.SetSum (rootNode[XsollaApiConst.R_BUYDATA]["sum"].AsDecimal);
 			this.SetInstruction (rootNode[XsollaApiConst.R_INSTRUCTION]);
 			this.SetPid (rootNode[XsollaApiConst.R_PID].AsInt);
 			this.SetSkipForm(rootNode[XsollaApiConst.R_SKIPFORM].AsBool);

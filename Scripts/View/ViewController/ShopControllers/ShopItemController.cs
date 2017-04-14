@@ -312,21 +312,13 @@ namespace Xsolla
 				mVcIcon.gameObject.SetActive(false);
 				if (pAmount == pAmountWithoutDiscount)
 				{
-					mAmount.text = CurrencyFormatter.FormatPrice(pCurrency , pAmount.ToString("N2"));
-					if (pCurrency == "RUB")
-						mCurrency.enabled = true;
-					else
-						mCurrency.gameObject.SetActive(false);
+					mAmount.text = CurrencyFormatter.Instance.FormatPrice(pCurrency, pAmount);
 				}
 				else
 				{
 					mOldAmount.enabled = true;
-					mOldAmount.text = CurrencyFormatter.FormatPrice(pCurrency, pAmountWithoutDiscount.ToString("N2"));
-					mAmount.text = CurrencyFormatter.FormatPrice(pCurrency, pAmount.ToString("N2"));
-					if (pCurrency == "RUB")
-						mCurrency.enabled = true;
-					else
-						mCurrency.gameObject.SetActive(false);
+					mOldAmount.text = CurrencyFormatter.Instance.FormatPrice(pCurrency, pAmountWithoutDiscount);
+					mAmount.text = CurrencyFormatter.Instance.FormatPrice(pCurrency, pAmount);
 				}
 			}
 				

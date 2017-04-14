@@ -36,13 +36,13 @@ namespace Xsolla
 
 			if(!_sub.IsSpecial())
 			{
-				_newPrice.text = CurrencyFormatter.FormatPrice(_sub.chargeCurrency, _sub.chargeAmount.ToString("N2"));
+				_newPrice.text = CurrencyFormatter.Instance.FormatPrice(_sub.chargeCurrency, _sub.chargeAmount);
 				_oldPrice.gameObject.SetActive(false);
 			}
 			else
 			{
-				_oldPrice.text = CurrencyFormatter.FormatPrice(_sub.chargeCurrency, _sub.chargeAmountWithoutDiscount.ToString());
-				_newPrice.text = CurrencyFormatter.FormatPrice(_sub.chargeCurrency, _sub.chargeAmount.ToString());
+				_oldPrice.text = CurrencyFormatter.Instance.FormatPrice(_sub.chargeCurrency, _sub.chargeAmountWithoutDiscount);
+				_newPrice.text = CurrencyFormatter.Instance.FormatPrice(_sub.chargeCurrency, _sub.chargeAmount);
 				_offerText.GetComponent<Text>().text = pTranslation.Get("option_offer");
 			}
 			_offerText.SetActive(_sub.IsSpecial()?true:false);

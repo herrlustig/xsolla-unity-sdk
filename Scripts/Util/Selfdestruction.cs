@@ -16,6 +16,10 @@ public class Selfdestruction : MonoBehaviour {
 		foreach(ApiRequest item in listObjRequest)
 			Destroy(item.gameObject);
 
+		CurrencyFormatter[] listObjCurrencyFormater = (CurrencyFormatter[])FindObjectsOfType(typeof(CurrencyFormatter));
+		foreach(CurrencyFormatter item in listObjCurrencyFormater)
+			Destroy(item.gameObject);
+
 		TransactionHelper.Clear ();
 	}
 

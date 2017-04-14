@@ -89,12 +89,12 @@ namespace Xsolla
 		public string GetPriceString()
 		{
 			if (sum == sumWithoutDiscount) {
-				return CurrencyFormatter.FormatPrice(currency, sum.ToString());
+				return CurrencyFormatter.Instance.FormatPrice(currency, sum);
 			} 
 			else 
 			{
-				string oldPrice = CurrencyFormatter.FormatPrice(currency, sumWithoutDiscount.ToString());
-				string newPrice = CurrencyFormatter.FormatPrice(currency, sum.ToString());
+				string oldPrice = CurrencyFormatter.Instance.FormatPrice(currency, sumWithoutDiscount);
+				string newPrice = CurrencyFormatter.Instance.FormatPrice(currency, sum);
 				return "<size=10><color=#a7a7a7>" + oldPrice + "</color></size>" + " " + newPrice;
 			}
 

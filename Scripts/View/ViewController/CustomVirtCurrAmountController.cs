@@ -50,7 +50,7 @@ namespace Xsolla
 			totalAmountTitle.text = mUtils.GetTranslations().Get("form_subtotal");
 			virtCurrAmount.text = pDefPackage.outAmount.ToString();
 			realCurrAmount.text = pDefPackage.sum.ToString();
-			mTotalAmount.text = CurrencyFormatter.FormatPrice(pDefPackage.currency, pDefPackage.sum.ToString("N2"));;
+			mTotalAmount.text = CurrencyFormatter.Instance.FormatPrice(pDefPackage.currency, pDefPackage.sum);;
 
 			virtCurrAmount.onValueChanged.AddListener(delegate 
 				{
@@ -210,7 +210,7 @@ namespace Xsolla
 			mSetValues = true;
 			if (pValue.amount != 0)
 			{
-				mTotalAmount.text = CurrencyFormatter.FormatPrice(pValue.currency, pValue.amount.ToString("N2"));
+				mTotalAmount.text = CurrencyFormatter.Instance.FormatPrice(pValue.currency, pValue.amount);
 			}
 			else
 			{
@@ -228,12 +228,8 @@ namespace Xsolla
 			else
 				realCurrAmount.text = "";
 
-			if (pValue.currency == "USD")
-				iconRealCurr.text = "$";
-			else if (pValue.currency == "EUR")
-				iconRealCurr.text = "€";
-			else if (pValue.currency == "RUB")
-				iconRealCurr.text = "";
+			iconRealCurr.text = CurrencyFormatter.Instance.GetCurrencyGraphem(pValue.currency);
+//			iconRealCurr.text = "";
 
 			if (pValue.vcAmount > 0)
 				btnPay.interactable = true;

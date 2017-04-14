@@ -152,14 +152,7 @@ namespace Xsolla
 
 			if (pItem.paymentAmount != 0)
 			{
-				mPrice.text = CurrencyFormatter.FormatPrice(pItem.paymentCurrency, pItem.paymentAmount.ToString("0.00"));
-				if (pItem.paymentCurrency == "RUB")
-					mSymbolRub.SetActive(true);
-				else
-				{
-					mSymbolRub.SetActive(false);
-					mPrice.alignment = TextAnchor.LowerLeft;
-				}
+				mPrice.text = CurrencyFormatter.Instance.FormatPrice(pItem.paymentCurrency, pItem.paymentAmount);
 			}
 			else
 				mPrice.text = ""; 

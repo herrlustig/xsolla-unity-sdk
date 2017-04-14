@@ -148,19 +148,19 @@ namespace Xsolla
 		{
 			if (!IsVirtualPayment()) {
 				if (amount == amountWithoutDiscount) {
-					return CurrencyFormatter.FormatPrice (currency, amount.ToString ());
+					return CurrencyFormatter.Instance.FormatPrice (currency, amount);
 				} else {
-					string oldPrice = CurrencyFormatter.FormatPrice (currency, amountWithoutDiscount.ToString ());
-					string newPrice = CurrencyFormatter.FormatPrice (currency, amount.ToString ());
+					string oldPrice = CurrencyFormatter.Instance.FormatPrice (currency, amountWithoutDiscount);
+					string newPrice = CurrencyFormatter.Instance.FormatPrice (currency, amount);
 					return "<size=10><color=#a7a7a7>" + oldPrice + "</color></size>" + " " + newPrice;
 				}
 			} else {
 				if (vcAmount == vcAmountWithoutDiscount) {
 					// FIX name currency must by localizated  
-					return CurrencyFormatter.FormatPrice (virtCurrency, vcAmount.ToString ());
+					return CurrencyFormatter.Instance.FormatPrice (virtCurrency, vcAmount);
 				} else {
-					string oldPrice = CurrencyFormatter.FormatPrice (virtCurrency, vcAmountWithoutDiscount.ToString ());
-					string newPrice = CurrencyFormatter.FormatPrice (virtCurrency, vcAmount.ToString ());
+					string oldPrice = CurrencyFormatter.Instance.FormatPrice (virtCurrency, vcAmountWithoutDiscount);
+					string newPrice = CurrencyFormatter.Instance.FormatPrice (virtCurrency, vcAmount);
 					return "<size=10><color=#a7a7a7>" + oldPrice + "</color></size>" + " " + newPrice;
 				}
 			}

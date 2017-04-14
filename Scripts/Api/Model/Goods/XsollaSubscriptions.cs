@@ -112,12 +112,12 @@ namespace Xsolla
 		public string GetPriceString()
 		{
 			if (!IsSpecial()) {
-				return CurrencyFormatter.FormatPrice(chargeCurrency, chargeAmount.ToString());
+				return CurrencyFormatter.Instance.FormatPrice(chargeCurrency, chargeAmount);
 			} 
 			else 
 			{
-				string oldPrice = CurrencyFormatter.FormatPrice(chargeCurrency, chargeAmountWithoutDiscount.ToString());
-				string newPrice = CurrencyFormatter.FormatPrice(chargeCurrency, chargeAmount.ToString());
+				string oldPrice = CurrencyFormatter.Instance.FormatPrice(chargeCurrency, chargeAmountWithoutDiscount);
+				string newPrice = CurrencyFormatter.Instance.FormatPrice(chargeCurrency, chargeAmount);
 				return "<size=10><color=#a7a7a7>" + oldPrice + "</color></size>" + " " + newPrice;
 			}
 			
