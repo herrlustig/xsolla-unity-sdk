@@ -8,7 +8,9 @@ namespace Xsolla
 
 		public static void ResizeToParrent(GameObject go)
 		{
-			var containerRectTransform = go.GetComponent<RectTransform>();
+			Logger.Log("Screen size - " + Screen.currentResolution.ToString() + " Screen dpi - " + Screen.dpi);
+
+			RectTransform containerRectTransform = go.GetComponent<RectTransform>();
 			var parentRectTransform = go.transform.parent.gameObject.GetComponent<RectTransform> ();
 			var parentHeight = parentRectTransform.rect.height;
 			var parentWidth = parentRectTransform.rect.width;
@@ -19,7 +21,7 @@ namespace Xsolla
 				containerRectTransform.offsetMin = new Vector2 (-parentWidth/2, -parentHeight/2);
 				containerRectTransform.offsetMax = new Vector2 (parentWidth/2, parentHeight/2);
 			} else {
-				var newWidth = parentWidth/3;
+				var newWidth = parentWidth/2;
 				if(width < newWidth){
 					containerRectTransform.offsetMin = new Vector2 (-newWidth/2, -parentHeight/2);
 					containerRectTransform.offsetMax = new Vector2 (newWidth/2, parentHeight/2);
@@ -28,6 +30,14 @@ namespace Xsolla
 					containerRectTransform.offsetMax = new Vector2 (width/2, parentHeight/2/parentScale);
 				}
 			}
+
+			// масштабирование
+			SetDefScale(go);
+		}
+
+		public static void SetDefScale(GameObject pObj)
+		{
+			pObj.GetComponent<RectTransform>().localScale = new Vector3(1,1,1);
 		}
 
 		public static void DestroyChilds(Transform parentTransform)
@@ -36,6 +46,44 @@ namespace Xsolla
 			foreach (Transform child in parentTransform) children.Add(child.gameObject);
 			children.ForEach(child => Object.Destroy(child));
 		}
+
+		public static void SetParentToFullScreen(GameObject pObj, GameObject pParent)
+		{
+			pObj.transform.SetParent(pParent.transform);
+			RectTransform objRect = pObj.GetComponent<RectTransform>();
+
+			objRect.anchorMin = new Vector2(0, 0);
+			objRect.anchorMax = new Vector2(1, 1);
+			objRect.localScale = new Vector3(1, 1, 1);
+			objRect.localPosition = new Vector3(0, 0, 0);
+			objRect.offsetMin = new Vector2(0, 0);
+			objRect.offsetMax = new Vector2(0, 0);
+		}
+
+		public static void ResizeToParrentRe(GameObject pObj)
+		{
+			RectTransform objRect = pObj.GetComponent<RectTransform>();
+
+			objRect.anchorMin = new Vector2(0, 0);
+			objRect.anchorMax = new Vector2(1, 1);
+			objRect.localScale = new Vector3(1, 1, 1);
+			objRect.localPosition = new Vector3(0, 0, 0);
+			objRect.offsetMin = new Vector2(0, 0);
+			objRect.offsetMax = new Vector2(0, 0);
+		}
+
+		public static void ResizeMainScreen(GameObject pObj)
+		{
+			RectTransform objRect = pObj.GetComponent<RectTransform>();
+
+			objRect.anchorMin = new Vector2(0, 0);
+			objRect.anchorMax = new Vector2(1, 1);
+			objRect.localScale = new Vector3(1, 1, 1);
+			objRect.localPosition = new Vector3(0, 0, 0);
+			objRect.offsetMin = new Vector2(0, 0);
+			objRect.offsetMax = new Vector2(0, 0);
+		}
+
 	}
 
 }

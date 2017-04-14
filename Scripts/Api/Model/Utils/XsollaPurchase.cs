@@ -41,8 +41,8 @@ namespace Xsolla
 
 		public class VirtualCurrency : IParseble
 		{
-			public int 	quantity{get; private set;}//	"quantity" : 1,
-			public bool allowModify{get; private set;}//"allow_modify" : false
+			public int 	quantity{get; private set;}
+			public bool allowModify{get; private set;}
 
 
 			public IParseble Parse (JSONNode virtualCurrencyNode)
@@ -55,8 +55,8 @@ namespace Xsolla
 
 		public class Subscription : IParseble 
 		{
-			public string id{get; private set;}//		"plan_id" : 1a50e93b,
-			public bool allowModify{get; private set;}//"allow_modify" : false
+			public string id{get; private set;}//		
+			public bool allowModify{get; private set;}
 
 			public IParseble Parse (JSONNode subscriptionNode)
 			{

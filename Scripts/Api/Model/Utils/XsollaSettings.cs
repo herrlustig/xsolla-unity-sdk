@@ -9,6 +9,7 @@ namespace Xsolla
 		public string version;//"version":"mobile"
 		public XsollaPaystation2 paystation2;//"paystation2":{}
 		public Components components;
+		public XsollaSettingDescktop mDesktop;
 		public string theme;
 
 		public string GetTheme(){
@@ -27,12 +28,43 @@ namespace Xsolla
 			var paystation2Node = rootNode["paystation2"];
 			paystation2 = new XsollaPaystation2 ().Parse (paystation2Node) as XsollaPaystation2;
 			theme = rootNode["theme"];
+			mDesktop = new XsollaSettingDescktop().Parse(rootNode["desktop"]) as XsollaSettingDescktop;
 			components = new Components().Parse(rootNode["components"]) as Components;
 			return this;
 		}
+
 		public override string ToString ()
 		{
 			return string.Format ("[XsollaSettings]");
+		}
+	}
+
+	public class XsollaSettingDescktop: IParseble
+	{
+		public XsollaVirtualItems pVirtItems;
+
+		public IParseble Parse(JSONNode pRootNode)
+		{
+			pVirtItems = new XsollaVirtualItems().Parse(pRootNode["virtual_item_list"]) as XsollaVirtualItems;
+			return this;
+		}
+	}
+
+	public class XsollaVirtualItems: IParseble
+	{
+		public bool mButtonWithPrice;
+		public string pLayout;
+
+		public bool isListLayout()
+		{
+			return pLayout == "list";
+		}
+
+		public IParseble Parse(JSONNode pRootNode)
+		{
+			mButtonWithPrice = pRootNode["button_with_price"].AsBool;
+			pLayout = pRootNode["layout"].Value;
+			return this;
 		}
 	}
 

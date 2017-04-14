@@ -89,7 +89,7 @@ namespace Xsolla
 	{
 
 		public float quantity { get; private set;}	//"quantity":100,
-		public float amount { get; private set;}	//"amount":0.99,
+		public decimal amount { get; private set;}	//"amount":0.99,
 		public string currency { get; private set;}//"currency":"USD",
 		public string name { get; private set;}	//"name":"Coins",
 		public string imageUrl { get; private set;}//"image_url":"https:\/\/xsolla.cachefly.net\/img\/misc\/images\/f5c585288abb141b179b17333a68fd5b.png",
@@ -115,7 +115,7 @@ namespace Xsolla
 
 		public string GetPrice()
 		{
-			return PriceFormatter.Format (amount, currency);
+			return CurrencyFormatter.Instance.FormatPrice(currency, amount);
 		}
 
 
@@ -132,7 +132,7 @@ namespace Xsolla
 		public IParseble Parse(JSONNode purchaseNode)
 		{
 			quantity = purchaseNode ["quantity"].AsFloat;
-			amount = purchaseNode ["amount"].AsFloat;
+			amount = purchaseNode ["amount"].AsDecimal;
 			currency = purchaseNode ["currency"];
 			name = purchaseNode ["name"];
 			imageUrl = purchaseNode ["image_url"];
@@ -145,7 +145,7 @@ namespace Xsolla
 
 	public class XsollaSummarySubscription : IParseble, IXsollaSummaryItem
 	{
-		public float amount{ get; private set;}//"amount":0.99,
+		public decimal amount{ get; private set;}//"amount":0.99,
 		public int period{ get; private set;}//"period":1,
 		public string currency{ get; private set;}//"currency":"USD",
 		public string description{ get; private set;}//"description":"Silver Status",
@@ -169,7 +169,7 @@ namespace Xsolla
 		
 		public string GetPrice()
 		{
-			return PriceFormatter.Format (amount, currency);
+			return CurrencyFormatter.Instance.FormatPrice(currency, amount);
 		}
 		
 		
@@ -185,7 +185,7 @@ namespace Xsolla
 
 		public IParseble Parse(JSONNode purchaseNode)
 		{
-			amount = purchaseNode ["amount"].AsFloat;
+			amount = purchaseNode ["amount"].AsDecimal;
 			period = purchaseNode ["period"].AsInt;
 			currency = purchaseNode ["currency"];
 			description = purchaseNode ["description"];
@@ -231,14 +231,14 @@ namespace Xsolla
 		
 		public class FinanceItemBase : IParseble
 		{
-			public float amount { get; private set;}//"amount":0.99,
+			public decimal amount { get; private set;}//"amount":0.99,
 			public string currency { get; private set;}//"currency":"USD",
 
 			public FinanceItemBase(){
 
 			}
 
-			public FinanceItemBase(float newAmount, string newCurrency):this()
+			public FinanceItemBase(decimal newAmount, string newCurrency):this()
 			{
 				amount = newAmount;
 				currency = newCurrency;
@@ -246,7 +246,7 @@ namespace Xsolla
 
 			public IParseble Parse(JSONNode baseFinanceItemNode)
 			{
-				amount = baseFinanceItemNode["amount"].AsFloat;
+				amount = baseFinanceItemNode["amount"].AsDecimal;
 				currency = baseFinanceItemNode["currency"];
 				return this;
 			}
@@ -262,7 +262,7 @@ namespace Xsolla
 				
 			}
 
-			public FinanceItem(float newAmount, string newCurrency, 
+			public FinanceItem(decimal newAmount, string newCurrency, 
 			                   float newPaymentAmount, string newPaymentCurrency):base(newAmount, newCurrency)
 			{
 				paymentAmount = newPaymentAmount;

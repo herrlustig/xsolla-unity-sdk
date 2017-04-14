@@ -1,6 +1,9 @@
 ﻿using System;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Collections;
+using System.Collections.Generic;
+using SimpleJSON;
 
 namespace Xsolla
 {
@@ -10,40 +13,52 @@ namespace Xsolla
 		public Text 			_titlePage;
 		public GameObject 		_listSubsView;
 		public Text 			_timeAlert;
+		public MyRotation		mProgressBar;
+
+		private XsollaUtils		mUtils;
+		private const string mActiveSubsUrl = "paystation2/api/recurring/active";
 
 		private const string PREFAB_SPEC_SUBS = "Prefabs/SimpleView/_ScreenShop/ShopItemSubscriptionSpecial";
 
-		public void InitScreen(XsollaTranslations pTranslation,XsollaSubscriptions pSubs)
+		public void init(XsollaUtils pUtils)
 		{
-			// for current design we can't show all allert, because we don't have button Continue or some else
-//			if (!pSubs.GetActivePackage().Equals(null))
-//			{
-//				if (pSubs.GetActivePackage()._isPossibleRenew)
-//					_timeAlert.text = string.Format(pTranslation.Get("subscription_active_note"), pSubs.GetActivePackage()._dateNextCharge.ToShortDateString());
-//				else	
-//					_timeAlert.text = string.Format(pTranslation.Get("subscription_active_note_no_renew"), pSubs.GetActivePackage()._dateNextCharge.ToShortDateString());
-//			}
-
-			_titlePage.text = pTranslation.Get(XsollaTranslations.SUBSCRIPTION_PAGE_TITLE);
-
-			_listSubs = pSubs;
-			foreach(XsollaSubscription sub in _listSubs.GetItemsList())
-			{
-				AddSubs(sub,pTranslation);
-			}
+			mUtils = pUtils;
+			_titlePage.text = (pUtils.GetProject().components ["subscriptions"].Name != "") ? pUtils.GetProject().components["subscriptions"].Name : pUtils.GetTranslations().Get(XsollaTranslations.SUBSCRIPTION_PAGE_TITLE); 
+			mProgressBar.SetLoading(false);
+			GetSubsRequest();
 		}
 
-		private void AddSubs(XsollaSubscription pSub, XsollaTranslations pTranslation)
+		private void GetSubsRequest()
+		{
+			mProgressBar.SetLoading(true);
+			// получить список пакетов
+			Dictionary<String, object> lParams = new Dictionary<string, object>();
+			lParams.Add(XsollaApiConst.ACCESS_TOKEN, mUtils.GetAcceessToken());
+			ApiRequest.Instance.getApiRequest(new XsollaRequestPckg(mActiveSubsUrl, lParams), ActiveSubsRecived, ErrorRecived);
+		}
+
+		private void ErrorRecived(XsollaErrorRe pError)
+		{
+		}
+
+		private void ActiveSubsRecived(JSONNode pNode)
+		{
+			mProgressBar.SetLoading(false);
+			XsollaSubscriptions subs = new XsollaSubscriptions().Parse(pNode) as XsollaSubscriptions;
+			subs.GetItemsList().ForEach((item) =>
+				{
+					AddSubs(item);
+				});
+		}
+
+
+		private void AddSubs(XsollaSubscription pSub)
 		{
 			GameObject subObj = Instantiate(Resources.Load(PREFAB_SPEC_SUBS)) as GameObject;
 			subObj.transform.SetParent(_listSubsView.transform);
+			Resizer.SetDefScale(subObj);
 			SubscriptionBtnController controller = subObj.GetComponent<SubscriptionBtnController>();
-			controller.InitBtn(pSub,pTranslation);
-
-		}
-
-		public SubscriptionsViewController ()
-		{
+			controller.InitBtn(pSub,mUtils.GetTranslations());
 		}
 	}
 }

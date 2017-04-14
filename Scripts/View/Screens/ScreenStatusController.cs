@@ -86,11 +86,5 @@ namespace Xsolla
 			if (StatusHandler != null)
 				StatusHandler (xsollaStatusData);
 		}
-
-		
-		void OnDestroy() {
-			print("Script was destroyed ScreenStatusController");
-		}
-
 	}
 }

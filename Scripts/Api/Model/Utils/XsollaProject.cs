@@ -20,6 +20,7 @@ namespace Xsolla
 		public string 	projectUrl			{get; private set;}// "projectUrl":"xsolla.com",
 		public string 	returnUrl			{get; private set;}// "returnUrl":"https:\/\/secure.xsolla.com?v1=user_1&v2=John+Smith",
 		public string 	eula				{get; private set;}// "eula":"http:\/\/xsolla.com\/termsandconditions\/?lang=en&ca=2340",
+		public string 	eulaUrl				{get; private set;}
 
 		public bool 	isDiscrete			{get; private set;}// "isDiscrete":false,
 		public bool 	isKeepUsers			{get; private set;}// "isKeepUsers":false,
@@ -38,13 +39,18 @@ namespace Xsolla
 			nameEn = projectNode ["nameEn"];
 			virtualCurrencyName = projectNode ["virtualCurrencyName"];
 			virtualCurrencyIconUrl = projectNode ["virtualCurrencyImage"];
+			virtualCurrencyIconUrl = virtualCurrencyIconUrl.Replace("//","");
 			merchantId = projectNode ["merchantId"].AsInt;
 			isDiscrete = projectNode ["isDiscrete"].AsBool;
 			projectUrl = projectNode ["projectUrl"];
 			returnUrl = projectNode ["returnUrl"];
 			isKeepUsers = projectNode ["isKeepUsers"].AsBool;
 			recurringPackageCount = projectNode ["recurringPackageCount"].AsInt;
-			eula = projectNode ["eula"];
+			if (projectNode ["eula"] != null)
+			{
+				eula = projectNode ["eula"]["label"];
+				eulaUrl = projectNode ["eula"]["url"];
+			}
 			canRepeatPayment = projectNode ["canRepeatPayment"].AsBool;
 			
 			JSONClass jsonObj = projectNode["components"].AsObject;
@@ -75,7 +81,7 @@ namespace Xsolla
 		public bool	IsEnabled;
 
 		public XComponent(string newName, bool isEnabled) {
-			Name 		= newName;
+			Name 		= newName == "null" ? "" : newName ;
 			IsEnabled 	= isEnabled;
 		}
 	}

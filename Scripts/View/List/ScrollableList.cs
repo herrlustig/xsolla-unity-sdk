@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.UI;
+using Xsolla;
 
 public class ScrollableList : MonoBehaviour
 {
@@ -37,6 +38,7 @@ public class ScrollableList : MonoBehaviour
             GameObject newItem = Instantiate(itemPrefab) as GameObject;
             newItem.name = gameObject.name + " item at (" + i + "," + j + ")";
             newItem.transform.parent = gameObject.transform;
+			Resizer.SetDefScale(newItem);
 			newItem.GetComponentInChildren<Text>().text = i + " AZAZA" ;
 
             //move and size the new item

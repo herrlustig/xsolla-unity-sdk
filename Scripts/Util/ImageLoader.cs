@@ -2,6 +2,7 @@
 using System.Collections;
 using UnityEngine.UI;
 using System.Collections.Generic;
+using System.IO;
 
 
 namespace Xsolla {
@@ -26,6 +27,7 @@ namespace Xsolla {
 		}
 
 		public void LoadImage (Image imageView, string url) {
+			imageView.enabled = false;
 			//Call the actual loading method
 			StartCoroutine(RealLoadImage(url, imageView));
 		}
@@ -56,23 +58,35 @@ namespace Xsolla {
 						//Construct a new Sprite
 						Sprite sprite = new Sprite ();     
 					
-						//Create a new sprite using the Texture2D from the url. 
-						//Note that the 400 parameter is the width and height. 
-						//Adjust accordingly
-						sprite = Sprite.Create (imageURLWWW.texture, new Rect (0, 0, imageURLWWW.texture.width, imageURLWWW.texture.height), Vector2.zero);
+						Texture2D image = new Texture2D(imageURLWWW.texture.width, imageURLWWW.texture.height, TextureFormat.RGBA32, true);
+						imageURLWWW.LoadImageIntoTexture(image);
+						image.SetPixels( image.GetPixels(0,0,image.width,image.height));
+						image.Apply();
+						image.filterMode = FilterMode.Trilinear;
+						sprite = Sprite.Create(image, new Rect (0, 0, image.width, image.height), new Vector2(0,0));
+
 						if(!imageCashe.ContainsKey(url))
 						{
 							imageCashe.Add (url, sprite);
 						}
+
 						//Assign the sprite to the Image Component
-						if (imageView != null) {
+						if (imageView != null) 
+						{
 							imageView.sprite = sprite; 
 						}
 					}
 				}
+				else
+				{
+					Logger.LogError("Error to load img with url - " + url);
+					// делаем image прозрачным 
+					imageView.color = new Color(255,255,255,0);
+				}
 				imageURLWWW.Dispose ();
 				imageURLWWW = null;
 			}
+			imageView.enabled = true;
 			yield return null;
 		}
 	}

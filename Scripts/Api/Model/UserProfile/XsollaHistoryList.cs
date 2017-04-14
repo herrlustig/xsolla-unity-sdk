@@ -20,12 +20,13 @@ namespace Xsolla
 
 	public class XsollaHistoryItem: IXsollaObject, IParseble
 	{
+		public string id {get; private set;}
 		public string comment {get; private set;} //comment:null
 		public string couponeCode {get; private set;} //couponCode:null
 		public DateTime date{get; private set;}// date:"2016-10-04T12:36:03+03:00"
 		public int invoiceId{get; private set;}// invoiceId:231266644
 		public string operationType{get; private set;}// operationType:"cancellation"
-		public float paymentAmount{get; private set;}// paymentAmount:0.5
+		public decimal paymentAmount{get; private set;}// paymentAmount:0.5
 		public string paymentCurrency{get; private set;}// paymentCurrency:"USD"
 		public string paymentName{get; private set;}// paymentName:"Apple Pay"
 		public string statusCode{get; private set;}// statusCode:"troubled"
@@ -43,7 +44,7 @@ namespace Xsolla
 			date = DateTime.Parse(pNode["date"]);
 			invoiceId = pNode["invoiceId"].AsInt;
 			operationType = pNode["operationType"];
-			paymentAmount = pNode["paymentAmount"].AsFloat;
+			paymentAmount = pNode["paymentAmount"].AsDecimal;
 			paymentCurrency = pNode["paymentCurrency"];
 			paymentName = pNode["paymentName"];
 			statusCode = pNode["statusCode"];
@@ -53,13 +54,14 @@ namespace Xsolla
 			vcAmount = pNode["vcAmount"].AsFloat;
 			virtualItems = new XsollaHistoryVirtualItems().Parse(pNode["virtualItems"]) as XsollaHistoryVirtualItems;
 			virtualItemsOperationType = pNode["virtualItemsOperationType"];
+			id = Guid.NewGuid().ToString();
 
 			return this;
 		}
 
 		public string GetKey()
 		{
-			return date.ToString("u");
+			return id;
 		}
 
 		public string GetName()

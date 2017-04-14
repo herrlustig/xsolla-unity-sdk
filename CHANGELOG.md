@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.3.7 - 2017-04-14
+
+  * Shop screens design update
+  * Grid/list shop items view support added
+  * Light theme support added
+  * Serverless integration support added
+  * High resolution screen support added
+  * Images rendering quality improved
+  * Work speed improved
+
 ## 1.3.6 - 2017-02-17
 
 The Subscription Management Interface was released.

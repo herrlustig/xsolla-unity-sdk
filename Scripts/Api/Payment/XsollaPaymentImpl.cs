@@ -11,7 +11,7 @@ namespace Xsolla
 
 		private string DOMAIN = "https://secure.xsolla.com";
 
-		private const string SDK_VERSION = "1.3.6";
+		private const string SDK_VERSION = "1.3.7";
 
 		private const int TRANSLATIONS 		 	= 0;
 		private const int DIRECTPAYMENT_FORM 	= 1;
@@ -40,12 +40,10 @@ namespace Xsolla
 
 		public Action<XsollaUtils> 					UtilsRecieved;
 		public Action<XsollaTranslations> 			TranslationRecieved;
-		public Action<XsollaHistoryList>			HistoryRecieved;
 
 		public Action<XsollaPricepointsManager> 	PricepointsRecieved;
 		public Action<XsollaGroupsManager> 			GoodsGroupsRecieved;
 		public Action<XsollaGoodsManager> 			GoodsRecieved;
-		public Action<XsollaSubscriptions>			SubsReceived;
 
 		public Action<XsollaPaymentMethods> 		PaymentMethodsRecieved;
 		public Action<XsollaSavedPaymentMethods>    SavedPaymentMethodsRecieved;
@@ -165,12 +163,6 @@ namespace Xsolla
 				GoodsGroupsRecieved(groups);
 		}
 
-		private void OnSubscriptionsReceived(XsollaSubscriptions pSubs)
-		{
-			if(SubsReceived != null)
-				SubsReceived(pSubs);
-		}
-
 		// ---------------------------------------------------------------------------
 
 		private void OnVPSummaryRecieved(XVirtualPaymentSummary summary)
@@ -227,12 +219,6 @@ namespace Xsolla
 				TranslationRecieved(translations);
 		}
 
-		protected virtual void OnHistoryRecieved(XsollaHistoryList pHistoryList)
-		{
-			if (HistoryRecieved != null)
-				HistoryRecieved(pHistoryList);
-		}
-		
 		// ---------------------------------------------------------------------------
 
 		protected virtual void OnFormReceived(XsollaForm form) 
@@ -366,13 +352,6 @@ namespace Xsolla
 			StartCoroutine(POST (GOODS_ITEMS, GetItemsUrl(), requestParams));
 		}
 
-		public void GetSubscriptions()
-		{
-			Dictionary<string,object> param = new Dictionary<string, object>();
-			param.Add(XsollaApiConst.ACCESS_TOKEN, baseParams[XsollaApiConst.ACCESS_TOKEN]);
-			StartCoroutine(POST(ACTIVE_SUBS, GetSubsUrl(), baseParams));
-		}
-
 		public void GetFavorites(Dictionary<string, object> requestParams)
 		{
 			StartCoroutine(POST (GOODS_ITEMS, GetFavoritsUrl(), requestParams));
@@ -439,13 +418,6 @@ namespace Xsolla
 			StartCoroutine(POST (COUNTRIES, GetCountriesListUrl(), requestParams));
 		}
 			
-		public void GetHistory(Dictionary<string, object> pParams)
-		{
-			if (!pParams.ContainsKey(XsollaApiConst.ACCESS_TOKEN))
-				pParams.Add(XsollaApiConst.ACCESS_TOKEN, baseParams[XsollaApiConst.ACCESS_TOKEN]);
-
-			StartCoroutine(POST(HISTORY, GetHistoryUrl(), pParams));
-		}
 		public void ApplyPromoCoupone(Dictionary<string, object> pParams)
 		{
 			StartCoroutine(POST(APPLY_PROMO_COUPONE, GetDirectpaymentLink(), pParams));
@@ -516,7 +488,8 @@ namespace Xsolla
 							if(rootNode.Count > 2){
 								XsollaUtils utils = new XsollaUtils().Parse(rootNode) as XsollaUtils;
 								projectId = utils.GetProject().id.ToString();
-								utils.SetAccessToken(baseParams[XsollaApiConst.ACCESS_TOKEN].ToString());
+								if (baseParams.ContainsKey(XsollaApiConst.ACCESS_TOKEN))
+									utils.SetAccessToken(baseParams[XsollaApiConst.ACCESS_TOKEN].ToString());
 
 								OnUtilsRecieved(utils);
 //								// if base param not containKey access token, then add token from util
@@ -712,23 +685,10 @@ namespace Xsolla
 							}
 							break;
 						}
-						case HISTORY:
-						{
-							XsollaHistoryList history = new XsollaHistoryList().Parse(rootNode["operations"]) as XsollaHistoryList;
-							OnHistoryRecieved(history);
-							break;
-						}
 						case CALCULATE_CUSTOM_AMOUNT:
 						{
 							CustomVirtCurrAmountController.CustomAmountCalcRes res = new CustomVirtCurrAmountController.CustomAmountCalcRes().Parse(rootNode["calculation"]) as CustomVirtCurrAmountController.CustomAmountCalcRes;
 							OnCustomAmountResRecieved(res);
-							break;
-						}
-						case ACTIVE_SUBS:
-						{
-							XsollaSubscriptions subs = new XsollaSubscriptions();
-							subs.Parse(rootNode);
-							OnSubscriptionsReceived(subs);
 							break;
 						}
 						case PAYMENT_MANAGER_LIST:
@@ -818,12 +778,6 @@ namespace Xsolla
 		private string GetItemsUrl(){
 			return DOMAIN + "/paystation2/api/virtualitems/items";
 		}
-
-		private string GetHistoryUrl()
-		{
-			return DOMAIN + "/paystation2/api/balance/history";
-		}
-
 
 		/*		PAYMENT METHODS LINKS	 */
 

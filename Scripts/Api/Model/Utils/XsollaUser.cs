@@ -44,10 +44,12 @@ namespace Xsolla
 			savedPaymentMethodCount = userNode ["savedPaymentMethodCount"].AsInt;
 			acceptLanguage = userNode ["acceptLanguage"];
 			acceptEncoding = userNode ["acceptEncoding"];
-			userBalance = new VirtualUserBalance(userNode["user_balance"]["currency"], userNode["user_balance"]["amount"].AsDecimal);
+			if ((userNode["user_balance"]["currency"] != null) && (userNode["user_balance"]["amount"] != null))
+				userBalance = new VirtualUserBalance(userNode["user_balance"]["currency"], userNode["user_balance"]["amount"].AsDecimal);
 
 			if (userNode["virtual_currency_balance"]["amount"] != null)
-				virtualCurrencyBalance = new VirtualCurrencyBalance(userNode["virtual_currency_balance"]["amount"].AsDouble);
+				if (userNode["virtual_currency_balance"]["amount"] != null)
+					virtualCurrencyBalance = new VirtualCurrencyBalance(userNode["virtual_currency_balance"]["amount"].AsDouble);
 
 			return this;
 		}

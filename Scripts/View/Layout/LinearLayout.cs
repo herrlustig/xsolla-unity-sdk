@@ -84,6 +84,7 @@ namespace Xsolla
 			//adjust the height of the container so that it will just barely fit all its children
 			totalHeight += height;
 			go.transform.SetParent (gameObject.transform);
+			Resizer.SetDefScale(go);
 			//move and size the new item
 			RectTransform rectTransform = go.GetComponent<RectTransform>();
 			

@@ -805,6 +805,7 @@ namespace SimpleJSON
 		{
 			return m_Dict;
 		}
+
         public override string ToString()
         {
             string result = "{";

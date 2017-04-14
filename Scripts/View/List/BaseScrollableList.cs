@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.UI;
+using Xsolla;
 
 public class BaseScrollableList : MonoBehaviour
 {
@@ -37,6 +38,7 @@ public class BaseScrollableList : MonoBehaviour
             GameObject newItem = Instantiate(itemPrefab) as GameObject;
             newItem.name = gameObject.name + " item at (" + i + "," + j + ")";
             newItem.transform.parent = gameObject.transform;
+			Resizer.SetDefScale(newItem);
 
             //move and size the new item
             RectTransform rectTransform = newItem.GetComponent<RectTransform>();
