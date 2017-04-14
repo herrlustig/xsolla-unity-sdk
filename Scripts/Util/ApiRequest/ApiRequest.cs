@@ -139,6 +139,12 @@ namespace Xsolla
 			}
 			
 		}
+
+		public override string ToString ()
+		{
+			return string.Format ("[XsollaErrorRe: mErrorList={0}]", mErrorList);
+		}
+		
 	}
 
 

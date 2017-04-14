@@ -312,10 +312,10 @@ namespace Xsolla
 				GameObject obj = Instantiate(Resources.Load(PREFAB_SCREEN_SUBSCRIPTION_MANAGER)) as GameObject;
 				_SubsManagerController = obj.GetComponent<SubsManagerController>();
 				_SubsManagerController.initScreen(Utils, pSubsList);
-
 				obj.transform.SetParent(mainScreenContainer.transform);
 				obj.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, 0);
-				Resizer.ResizeToParrent(obj);
+				Resizer.ResizeToParrentRe(obj);
+				Resizer.SetDefScale(obj);
 			}
 			else
 			{

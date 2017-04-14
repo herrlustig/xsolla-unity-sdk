@@ -22,6 +22,7 @@ namespace Xsolla
 
 		private XsollaUtils mUtils;
 		private const String DOMAIN = "https://secure.xsolla.com";
+		private const String mSubDetailUrl = "/paystation2/api/useraccount/subscription"; 
 		private const String mBtnPrefab = "Prefabs/Screens/SubsManager/Simple/SubManagerBtn";
 		private const String mDetailPartPrefab = "Prefabs/Screens/SubsManager/Detail/SubDetailPart";
 		private const String mDetailPaymentPartPrefab = "Prefabs/Screens/SubsManager/Detail/SubDetailPaymentPart";
@@ -114,6 +115,11 @@ namespace Xsolla
 			}
 			WWW lwww = new WWW(pUrl, lForm);
 			StartCoroutine(getRequest(lwww, pRecivedCallBack));
+		}
+
+		private void ErrorRecived(XsollaErrorRe pError)
+		{
+			Logger.LogError("Error to get detail on subs!" + pError.ToString());
 		}
 			
 		private IEnumerator getRequest(WWW pWww, Action<JSONNode> pCallback)
