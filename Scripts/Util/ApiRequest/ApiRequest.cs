@@ -11,7 +11,7 @@ namespace Xsolla
 	{
 		private String DOMAIN = "https://secure.xsolla.com/";
 		private const string mVerAPI = "1.0.1";
-		private const string SDK_VERSION = "2.0.0";
+		private const string SDK_VERSION = "1.3.7";
 		protected Dictionary<XsollaRequestPckg, JSONNode> mGlobalCache = null;
 
 		protected ApiRequest() 
