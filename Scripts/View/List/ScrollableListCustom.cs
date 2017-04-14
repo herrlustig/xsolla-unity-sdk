@@ -58,6 +58,7 @@ namespace Xsolla
 				GameObject newItem = Instantiate (itemPrefab) as GameObject;
 				newItem.name = gameObject.name + " item at (" + i + "," + j + ")";
 				newItem.transform.SetParent(gameObject.transform);
+				Resizer.SetDefScale(newItem);
 				Text textField = newItem.GetComponentsInChildren<Text> (true)[0];
 				KeyValuePair<string, string> o = objects.ElementAt(i);//.Keys.ElementAt2(i);
 				textField.text = o.Value;

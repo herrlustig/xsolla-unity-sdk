@@ -6,7 +6,6 @@ namespace Xsolla
 {
 	public class XsollaError : IParseble
 	{
-		
 		public Source errorSource{get; private set;}
 		public int errorCode{get; private set;}
 		public string elementName{get; private set;}

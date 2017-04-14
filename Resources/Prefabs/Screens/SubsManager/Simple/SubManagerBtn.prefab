@@ -26,6 +26,7 @@ GameObject:
   - 114: {fileID: 114000011058753484}
   - 114: {fileID: 114000013568854684}
   - 114: {fileID: 114000014263652846}
+  - 114: {fileID: 114000010200595270}
   m_Layer: 5
   m_Name: SubManagerBtn
   m_TagString: Untagged
@@ -182,6 +183,19 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
+--- !u!114 &114000010200595270
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000010071277794}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 34639f65e00734782bb755f9d2d49703, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pType: 27
+  mButton: {fileID: 114000012934574490}
 --- !u!114 &114000010227157058
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -245,7 +259,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.392}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -580,7 +594,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemsToColor:
   - color: 11
-    whatToColor: {fileID: 114000010536840814}
+    whatToColor: {fileID: 0}
   - color: 34
     whatToColor: {fileID: 114000010227157058}
   - color: 15

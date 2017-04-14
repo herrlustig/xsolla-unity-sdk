@@ -12,6 +12,7 @@ namespace Xsolla
 		private XsollaSettings 		settings;// "settings":{},
 		private XsollaTranslations 	translations;// "translations":{},
 		private XsollaApi 			api;// "api":{}
+		public XsollaBonus			mBonus;
 
 		public string GetAcceessToken() {
 			return accessToken;
@@ -47,22 +48,26 @@ namespace Xsolla
 		{
 			accessToken = pToken;
 		}
-
+			
+		public bool IsServerLess()
+		{
+			return GetUser().IdAllowModify();
+		}
 
 		public IParseble Parse (JSONNode utilsNode)
 		{
-			//accessToken 	= utilsNode [XsollaApiConst.ACCESS_TOKEN].Value;
+			accessToken 	= utilsNode [XsollaApiConst.ACCESS_TOKEN].Value;
 			user 			= new XsollaUser ().Parse (utilsNode [XsollaApiConst.R_USER]) as XsollaUser;
 			project 		= new XsollaProject ().Parse (utilsNode [XsollaApiConst.R_PROJECT]) as XsollaProject;
 			purchase 		= new XsollaPurchase ().Parse (utilsNode [XsollaApiConst.R_PURCHASE]) as XsollaPurchase;
 			settings 		= new XsollaSettings ().Parse (utilsNode [XsollaApiConst.R_SETTINGS]) as XsollaSettings;
 			translations 	= new XsollaTranslations ().Parse (utilsNode [XsollaApiConst.R_TRANSLATIONS]) as XsollaTranslations;
 			api 			= new XsollaApi ().Parse (utilsNode [XsollaApiConst.R_API]) as XsollaApi;
+			mBonus = new XsollaBonus().Parse(utilsNode["bonus"]) as XsollaBonus;
 
 			return this;
 		}
-
-
+			
 		public override string ToString ()
 		{
 			return string.Format ("[XsollaUtils] " 

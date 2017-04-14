@@ -8,6 +8,7 @@ namespace Xsolla
 		public void OpenUrl(string urlToOpen)
 		{
 			Application.OpenURL (urlToOpen);
+			return;
 		}
 
 	}

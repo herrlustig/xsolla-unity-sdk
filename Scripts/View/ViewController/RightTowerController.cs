@@ -34,23 +34,23 @@ namespace Xsolla
 				linearLayout.AddObject(GetSummaryItem(purchase));
 			}
 			XsollaFinance finance = _summary.GetFinance ();
-			linearLayout.AddObject(GetItem(subTotalPrefab, translations.Get(XsollaTranslations.PAYMENT_SUMMARY_SUBTOTAL), PriceFormatter.Format(finance.subTotal.amount, finance.subTotal.currency)));
+			linearLayout.AddObject(GetItem(subTotalPrefab, translations.Get(XsollaTranslations.PAYMENT_SUMMARY_SUBTOTAL), CurrencyFormatter.Instance.FormatPrice(finance.subTotal.currency, finance.subTotal.amount)));
 			if (finance.discount != null && finance.discount.amount > 0) 
 			{
-				linearLayout.AddObject(GetItem(financeItemPrefab, translations.Get(XsollaTranslations.PAYMENT_SUMMARY_DISCOUNT), "- " + PriceFormatter.Format(finance.discount.amount, finance.discount.currency)));
+				linearLayout.AddObject(GetItem(financeItemPrefab, translations.Get(XsollaTranslations.PAYMENT_SUMMARY_DISCOUNT), "- " + CurrencyFormatter.Instance.FormatPrice(finance.discount.currency, finance.discount.amount)));
 			}
 			if (finance.fee != null) 
 			{
-				linearLayout.AddObject (GetItem (financeItemPrefab, translations.Get(XsollaTranslations.PAYMENT_SUMMARY_FEE), PriceFormatter.Format (finance.fee.amount, finance.fee.currency)));
+				linearLayout.AddObject (GetItem (financeItemPrefab, translations.Get(XsollaTranslations.PAYMENT_SUMMARY_FEE), CurrencyFormatter.Instance.FormatPrice (finance.fee.currency, finance.fee.amount)));
 			}
 			if (finance.xsollaCredits != null && finance.xsollaCredits.amount > 0) 
 			{
-				linearLayout.AddObject(GetItem(financeItemPrefab, translations.Get(XsollaTranslations.PAYMENT_SUMMARY_XSOLLA_CREDITS), PriceFormatter.Format(finance.xsollaCredits.amount, finance.xsollaCredits.currency)));
+				linearLayout.AddObject(GetItem(financeItemPrefab, translations.Get(XsollaTranslations.PAYMENT_SUMMARY_XSOLLA_CREDITS), CurrencyFormatter.Instance.FormatPrice(finance.xsollaCredits.currency, finance.xsollaCredits.amount)));
 			}
-			linearLayout.AddObject(GetItem(totalPrefab, translations.Get(XsollaTranslations.PAYMENT_SUMMARY_TOTAL), PriceFormatter.Format(finance.total.amount, finance.total.currency)));
+			linearLayout.AddObject(GetItem(totalPrefab, translations.Get(XsollaTranslations.PAYMENT_SUMMARY_TOTAL), CurrencyFormatter.Instance.FormatPrice(finance.total.currency, finance.total.amount)));
 			if (finance.vat != null && finance.vat.amount > 0) 
 			{
-					linearLayout.AddObject(GetItem(financeItemPrefab, "VAT", PriceFormatter.Format(finance.vat.amount, finance.vat.currency)));
+				linearLayout.AddObject(GetItem(financeItemPrefab, "VAT", CurrencyFormatter.Instance.FormatPrice(finance.vat.currency, finance.vat.amount)));
 			}
 			linearLayout.Invalidate ();
 		}

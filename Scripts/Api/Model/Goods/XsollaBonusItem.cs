@@ -7,7 +7,7 @@ namespace Xsolla
 	public class XsollaBonusItem : IParseble {
 
 		public string name {get; private set;}// 	"name":"Milk",
-		public string quantity {get; private set;}//"quantity":"1"
+		public int quantity {get; private set;}//"quantity":"1"
 
 		public static List<XsollaBonusItem> ParseMany(JSONNode bonusItemsNode)
 		{
@@ -23,7 +23,7 @@ namespace Xsolla
 		public IParseble Parse (JSONNode bonusItemsNode)
 		{
 			name = bonusItemsNode["name"];
-			quantity = bonusItemsNode["quantity"];
+			quantity = bonusItemsNode["quantity"].AsInt;
 			return this;
 		}
 	}

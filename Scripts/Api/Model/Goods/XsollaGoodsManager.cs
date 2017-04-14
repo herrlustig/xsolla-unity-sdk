@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections;
 using System.Text;
+
 using UnityEngine;
 
 namespace Xsolla
@@ -32,8 +33,8 @@ namespace Xsolla
 	{
 		public IParseble Parse (JSONNode groupsNode)
 		{
-			JSONNode goodsGroupsNode = groupsNode["groups"];//["goodsgroups"];
-			IEnumerator<JSONNode> goodsGroupsEnumerator = goodsGroupsNode.Childs.GetEnumerator ();
+			//JSONNode goodsGroupsNode = groupsNode["groups"];
+			IEnumerator<JSONNode> goodsGroupsEnumerator = groupsNode.Childs.GetEnumerator ();
 			while(goodsGroupsEnumerator.MoveNext()){
 				AddItem(new XsollaGoodsGroup().Parse(goodsGroupsEnumerator.Current) as XsollaGoodsGroup);
 			}
@@ -43,8 +44,11 @@ namespace Xsolla
 
 	public class XsollaGoodsGroup : IXsollaObject, IParseble
 	{
-		public long id {get; private set;}// "id":"119",
-		public string name {get; private set;}// "name":"Top Items",
+		public int id; // "id":"119",
+		public string name; // "name":"Top Items",
+		public int mLevel;
+		public string mExternalId;
+		public XsollaGroupsManager mChildren;
 
 		public string GetKey()
 		{
@@ -60,6 +64,9 @@ namespace Xsolla
 		{
 			id = goodsGroupNode ["id"].AsInt;
 			name = goodsGroupNode ["name"];
+			mLevel = goodsGroupNode ["level"].AsInt;
+			mExternalId = goodsGroupNode ["external_id"].Value;
+			mChildren = new XsollaGroupsManager().Parse(goodsGroupNode ["children"]) as XsollaGroupsManager;
 			return this;
 		}
 	}
@@ -74,20 +81,20 @@ namespace Xsolla
 		private string 	imageUrl;							//	image_url: "https://xsolla.cachefly.net/img/3906561d617cb3.png",
 		private string 	description;						//	description: "Кролики — это маленькие млекопитающие семейства зайцевых.",
 		private string 	descriptionLong;					//	long_description: "There are eight different genera in the family classified as rabbits...",
-		private string 	currency;							//	currency: "USD",
+		public string 	currency;							//	currency: "USD",
 		private string  virtCurrency = "Coins";				//  item virtual currency. Today not allowed different currency for each item.
 
-		private float 	amount;								//	amount: 0.39,
-		private float 	amountWithoutDiscount;				//	amount_without_discount: 0.39,
-		private float 	vcAmount;							//	vc_amount: 0,
-		private float 	vcAmountWithoutDiscount;			//	vc_amount_without_discount: 0,
+		public decimal 	amount;								//	amount: 0.39,
+		public decimal 	amountWithoutDiscount;				//	amount_without_discount: 0.39,
+		public decimal 	vcAmount;							//	vc_amount: 0,
+		public decimal 	vcAmountWithoutDiscount;			//	vc_amount_without_discount: 0,
 
 		private int 	quantityLimit;						//	quantity_limit: 1,
-		private int 	isFavorite;							//	is_favorite: 0,
+		public int 	isFavorite;							//	is_favorite: 0,
 
 		private string[] 				unsatisfiedUserAttributes;	//	unsatisfied_user_attributes: []
-		private XsollaBonusItem 		bonusVirtualCurrency;		//	bonus_virtual_currency: {},
-		private List<XsollaBonusItem> 	bonusVirtualItems;			//	bonus_virtual_items: [],
+		public XsollaBonusItem 		bonusVirtualCurrency;		//	bonus_virtual_currency: {},
+		public List<XsollaBonusItem> 	bonusVirtualItems;			//	bonus_virtual_items: [],
 
 		public void SetVirtCurrName(string pName){
 			virtCurrency = pName;
@@ -95,6 +102,11 @@ namespace Xsolla
 
 		public long GetId(){
 			return id;
+		}
+
+		public int GetQuantityLimit()
+		{
+			return quantityLimit;
 		}
 
 		public string GetBounusString()
@@ -108,7 +120,7 @@ namespace Xsolla
 				}
 				stringBuilder.Append ("</color>");
 				return stringBuilder.ToString ();
-			} else if (bonusVirtualCurrency != null && bonusVirtualCurrency.quantity != null && !"".Equals(bonusVirtualCurrency.quantity)) {
+			} else if (bonusVirtualCurrency != null && bonusVirtualCurrency.quantity > 0 && !"".Equals(bonusVirtualCurrency.quantity)) {
 				StringBuilder stringBuilder = new StringBuilder ();
 				stringBuilder.Append ("<color=#2DAE7B>");
 				stringBuilder.Append ("+ ");
@@ -136,19 +148,19 @@ namespace Xsolla
 		{
 			if (!IsVirtualPayment()) {
 				if (amount == amountWithoutDiscount) {
-					return CurrencyFormatter.FormatPrice (currency, amount.ToString ());
+					return CurrencyFormatter.Instance.FormatPrice (currency, amount);
 				} else {
-					string oldPrice = CurrencyFormatter.FormatPrice (currency, amountWithoutDiscount.ToString ());
-					string newPrice = CurrencyFormatter.FormatPrice (currency, amount.ToString ());
+					string oldPrice = CurrencyFormatter.Instance.FormatPrice (currency, amountWithoutDiscount);
+					string newPrice = CurrencyFormatter.Instance.FormatPrice (currency, amount);
 					return "<size=10><color=#a7a7a7>" + oldPrice + "</color></size>" + " " + newPrice;
 				}
 			} else {
 				if (vcAmount == vcAmountWithoutDiscount) {
 					// FIX name currency must by localizated  
-					return CurrencyFormatter.FormatPrice (virtCurrency, vcAmount.ToString ());
+					return CurrencyFormatter.Instance.FormatPrice (virtCurrency, vcAmount);
 				} else {
-					string oldPrice = CurrencyFormatter.FormatPrice (virtCurrency, vcAmountWithoutDiscount.ToString ());
-					string newPrice = CurrencyFormatter.FormatPrice (virtCurrency, vcAmount.ToString ());
+					string oldPrice = CurrencyFormatter.Instance.FormatPrice (virtCurrency, vcAmountWithoutDiscount);
+					string newPrice = CurrencyFormatter.Instance.FormatPrice (virtCurrency, vcAmount);
 					return "<size=10><color=#a7a7a7>" + oldPrice + "</color></size>" + " " + newPrice;
 				}
 			}
@@ -193,11 +205,12 @@ namespace Xsolla
 			description 			= shopItemNode ["description"].Value;
 			descriptionLong 		= shopItemNode ["long_description"].Value;
 			imageUrl 				= shopItemNode ["image_url"].Value;//image_url <- NEW | OLD -> image
-			amount 					= shopItemNode ["amount"].AsFloat;
-			amountWithoutDiscount 	= shopItemNode ["amount_without_discount"].AsFloat;//amount_without_discount <- NEW | OLD -> amountWithoutDiscount
-			vcAmount 				= shopItemNode ["vc_amount"].AsFloat;
-			vcAmountWithoutDiscount = shopItemNode ["vc_amount_without_discount"].AsFloat;//amount_without_discount <- NEW | OLD -> amountWithoutDiscount
+			amount 					= shopItemNode ["amount"].AsDecimal;
+			amountWithoutDiscount 	= shopItemNode ["amount_without_discount"].AsDecimal;//amount_without_discount <- NEW | OLD -> amountWithoutDiscount
+			vcAmount 				= shopItemNode ["vc_amount"].AsDecimal;
+			vcAmountWithoutDiscount = shopItemNode ["vc_amount_without_discount"].AsDecimal;//amount_without_discount <- NEW | OLD -> amountWithoutDiscount
 			currency 				= shopItemNode ["currency"].Value;
+			quantityLimit			= shopItemNode ["quantity_limit"].AsInt;
 			bonusVirtualItems 		= XsollaBonusItem.ParseMany (shopItemNode ["bonus_virtual_items"]);
 			var bvc 				= new XsollaBonusItem ();
 			bvc.Parse (shopItemNode ["bonus_virtual_currency"]);
@@ -211,10 +224,21 @@ namespace Xsolla
 			if (amount != amountWithoutDiscount || bonusVirtualItems.Count > 0) {
 				advertisementType = AdType.SPECIAL_OFFER;
 			} else {
-				if("best_deal".Equals(advertisementTypeString)) {
+				if("best_deal".Equals(advertisementTypeString)) 
+				{
 					advertisementType = AdType.BEST_DEAL;
-				} else if("recommended".Equals(advertisementTypeString)) {
+				} 
+				else if("recommended".Equals(advertisementTypeString)) 
+				{
 					advertisementType = AdType.RECCOMENDED;
+				} 
+				else if("special_offer".Equals(advertisementTypeString)) 
+				{
+					advertisementType = AdType.SPECIAL_OFFER;
+				}
+				else if("custom".Equals(advertisementTypeString)) 
+				{
+					advertisementType = AdType.CUSTOM;
 				}
 			}
 			return this;

@@ -22,6 +22,7 @@ namespace Xsolla
 
 		private XsollaUtils mUtils;
 		private const String DOMAIN = "https://secure.xsolla.com";
+		private const String mSubDetailUrl = "/paystation2/api/useraccount/subscription"; 
 		private const String mBtnPrefab = "Prefabs/Screens/SubsManager/Simple/SubManagerBtn";
 		private const String mDetailPartPrefab = "Prefabs/Screens/SubsManager/Detail/SubDetailPart";
 		private const String mDetailPaymentPartPrefab = "Prefabs/Screens/SubsManager/Detail/SubDetailPaymentPart";
@@ -43,7 +44,10 @@ namespace Xsolla
 
 			var children = new List<GameObject>();
 			foreach (Transform child in mSubsContainer.transform) 
-				children.Add(child.gameObject);
+			{
+				if (child.gameObject != mLabel.gameObject)
+					children.Add(child.gameObject);
+			}
 			children.ForEach(child => Destroy(child));
 
 			setNotifyPanels();
@@ -96,7 +100,8 @@ namespace Xsolla
 			Dictionary<string, object> lParams = new Dictionary<string, object>();
 			lParams.Add(XsollaApiConst.ACCESS_TOKEN, mUtils.GetAcceessToken());
 			lParams.Add("subscription_id", pSubId);
-			lParams.Add("userInitialCurrency", mUtils.GetUser().userBalance.currency);
+			if (mUtils.GetUser().userBalance != null)
+				lParams.Add(XsollaApiConst.USER_INITIAL_CURRENCY, mUtils.GetUser().userBalance.currency);
 
 			getApiRequest(DOMAIN + "/paystation2/api/useraccount/subscription", lParams, callbackShowSubDetail);
 		}
@@ -113,6 +118,11 @@ namespace Xsolla
 			}
 			WWW lwww = new WWW(pUrl, lForm);
 			StartCoroutine(getRequest(lwww, pRecivedCallBack));
+		}
+
+		private void ErrorRecived(XsollaErrorRe pError)
+		{
+			Logger.LogError("Error to get detail on subs!" + pError.ToString());
 		}
 			
 		private IEnumerator getRequest(WWW pWww, Action<JSONNode> pCallback)
@@ -150,7 +160,12 @@ namespace Xsolla
 			// зачищаем то что было раньше
 			var children = new List<GameObject>();
 			foreach (Transform child in mSubsContainer.transform) 
-				children.Add(child.gameObject);
+			{
+				if (child.gameObject != mLabel.gameObject)
+					children.Add(child.gameObject);
+				else
+					mLabel.gameObject.SetActive(false);
+			}
 			children.ForEach(child => Destroy(child));
 
 			// скрыть заголовок
@@ -280,7 +295,8 @@ namespace Xsolla
 			Dictionary<String, object> lParams = new Dictionary<string, object>();
 			lParams.Add(XsollaApiConst.ACCESS_TOKEN, mUtils.GetAcceessToken());
 			lParams.Add("subscription_id", pSubDetail.mId);
-			lParams.Add("userInitialCurrency", mUtils.GetUser().userBalance.currency);
+			if (mUtils.GetUser().userBalance != null)
+				lParams.Add(XsollaApiConst.USER_INITIAL_CURRENCY, mUtils.GetUser().userBalance.currency);
 
 			getApiRequest(DOMAIN + "/paystation2/api/useraccount/unlinkpaymentaccount", lParams, callbackUnlinkMethod);
 		}
@@ -302,7 +318,7 @@ namespace Xsolla
 		{
 			Logger.Log("On click back shop");
 			// уничтожаем объект чтобы отобразить то что под ним
-			GameObject.FindObjectOfType<XsollaPaystation>().LoadShop();
+			GetComponentInParent<XsollaPaystationController>().NavMenuClick(RadioButton.RadioType.SCREEN_GOODS);
 			Destroy(this.gameObject);
 		}
 
@@ -311,7 +327,8 @@ namespace Xsolla
 			Logger.Log("On click back to subs");
 			Dictionary<String, object> lParams = new Dictionary<string, object>();
 			lParams.Add(XsollaApiConst.ACCESS_TOKEN, mUtils.GetAcceessToken());
-			lParams.Add("userInitialCurrency", mUtils.GetUser().userBalance.currency);
+			if (mUtils.GetUser().userBalance != null)
+				lParams.Add(XsollaApiConst.USER_INITIAL_CURRENCY, mUtils.GetUser().userBalance.currency);
 
 			getApiRequest(DOMAIN + "/paystation2/api/useraccount/subscriptions", lParams, callbackGetSubsList);
 		}
@@ -321,7 +338,12 @@ namespace Xsolla
 			// чистим то что было на экране
 			var children = new List<GameObject>();
 			foreach (Transform child in mSubsContainer.transform) 
-				children.Add(child.gameObject);
+			{
+				if (child.gameObject != mLabel.gameObject)	
+					children.Add(child.gameObject);
+				else
+					mLabel.gameObject.SetActive(false);
+			}
 			children.ForEach(child => Destroy(child));
 
 			GameObject obj = Instantiate(Resources.Load(mDetailCancelLinkPartPrefab)) as GameObject;
@@ -350,7 +372,8 @@ namespace Xsolla
 			Dictionary<String, object> lParams = new Dictionary<string, object>();
 			lParams.Add(XsollaApiConst.ACCESS_TOKEN, mUtils.GetAcceessToken());
 			lParams.Add("subscription_id", mLocalSubDetail.mId);
-			lParams.Add("userInitialCurrency", mUtils.GetUser().userBalance.currency);
+			if (mUtils.GetUser().userBalance != null)
+				lParams.Add(XsollaApiConst.USER_INITIAL_CURRENCY, mUtils.GetUser().userBalance.currency);
 
 			getApiRequest(DOMAIN + "/paystation2/api/useraccount/unholdsubscription", lParams, callbackUnholdMethod);
 		}
@@ -361,7 +384,8 @@ namespace Xsolla
 			Dictionary<String, object> lParams = new Dictionary<string, object>();
 			lParams.Add(XsollaApiConst.ACCESS_TOKEN, mUtils.GetAcceessToken());
 			lParams.Add("subscription_id", mLocalSubDetail.mId);
-			lParams.Add("userInitialCurrency", mUtils.GetUser().userBalance.currency);
+			if (mUtils.GetUser().userBalance != null)
+				lParams.Add(XsollaApiConst.USER_INITIAL_CURRENCY, mUtils.GetUser().userBalance.currency);
 			lParams.Add("status", "non_renewing");
 
 			getApiRequest(DOMAIN + "/paystation2/api/useraccount/holdsubscription", lParams, callbackDontrenewMethod);
@@ -374,7 +398,8 @@ namespace Xsolla
 			Dictionary<String, object> lParams = new Dictionary<string, object>();
 			lParams.Add(XsollaApiConst.ACCESS_TOKEN, mUtils.GetAcceessToken());
 			lParams.Add("subscription_id", mLocalSubDetail.mId);
-			lParams.Add("userInitialCurrency", mUtils.GetUser().userBalance.currency);
+			if (mUtils.GetUser().userBalance != null)
+				lParams.Add(XsollaApiConst.USER_INITIAL_CURRENCY, mUtils.GetUser().userBalance.currency);
 			lParams.Add("status", "canceled");
 
 			getApiRequest(DOMAIN + "/paystation2/api/useraccount/holdsubscription", lParams, callbackDeleteSubMethod);

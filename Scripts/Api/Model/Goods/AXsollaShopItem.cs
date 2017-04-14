@@ -23,7 +23,8 @@ namespace Xsolla {
 			NONE,
 			SPECIAL_OFFER,
 			RECCOMENDED,
-			BEST_DEAL
+			BEST_DEAL,
+			CUSTOM
 		}
 
 		public override string ToString ()

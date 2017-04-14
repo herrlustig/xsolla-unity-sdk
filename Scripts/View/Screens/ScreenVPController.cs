@@ -60,7 +60,7 @@ namespace Xsolla {
 		private void onClickBack()
 		{
 			if (GetComponentInParent<XsollaPaystationController> () != null)
-				GetComponentInParent<XsollaPaystationController> ().LoadGoodsGroups();
+				GetComponentInParent<XsollaPaystationController> ().NavMenuClick(RadioButton.RadioType.SCREEN_GOODS);
 		}
 
 	}

@@ -12,6 +12,11 @@ namespace Xsolla {
 				Debug.Log (message);
 		}
 
+		public static void LogError(string message) {
+			if(isLogRequired)
+				Debug.LogError (message);
+		}
+
 		public static void Log(string elemName, Dictionary<string, object> dictToLog){
 			if (dictToLog == null)
 			{

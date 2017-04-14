@@ -5,7 +5,7 @@ using System.Collections.Generic;namespace Xsolla {
 	public class BuyData : IParseble {
 //		public Dictionary<string, object> data;
 		public string currency{ get; private set;}//currency: "RUB"
-		public string sum{ get; private set;}//sum: "0.66"
+		public decimal sum{ get; private set;}//sum: "0.66"
 		public bool enabled{ get; private set;}//enabled: true
 		public string example{ get; private set;}//example: null
 		public string isMandatory{ get; private set;}//isMandatory: null
@@ -24,7 +24,7 @@ using System.Collections.Generic;namespace Xsolla {
 			if (buyDataNode ["currency"] != null)
 				currency = buyDataNode ["currency"];
 			if (buyDataNode ["sum"] != null)
-				sum = buyDataNode ["sum"];
+				sum = buyDataNode ["sum"].AsDecimal;
 			if (buyDataNode ["enabled"] != null)
 				enabled = buyDataNode ["enabled"].AsBool;
 			if (buyDataNode ["example"] != null)

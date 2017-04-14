@@ -7,13 +7,13 @@ namespace Xsolla {
 
 		public List<RadioButton> radioButtons;
 		private int prevSelected = 0;
-		private bool isUpdated = false;
 
 		public RadioGroupController(){
 			radioButtons = new List<RadioButton>();
 		}
 
 		public void AddButton(RadioButton rb){
+			rb.Deselect();
 			radioButtons.Add(rb);
 		}
 
@@ -23,6 +23,14 @@ namespace Xsolla {
 			{
 				radioButtons.Add(go.GetComponent<RadioButton>());
 			}
+		}
+
+		public void UnselectAll()
+		{
+			radioButtons.ForEach((item) => 
+				{
+					item.Deselect();
+				});
 		}
 
 		public void SelectItem(RadioButton.RadioType pType)
@@ -43,17 +51,6 @@ namespace Xsolla {
 			}
 			radioButtons [pPosition].Select ();
 			prevSelected = pPosition;
-			isUpdated = false;
-		}
-
-		void Update() {
-			if (!isUpdated) {
-				foreach (var rb in radioButtons) {
-					rb.Deselect ();
-				}
-				radioButtons [prevSelected].Select ();
-				isUpdated = true;
-			}
 		}
 	}
 }

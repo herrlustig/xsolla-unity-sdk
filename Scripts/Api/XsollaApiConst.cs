@@ -89,5 +89,6 @@ namespace Xsolla {
 		public const string R_SETTINGS = "settings";
 		public const string R_TRANSLATIONS = "translations";
 		public const string R_API = "api";
+		public const string USER_INITIAL_CURRENCY = "userInitialCurrency";
     }
 }

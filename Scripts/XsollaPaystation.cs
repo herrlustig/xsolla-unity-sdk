@@ -55,9 +55,7 @@ namespace  Xsolla
 		protected abstract void ShowCountries (XsollaCountries paymentMethods);
 
 		protected abstract void ApplyPromoCouponeCode(XsollaForm pForm);
-		protected abstract void ShowHistory(XsollaHistoryList pList);
 		protected abstract void UpdateCustomAmount(CustomVirtCurrAmountController.CustomAmountCalcRes pRes);
-		protected abstract void ShowSubs (XsollaSubscriptions pSubs);
 
 		protected abstract void ShowPaymentForm (XsollaUtils utils, XsollaForm form);
 
@@ -124,15 +122,12 @@ namespace  Xsolla
 			Payment.PaymentMethodsRecieved += ShowPaymentsList;
 			Payment.SavedPaymentMethodsRecieved += ShowSavedPaymentsList;
 			Payment.CountriesRecieved += ShowCountries;
-			Payment.HistoryRecieved += ShowHistory;
 
 			Payment.PricepointsRecieved += (pricepoints) => ShowPricepoints(Utils, pricepoints);
 			Payment.GoodsGroupsRecieved += (goods) => ShowGoodsGroups(goods);
 			Payment.GoodsRecieved += (goods) => UpdateGoods(goods);
 
 			Payment.CustomAmountCalcRecieved += (calcRes) => UpdateCustomAmount(calcRes);
-
-			Payment.SubsReceived += (pSubs) => ShowSubs(pSubs);
 
 			Payment.VirtualPaymentSummaryRecieved += (summary) => ShowVPSummary(Utils, summary);
 			Payment.VirtualPaymentProceedError += (error) => ShowVPError(Utils, error);
@@ -173,7 +168,7 @@ namespace  Xsolla
 
 		private void SelectRadioItem(RadioButton.RadioType pType)
 		{
-			GetComponentInParent<XsollaPaystationController> ().SelectRadioItem(pType);
+			FindObjectOfType<MainNavMenuController>().SelectRadioItem(pType);
 		}
 
 		public void LoadShopPricepoints()
@@ -196,14 +191,6 @@ namespace  Xsolla
 		{
 			Logger.Log ("Load Goods request");
 			Payment.GetItems (groupId, currentPurchase.GetMergedMap());
-		}
-
-		public void LoadSubscriptions()
-		{
-			Logger.Log("Load subscriptions");
-			SetLoading (true);
-			Payment.GetSubscriptions();
-			SelectRadioItem(RadioButton.RadioType.SCREEN_SUBSCRIPTION);
 		}
 
 		public void LoadFavorites()
@@ -264,16 +251,12 @@ namespace  Xsolla
 			Payment.GetCountries (currentPurchase.GetMergedMap());
 		}
 
-		public void LoadHistory(Dictionary<string, object> pParams)
-		{	
-			Payment.GetHistory(pParams);
-		}
-
 		public void LoadPaymentManager()
 		{
 			Logger.Log("Show Payment manager");
 			Dictionary<string, object> lParams = new Dictionary<string, object>();
-			lParams.Add("userInitialCurrency", Utils.GetUser().userBalance.currency);
+			if (Utils.GetUser().userBalance != null)
+				lParams.Add(XsollaApiConst.USER_INITIAL_CURRENCY, Utils.GetUser().userBalance.currency);
 			Payment.GetSavedPaymentsForManager(lParams);
 		}
 
@@ -281,7 +264,8 @@ namespace  Xsolla
 		{
 			Logger.Log("Show Subscription manager");
 			Dictionary<string, object> lParams = new Dictionary<string, object>();
-			lParams.Add("userInitialCurrency", Utils.GetUser().userBalance.currency);
+			if (Utils.GetUser().userBalance != null)
+				lParams.Add(XsollaApiConst.USER_INITIAL_CURRENCY, Utils.GetUser().userBalance.currency);
 			Payment.GetSubscriptionForManager(lParams);
 			SetLoading(true);
 		}
@@ -506,6 +490,7 @@ namespace  Xsolla
 				if (pStatus.isFinal()) {
 //					Payment.InitPaystation(currentPurchase.GetMergedMap());
 					LoadShopPricepoints ();
+
 				} else {
 					StartCoroutine (Test ());
 				}

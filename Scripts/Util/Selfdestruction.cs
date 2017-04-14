@@ -8,14 +8,16 @@ public class Selfdestruction : MonoBehaviour {
 		XsollaPaystationController controller = gameObject.GetComponentInParent<XsollaPaystationController> ();
 		Destroy (controller.gameObject);
 
-		// delete HttpRequst 
-		HttpTlsRequest[] listObj = (HttpTlsRequest[])FindObjectsOfType(typeof(HttpTlsRequest));
-		foreach(HttpTlsRequest item in listObj)
-			Destroy(item.gameObject);
-
-		// delete Xsolla.StyleManager
 		StyleManager[] listObjStyles = (StyleManager[])FindObjectsOfType(typeof(StyleManager));
 		foreach(StyleManager item in listObjStyles)
+			Destroy(item.gameObject);
+
+		ApiRequest[] listObjRequest = (ApiRequest[])FindObjectsOfType(typeof(ApiRequest));
+		foreach(ApiRequest item in listObjRequest)
+			Destroy(item.gameObject);
+
+		CurrencyFormatter[] listObjCurrencyFormater = (CurrencyFormatter[])FindObjectsOfType(typeof(CurrencyFormatter));
+		foreach(CurrencyFormatter item in listObjCurrencyFormater)
 			Destroy(item.gameObject);
 
 		TransactionHelper.Clear ();

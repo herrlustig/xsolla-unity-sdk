@@ -34,7 +34,7 @@ namespace Xsolla
 			if(isPrevStepPaymentList)
 				GetComponentInParent<XsollaPaystationController>().LoadQuickPayment();
 			else
-				GetComponentInParent<XsollaPaystationController>().LoadShop();
+				GetComponentInParent<XsollaPaystationController>().NavMenuClick(RadioButton.RadioType.SCREEN_GOODS);
 		}
 
 	}
