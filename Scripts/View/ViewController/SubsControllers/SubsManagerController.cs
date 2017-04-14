@@ -44,7 +44,10 @@ namespace Xsolla
 
 			var children = new List<GameObject>();
 			foreach (Transform child in mSubsContainer.transform) 
-				children.Add(child.gameObject);
+			{
+				if (child.gameObject != mLabel.gameObject)
+					children.Add(child.gameObject);
+			}
 			children.ForEach(child => Destroy(child));
 
 			setNotifyPanels();
@@ -157,7 +160,12 @@ namespace Xsolla
 			// зачищаем то что было раньше
 			var children = new List<GameObject>();
 			foreach (Transform child in mSubsContainer.transform) 
-				children.Add(child.gameObject);
+			{
+				if (child.gameObject != mLabel.gameObject)
+					children.Add(child.gameObject);
+				else
+					mLabel.gameObject.SetActive(false);
+			}
 			children.ForEach(child => Destroy(child));
 
 			// скрыть заголовок
@@ -330,7 +338,12 @@ namespace Xsolla
 			// чистим то что было на экране
 			var children = new List<GameObject>();
 			foreach (Transform child in mSubsContainer.transform) 
-				children.Add(child.gameObject);
+			{
+				if (child.gameObject != mLabel.gameObject)	
+					children.Add(child.gameObject);
+				else
+					mLabel.gameObject.SetActive(false);
+			}
 			children.ForEach(child => Destroy(child));
 
 			GameObject obj = Instantiate(Resources.Load(mDetailCancelLinkPartPrefab)) as GameObject;
